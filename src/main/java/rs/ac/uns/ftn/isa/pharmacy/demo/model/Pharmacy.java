@@ -13,13 +13,13 @@ public class Pharmacy {
     private List<Pharmacist> pharmacists;
     private List<Medicine> drugs;
     private HashMap<Medicine, Double> drugsPriceList;
-    private HashMap<Examine, Double> examinePriceList;
+    private HashMap<Exam, Double> examinePriceList;
 
     public Pharmacy() {
 
     }
 
-    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> drugs, HashMap<Medicine, Double> drugsPriceList, HashMap<Examine, Double> examinePriceList) {
+    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> drugs, HashMap<Medicine, Double> drugsPriceList, HashMap<Exam, Double> examinePriceList) {
         this.name = name;
         this.address = address;
         this.about = about;
@@ -86,11 +86,11 @@ public class Pharmacy {
         this.drugsPriceList = drugsPriceList;
     }
 
-    public HashMap<Examine, Double> getExaminePriceList() {
+    public HashMap<Exam, Double> getExaminePriceList() {
         return examinePriceList;
     }
 
-    public void setExaminePriceList(HashMap<Examine, Double> examinePriceList) {
+    public void setExaminePriceList(HashMap<Exam, Double> examinePriceList) {
         this.examinePriceList = examinePriceList;
     }
 

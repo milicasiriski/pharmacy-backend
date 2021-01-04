@@ -2,24 +2,24 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import java.util.Objects;
 
-public class User {
+public abstract class User {
 
-    private String username;
-    private String password;
+    protected String email;
+    protected String password;
 
-    public User(String username) {
-        this.username = username;
+    protected User() {
     }
 
-    public User() {
+    protected User(String email, String password) {
+        this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -35,18 +35,18 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return getUsername().equals(user.getUsername()) && getPassword().equals(user.getPassword());
+        return getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUsername(), getPassword());
+        return Objects.hash(getEmail(), getPassword());
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "username='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
