@@ -1,14 +1,14 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class Order {
     private Medicine medicine;
     private Integer amount;
-    private Date deadline;
+    private Calendar deadline;
 
-    public Order(Medicine medicine, Integer amount, Date deadline) {
+    public Order(Medicine medicine, Integer amount, Calendar deadline) {
         this.medicine = medicine;
         this.amount = amount;
         this.deadline = deadline;
@@ -34,11 +34,11 @@ public class Order {
         this.amount = amount;
     }
 
-    public Date getDeadline() {
+    public Calendar getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(Calendar deadline) {
         this.deadline = deadline;
     }
 
