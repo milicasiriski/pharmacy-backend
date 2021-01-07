@@ -1,8 +1,19 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "exam_pharmacist")
 public class ExamPharmacist extends Exam {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "id", unique = true)
+    private Long id;
+
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Transient
     private Pharmacist pharmacist;
 
     public ExamPharmacist() {

@@ -1,11 +1,27 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "vacation_time_request")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class VacationTimeRequest {
 
+    @Id
+    private Long id;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "start", column = @Column(name = "time_start")),
+            @AttributeOverride(name = "end", column = @Column(name = "time_end"))
+    })
     protected TimeInterval requestedTimeForVacation;
+
+    @Column(name = "approved")
     protected boolean isApproved;
+
+    @Column(name = "rejected_reason")
     protected String rejectedReason;
 
     protected VacationTimeRequest() {
@@ -16,6 +32,14 @@ public abstract class VacationTimeRequest {
         this.requestedTimeForVacation = requestedTimeForVacation;
         this.isApproved = isApproved;
         this.rejectedReason = rejectedReason;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public TimeInterval getRequestedTimeForVacation() {

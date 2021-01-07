@@ -1,10 +1,23 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "pharmacy_user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "id", unique = true)
+    protected Long id;
+
+    @Column(name = "email")
     protected String email;
+
+    @Column(name = "password")
     protected String password;
 
     protected User() {
@@ -12,6 +25,7 @@ public abstract class User {
 
     protected User(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {

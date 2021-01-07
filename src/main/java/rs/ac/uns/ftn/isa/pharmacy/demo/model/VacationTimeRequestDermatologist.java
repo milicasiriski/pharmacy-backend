@@ -1,9 +1,13 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "vacation_request_dermatologist")
 public class VacationTimeRequestDermatologist extends VacationTimeRequest {
 
+    @Transient
     private Dermatologist dermatologist;
 
     public VacationTimeRequestDermatologist() {

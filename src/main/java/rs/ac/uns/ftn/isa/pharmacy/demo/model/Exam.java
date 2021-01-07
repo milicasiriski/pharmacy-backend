@@ -43,4 +43,5 @@ public abstract class Exam {
     public int hashCode() {
         return Objects.hash(duration, price);
     }
+
 }

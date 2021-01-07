@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.DiscriminatorValue;
+
+@DiscriminatorValue("DERMATOLOGIST")
 public class Dermatologist extends User {
 
     public Dermatologist() {

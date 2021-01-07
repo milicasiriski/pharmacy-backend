@@ -1,13 +1,29 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
+@DiscriminatorValue("PATIENT")
 public class Patient extends User {
+    @Column(name = "patient_name")
     private String name;
+
+    @Column(name = "patient_surname")
     private String surname;
+
+    @Column(name = "patient_address")
     private String address;
+
+    @Column(name = "patient_city")
     private String city;
+
+    @Column(name = "patient_country")
     private String country;
+
+    @Column(name = "patient_phone_num")
     private String phoneNumber;
 
     public Patient() {
