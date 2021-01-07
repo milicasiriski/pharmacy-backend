@@ -1,8 +1,10 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.Embeddable;
 import java.util.Calendar;
 import java.util.Objects;
 
+@Embeddable
 public class TimeInterval {
 
     private Calendar start;
