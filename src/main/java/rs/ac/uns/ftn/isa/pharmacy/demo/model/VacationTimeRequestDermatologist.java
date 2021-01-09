@@ -7,7 +7,8 @@ import java.util.Objects;
 @Table(name = "vacation_request_dermatologist")
 public class VacationTimeRequestDermatologist extends VacationTimeRequest {
 
-    @Transient
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "dermatologist_id")
     private Dermatologist dermatologist;
 
     public VacationTimeRequestDermatologist() {
