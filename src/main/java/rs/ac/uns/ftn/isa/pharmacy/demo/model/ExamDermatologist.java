@@ -7,12 +7,6 @@ import java.util.Objects;
 @Table(name = "exam_dermatologist")
 public class ExamDermatologist extends Exam {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "id", unique = true)
-    private Long id;
-
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Transient
     private Dermatologist dermatologist;
 
@@ -20,8 +14,8 @@ public class ExamDermatologist extends Exam {
         super();
     }
 
-    public ExamDermatologist(int duration, double price, Dermatologist dermatologist) {
-        super(duration, price);
+    public ExamDermatologist(int duration, Dermatologist dermatologist) {
+        super(duration);
         this.dermatologist = dermatologist;
     }
 
@@ -52,7 +46,6 @@ public class ExamDermatologist extends Exam {
         return "ExamDermatologist{" +
                 "dermatologist=" + dermatologist +
                 ", duration=" + duration +
-                ", price=" + price +
                 '}';
     }
 }

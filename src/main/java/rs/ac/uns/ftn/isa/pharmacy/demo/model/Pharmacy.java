@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -30,10 +31,17 @@ public class Pharmacy {
     @JoinColumn(name = "pharmacy_id")
     private List<Medicine> medicine;
 
-    @Transient
-    private HashMap<Medicine, Double> medicinePriceList;
-    @Transient
-    private HashMap<Exam, Double> examinePriceList;
+    @ElementCollection
+    @CollectionTable(name = "pharmacy_medicine_price_list_mapping", joinColumns = @JoinColumn(name = "pharmacy_id"))
+    @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")
+    @Column(name = "price")
+    private Map<Medicine, Double> medicinePriceList;
+
+    @ElementCollection
+    @CollectionTable(name = "pharmacy_exam_price_list_mapping", joinColumns = @JoinColumn(name = "pharmacy_id"))
+    @MapKeyJoinColumn(name = "exam_id", referencedColumnName = "id")
+    @Column(name = "price")
+    private Map<Exam, Double> examinePriceList;
 
     public Pharmacy() {
 
@@ -106,7 +114,7 @@ public class Pharmacy {
         this.medicine = medicine;
     }
 
-    public HashMap<Medicine, Double> getMedicinePriceList() {
+    public Map<Medicine, Double> getMedicinePriceList() {
         return medicinePriceList;
     }
 
@@ -114,7 +122,7 @@ public class Pharmacy {
         this.medicinePriceList = medicinePriceList;
     }
 
-    public HashMap<Exam, Double> getExaminePriceList() {
+    public Map<Exam, Double> getExaminePriceList() {
         return examinePriceList;
     }
 

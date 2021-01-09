@@ -1,11 +1,25 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Objects;
 
+@Entity
+@Table(name = "medicine_order")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    private Long id;
+
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "medicine_id")
     private Medicine medicine;
-    private Integer amount;
+
+    @Column(name = "amount")
+    private int amount;
+
+    @Column(name = "deadline")
     private Calendar deadline;
 
     public Order(Medicine medicine, Integer amount, Calendar deadline) {
@@ -16,6 +30,14 @@ public class Order {
 
     public Order() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Medicine getMedicine() {
@@ -48,7 +70,7 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return medicine.equals(order.medicine) &&
-                amount.equals(order.amount) &&
+                amount == order.amount &&
                 deadline.equals(order.deadline);
     }
 
