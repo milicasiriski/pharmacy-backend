@@ -9,6 +9,7 @@ import java.util.Objects;
 public abstract class VacationTimeRequest {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Embedded
