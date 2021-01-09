@@ -7,7 +7,8 @@ import java.util.Objects;
 @Table(name = "exam_pharmacist")
 public class ExamPharmacist extends Exam {
 
-    @Transient
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "pharmacist_id")
     private Pharmacist pharmacist;
 
     public ExamPharmacist() {

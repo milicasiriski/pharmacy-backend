@@ -21,10 +21,12 @@ public class Pharmacy {
     @Column(name = "about")
     private String about;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pharmacy_id")
     private List<Dermatologist> dermatologists;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pharmacy_id")
     private List<Pharmacist> pharmacists;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

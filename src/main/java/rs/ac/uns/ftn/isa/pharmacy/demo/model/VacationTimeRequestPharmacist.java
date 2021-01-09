@@ -1,15 +1,14 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "vacation_request_pharmacist")
 public class VacationTimeRequestPharmacist extends VacationTimeRequest {
 
-    @Transient
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "pharmacist_id")
     private Pharmacist pharmacist;
 
     public VacationTimeRequestPharmacist() {
