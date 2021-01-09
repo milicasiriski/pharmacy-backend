@@ -1,11 +1,23 @@
 language: java
+
 jdk:
   - oraclejdk11
 
 sudo: required
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database pharmacy_db;' -U postgres
 
 before_install:
  - chmod +x gradlew
 
 script:
   - ./gradlew clean build -i --continue
+
+
+
+
+
