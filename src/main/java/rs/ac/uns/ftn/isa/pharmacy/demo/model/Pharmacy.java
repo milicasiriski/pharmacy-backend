@@ -1,33 +1,61 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "pharmacy")
 public class Pharmacy {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "address")
     private String address;
+    @Column(name = "about")
     private String about;
+
+    @Transient
     private List<Dermatologist> dermatologists;
+
+    @Transient
     private List<Pharmacist> pharmacists;
-    private List<Medicine> drugs;
-    private HashMap<Medicine, Double> drugsPriceList;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pharmacy_id")
+    private List<Medicine> medicine;
+
+    @Transient
+    private HashMap<Medicine, Double> medicinePriceList;
+    @Transient
     private HashMap<Exam, Double> examinePriceList;
 
     public Pharmacy() {
 
     }
 
-    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> drugs, HashMap<Medicine, Double> drugsPriceList, HashMap<Exam, Double> examinePriceList) {
+    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> medicine, HashMap<Medicine, Double> medicinePriceList, HashMap<Exam, Double> examinePriceList) {
         this.name = name;
         this.address = address;
         this.about = about;
         this.dermatologists = dermatologists;
         this.pharmacists = pharmacists;
-        this.drugs = drugs;
-        this.drugsPriceList = drugsPriceList;
+        this.medicine = medicine;
+        this.medicinePriceList = medicinePriceList;
         this.examinePriceList = examinePriceList;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -70,20 +98,20 @@ public class Pharmacy {
         this.pharmacists = pharmacists;
     }
 
-    public List<Medicine> getDrugs() {
-        return drugs;
+    public List<Medicine> getMedicine() {
+        return medicine;
     }
 
-    public void setDrugs(List<Medicine> drugs) {
-        this.drugs = drugs;
+    public void setMedicine(List<Medicine> medicine) {
+        this.medicine = medicine;
     }
 
-    public HashMap<Medicine, Double> getDrugsPriceList() {
-        return drugsPriceList;
+    public HashMap<Medicine, Double> getMedicinePriceList() {
+        return medicinePriceList;
     }
 
-    public void setDrugsPriceList(HashMap<Medicine, Double> drugsPriceList) {
-        this.drugsPriceList = drugsPriceList;
+    public void setMedicinePriceList(HashMap<Medicine, Double> medicinePriceList) {
+        this.medicinePriceList = medicinePriceList;
     }
 
     public HashMap<Exam, Double> getExaminePriceList() {
