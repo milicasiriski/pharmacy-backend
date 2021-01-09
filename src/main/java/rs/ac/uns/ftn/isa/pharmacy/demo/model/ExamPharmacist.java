@@ -7,12 +7,6 @@ import java.util.Objects;
 @Table(name = "exam_pharmacist")
 public class ExamPharmacist extends Exam {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "id", unique = true)
-    private Long id;
-
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Transient
     private Pharmacist pharmacist;
 
@@ -20,8 +14,8 @@ public class ExamPharmacist extends Exam {
         super();
     }
 
-    public ExamPharmacist(int duration, double price, Pharmacist pharmacist) {
-        super(duration, price);
+    public ExamPharmacist(int duration, Pharmacist pharmacist) {
+        super(duration);
         this.pharmacist = pharmacist;
     }
 
@@ -52,7 +46,6 @@ public class ExamPharmacist extends Exam {
         return "ExamPharmacist{" +
                 "pharmacist=" + pharmacist +
                 ", duration=" + duration +
-                ", price=" + price +
                 '}';
     }
 }
