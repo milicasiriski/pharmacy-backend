@@ -8,13 +8,13 @@ INSERT INTO medicine(id, pharmacy_id) VALUES ('1', '1');
 INSERT INTO medicine(id, pharmacy_id) VALUES ('2', '1');
 INSERT INTO medicine(id, pharmacy_id) VALUES ('3', '1');
 
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('4', 'DERMATOLOGIST', '1');
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('5', 'DERMATOLOGIST', '1');
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('6', 'DERMATOLOGIST', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('4', 'DERMATOLOGIST', 'dermatologist1@gmail.com', 'derm1', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('5', 'DERMATOLOGIST', 'dermatologist2@gmail.com', 'derm2', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('6', 'DERMATOLOGIST', 'dermatologist3@gmail.com', 'derm3', '1');
 
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('7', 'PHARMACIST', '1');
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('8', 'PHARMACIST', '1');
-INSERT INTO pharmacy_user(id, type, pharmacy_id) VALUES ('9', 'PHARMACIST', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('7', 'PHARMACIST', 'pharmacist1@gmail.com', 'pharm1', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('8', 'PHARMACIST', 'pharmacist2@gmail.com', 'pharm2', '1');
+INSERT INTO pharmacy_user(id, type, email, password, pharmacy_id) VALUES ('9', 'PHARMACIST', 'pharmacist3@gmail.com', 'pharm3', '1');
 
 INSERT INTO exam(id, duration) VALUES ('1', '30');
 INSERT INTO exam(id, duration) VALUES ('2', '45');

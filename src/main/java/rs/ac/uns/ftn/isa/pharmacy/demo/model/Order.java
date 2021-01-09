@@ -9,7 +9,8 @@ import java.util.Objects;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 
     @ManyToOne(cascade = CascadeType.DETACH)

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -12,6 +13,25 @@ public class Pharmacist extends User {
     }
 
     public Pharmacist(String email, String password) {
-        super();
+        super(email, password);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacist{" +
+                ", id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

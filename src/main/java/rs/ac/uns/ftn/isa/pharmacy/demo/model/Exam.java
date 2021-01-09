@@ -8,7 +8,8 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Exam {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @SequenceGenerator(name = "exam_sequence_generator", sequenceName = "exam_sequence", initialValue = 7)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_sequence_generator")
     private Long id;
 
     @Column(name = "duration")

@@ -9,7 +9,8 @@ import java.util.Objects;
 public abstract class VacationTimeRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @SequenceGenerator(name = "vacation_time_request_sequence_generator", sequenceName = "vacation_time_request_sequence", initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacation_time_request_sequence_generator")
     private Long id;
 
     @Embedded
