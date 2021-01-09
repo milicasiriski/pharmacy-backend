@@ -11,7 +11,8 @@ import java.util.Objects;
 public class Pharmacy {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @SequenceGenerator(name = "pharmacy_sequence_generator", sequenceName = "pharmacy_sequence", initialValue = 2)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pharmacy_sequence_generator")
     private Long id;
 
     @Column(name = "name")
@@ -143,5 +144,20 @@ public class Pharmacy {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", about='" + about + '\'' +
+//                ", dermatologists=" + dermatologists +
+//                ", pharmacists=" + pharmacists +
+//                ", medicine=" + medicine +
+//                ", medicinePriceList=" + medicinePriceList +
+//                ", examinePriceList=" + examinePriceList +
+                '}';
     }
 }
