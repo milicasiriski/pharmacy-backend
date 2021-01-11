@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("DERMATOLOGIST")
 public class Dermatologist extends User {
+    private final String administrationRole = "ROLE_DERMATOLOGIST";
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 
