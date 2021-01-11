@@ -30,3 +30,22 @@ INSERT INTO exam_dermatologist(id, dermatologist_id) VALUES ('4', '6');
 INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('3', '7');
 INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('5', '8');
 INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('6', '9');
+
+INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
+INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
+INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');
+INSERT INTO AUTHORITY (id ,name) VALUES (4, 'ROLE_PHARMACY_ADMINISTRATOR');
+INSERT INTO AUTHORITY (id ,name) VALUES (5, 'ROLE_SYSTEM_ADMINISTRATOR');
+INSERT INTO AUTHORITY (id ,name) VALUES (6, 'ROLE_UNAUTHORISED');
+
+
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (1, 1);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (2, 1);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (3, 1);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (4, 3);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (5, 3);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (6, 3);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (7, 2);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (8, 2);
+INSERT INTO USERS_AUTHORITY (user_id, authority_id) VALUES (9, 2);
+

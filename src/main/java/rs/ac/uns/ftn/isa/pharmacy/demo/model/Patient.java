@@ -1,13 +1,18 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @DiscriminatorValue("PATIENT")
 public class Patient extends User {
+    private final String administrationRole = "ROLE_PATIENT";
+
     @Column(name = "patient_name")
     private String name;
 
@@ -25,6 +30,8 @@ public class Patient extends User {
 
     @Column(name = "patient_phone_num")
     private String phoneNumber;
+
+
 
     public Patient() {
         super();
@@ -120,4 +127,6 @@ public class Patient extends User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+
 }

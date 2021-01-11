@@ -1,13 +1,21 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "pharmacy_user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class User {
+public abstract class User implements UserDetails {
+
+    private String administrationRole = "";
 
     @Id
     @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 10)
@@ -18,8 +26,18 @@ public abstract class User {
     @Column(name = "email")
     protected String email;
 
+    @JsonIgnore
     @Column(name = "password")
     protected String password;
+
+    @Column(name = "enabled")
+    protected boolean enabled = false;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+    private List<Authority> authorities;
 
     protected User() {
     }
@@ -45,6 +63,13 @@ public abstract class User {
         this.password = password;
     }
 
+    public String getAdministrationRole() { return this.administrationRole; }
+
+    public  void Enable() { this.enabled = true; }
+
+    public void  Disable() { this.enabled = false; }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,5 +89,39 @@ public abstract class User {
                 "username='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isEnabled(){ return this.enabled; }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
