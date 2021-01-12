@@ -25,10 +25,6 @@ public class RegisterController {
 
     @Qualifier("registerPatientServiceImpl")
     private RegisterService<PatientDTO, Patient> registerService;
-    private TokenUtils tokenUtils;
-    private AuthenticationManager authenticationManager;
-    private CustomUserDetailsService userDetailsService;
-
 
     @Autowired
     public RegisterController(RegisterService<PatientDTO, Patient> registerService) {
@@ -41,29 +37,10 @@ public class RegisterController {
         if (existUser != null) {
             throw new RuntimeException("Email already exists");
         }
-
         Patient user = this.registerService.save(patientDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
-
-    @PostMapping(value = "/refresh")
-    public ResponseEntity<UserTokenState> refreshAuthenticationToken(HttpServletRequest request) {
-
-        String token = tokenUtils.getToken(request);
-        String username = this.tokenUtils.getUsernameFromToken(token);
-        User user = (User) this.userDetailsService.loadUserByUsername(username);
-
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token);
-            int expiresIn = tokenUtils.getExpiredIn();
-
-            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
-        } else {
-            UserTokenState userTokenState = new UserTokenState();
-            return ResponseEntity.badRequest().body(userTokenState);
-        }
     }
 
 }

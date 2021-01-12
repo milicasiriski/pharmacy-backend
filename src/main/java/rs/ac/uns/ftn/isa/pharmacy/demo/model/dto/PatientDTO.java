@@ -4,8 +4,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 
 public class PatientDTO {
 
-
-
     private String name;
     private String surname;
     private String address;
@@ -14,7 +12,6 @@ public class PatientDTO {
     private String phoneNumber;
     private String email;
     private String password;
-
 
     public String getName() {
         return name;

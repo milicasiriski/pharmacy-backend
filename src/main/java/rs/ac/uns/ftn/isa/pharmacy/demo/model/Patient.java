@@ -11,6 +11,7 @@ import java.util.Objects;
 @Entity
 @DiscriminatorValue("PATIENT")
 public class Patient extends User {
+
     private transient final String administrationRole = "ROLE_PATIENT";
 
     @Column(name = "patient_name")
@@ -30,7 +31,6 @@ public class Patient extends User {
 
     @Column(name = "patient_phone_num")
     private String phoneNumber;
-
 
     public Patient() {
         super();

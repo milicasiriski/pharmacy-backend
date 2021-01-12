@@ -18,6 +18,7 @@ import java.util.List;
 
 @Service
 public class RegisterPatientServiceImpl implements RegisterService<PatientDTO, Patient> {
+
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private AuthorityService authService;

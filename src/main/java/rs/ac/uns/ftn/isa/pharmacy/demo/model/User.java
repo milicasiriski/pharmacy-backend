@@ -135,7 +135,6 @@ public abstract class User implements UserDetails {
         return authorities;
     }
 
-
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {

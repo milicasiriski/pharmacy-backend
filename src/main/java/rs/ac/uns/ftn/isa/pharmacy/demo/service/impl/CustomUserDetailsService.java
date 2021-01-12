@@ -18,7 +18,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private AuthenticationManager authenticationManager;
