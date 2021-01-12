@@ -6,18 +6,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDTO;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
-import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterService;
-import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.CustomUserDetailsService;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)

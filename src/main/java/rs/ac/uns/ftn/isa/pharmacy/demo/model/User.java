@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -98,7 +97,6 @@ public abstract class User implements UserDetails {
     public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
-
 
     @Override
     public boolean equals(Object o) {

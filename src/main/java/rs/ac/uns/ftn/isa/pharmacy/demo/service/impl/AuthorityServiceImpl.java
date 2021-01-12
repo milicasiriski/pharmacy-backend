@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Authority;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.AuthorityRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
-
 import java.util.ArrayList;
 import java.util.List;
 

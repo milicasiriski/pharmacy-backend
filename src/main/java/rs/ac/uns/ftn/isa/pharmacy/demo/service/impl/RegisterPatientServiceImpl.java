@@ -13,7 +13,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDTO;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterService;
-
 import java.util.List;
 
 @Service
@@ -41,11 +40,9 @@ public class RegisterPatientServiceImpl implements RegisterService<PatientDTO, P
         return patient;
     }
 
-
     @Override
     public Patient findByEmail(String email) {
         return (Patient) userRepository.findByEmail(email);
     }
-
 
 }
