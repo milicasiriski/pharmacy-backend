@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("DERMATOLOGIST")
 public class Dermatologist extends User {
 
+    private transient final String administrationRole = "ROLE_DERMATOLOGIST";
+
     public Dermatologist() {
         super();
     }

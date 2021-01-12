@@ -6,4 +6,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByEmailAndPassword(String email, String password);
+    User findByEmail(String email);
+
 }
