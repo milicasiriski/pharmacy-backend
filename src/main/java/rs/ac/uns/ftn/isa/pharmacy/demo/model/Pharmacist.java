@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("PHARMACIST")
 public class Pharmacist extends User {
+    private transient final String administrationRole = "ROLE_PHARMACIST";
 
     public Pharmacist() {
         super();
@@ -15,6 +16,7 @@ public class Pharmacist extends User {
     public Pharmacist(String email, String password) {
         super(email, password);
     }
+
 
     @Override
     public boolean equals(Object o) {
