@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("PHARMACIST")
 public class Pharmacist extends User {
-    private final String administrationRole = "ROLE_PHARMACIST";
+    private transient final String administrationRole = "ROLE_PHARMACIST";
 
     public Pharmacist() {
         super();
