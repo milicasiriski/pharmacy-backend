@@ -14,7 +14,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 public class PharmacyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PharmacyApplication.class, args);
+//        SpringApplication.run(PharmacyApplication.class, args);
 
         // Used for testing
 //        ApplicationContext ctx = SpringApplication.run(PharmacyApplication.class, args);
@@ -23,7 +23,7 @@ public class PharmacyApplication {
 //        service.getAllPharmacies().forEach(pharmacy -> {
 //            System.out.println(pharmacy.toString());
 //        });
-//
+
 //        UserRepository repository = (UserRepository) ctx.getBean("userRepository");
 //
 //        repository.save(new Patient("djuro@gmail.com", "djuro", "Djuro", "Djuri", "Djurina ulica 34", "Novi Sad", "Srbija", "065123123"));

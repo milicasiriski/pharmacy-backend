@@ -30,7 +30,7 @@ public class Pharmacy {
     @JoinColumn(name = "pharmacy_id")
     private List<Pharmacist> pharmacists;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "pharmacy_id")
     private List<Medicine> medicine;
 
@@ -40,17 +40,23 @@ public class Pharmacy {
     @Column(name = "price")
     private Map<Medicine, Double> medicinePriceList;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "pharmacy_medicine_stock_mapping", joinColumns = @JoinColumn(name = "pharmacy_id"))
+    @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")
+    @Column(name = "stock")
+    private Map<Medicine, Integer> medicineStock;
+
     @ElementCollection
     @CollectionTable(name = "pharmacy_exam_price_list_mapping", joinColumns = @JoinColumn(name = "pharmacy_id"))
     @MapKeyJoinColumn(name = "exam_id", referencedColumnName = "id")
     @Column(name = "price")
-    private Map<Exam, Double> examinePriceList;
+    private Map<Exam, Double> examPriceList;
 
     public Pharmacy() {
 
     }
 
-    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> medicine, HashMap<Medicine, Double> medicinePriceList, HashMap<Exam, Double> examinePriceList) {
+    public Pharmacy(String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, List<Medicine> medicine, Map<Medicine, Double> medicinePriceList, Map<Medicine, Integer> medicineStock, Map<Exam, Double> examPriceList) {
         this.name = name;
         this.address = address;
         this.about = about;
@@ -58,7 +64,8 @@ public class Pharmacy {
         this.pharmacists = pharmacists;
         this.medicine = medicine;
         this.medicinePriceList = medicinePriceList;
-        this.examinePriceList = examinePriceList;
+        this.medicineStock = medicineStock;
+        this.examPriceList = examPriceList;
     }
 
     public Long getId() {
@@ -125,12 +132,20 @@ public class Pharmacy {
         this.medicinePriceList = medicinePriceList;
     }
 
-    public Map<Exam, Double> getExaminePriceList() {
-        return examinePriceList;
+    public Map<Exam, Double> getExamPriceList() {
+        return examPriceList;
     }
 
-    public void setExaminePriceList(HashMap<Exam, Double> examinePriceList) {
-        this.examinePriceList = examinePriceList;
+    public void setExamPriceList(HashMap<Exam, Double> examPriceList) {
+        this.examPriceList = examPriceList;
+    }
+
+    public Map<Medicine, Integer> getMedicineStock() {
+        return medicineStock;
+    }
+
+    public void setMedicineStock(Map<Medicine, Integer> medicineStock) {
+        this.medicineStock = medicineStock;
     }
 
     @Override
@@ -153,11 +168,8 @@ public class Pharmacy {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", about='" + about + '\'' +
-//                ", dermatologists=" + dermatologists +
-//                ", pharmacists=" + pharmacists +
-//                ", medicine=" + medicine +
-//                ", medicinePriceList=" + medicinePriceList +
-//                ", examinePriceList=" + examinePriceList +
+                ", medicine='" + getMedicine() + '\'' +
+                ", medicine stock='" + getMedicineStock() + '\'' +
                 '}';
     }
 }
