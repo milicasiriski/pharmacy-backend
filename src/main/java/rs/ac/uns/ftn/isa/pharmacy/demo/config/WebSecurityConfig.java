@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,7 +18,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.auth.RestAuthenticationEntryPoint;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.auth.TokenAuthenticationFilter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.CustomUserDetailsService;
-
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -60,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/medicine-reservation/**").permitAll()
                 .antMatchers("/api/foo").permitAll()
+                .antMatchers("/order/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),

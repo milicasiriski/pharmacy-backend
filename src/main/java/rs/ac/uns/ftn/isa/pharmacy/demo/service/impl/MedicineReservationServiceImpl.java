@@ -9,11 +9,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
-
 import javax.persistence.EntityNotFoundException;
-import javax.websocket.server.PathParam;
 import java.util.Calendar;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
