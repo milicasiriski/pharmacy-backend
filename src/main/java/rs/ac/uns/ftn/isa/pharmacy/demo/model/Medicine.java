@@ -1,10 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "medicine")
-public class Medicine {
+public class Medicine implements Serializable {
 
     @Id
     @SequenceGenerator(name = "medicine_sequence_generator", sequenceName = "medicine_sequence", initialValue = 4)

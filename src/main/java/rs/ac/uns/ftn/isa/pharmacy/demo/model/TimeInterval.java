@@ -1,11 +1,12 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Objects;
 
 @Embeddable
-public class TimeInterval {
+public class TimeInterval implements Serializable {
 
     private Calendar start;
     private Calendar end;

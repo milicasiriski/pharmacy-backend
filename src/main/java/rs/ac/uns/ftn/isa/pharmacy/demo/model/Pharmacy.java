@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "pharmacy")
-public class Pharmacy {
+public class Pharmacy implements Serializable {
 
     @Id
     @SequenceGenerator(name = "pharmacy_sequence_generator", sequenceName = "pharmacy_sequence", initialValue = 2)

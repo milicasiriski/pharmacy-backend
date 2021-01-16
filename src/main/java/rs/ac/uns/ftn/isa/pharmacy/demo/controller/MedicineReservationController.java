@@ -1,12 +1,15 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
@@ -14,7 +17,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/medicine/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/medicine-reservation", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicineReservationController {
     private MedicineReservationService medicineReservationService;
 
@@ -24,19 +27,21 @@ public class MedicineReservationController {
     }
 
     @GetMapping("/medicine")
-    public List<Medicine> getAllMedicine() {
-        return medicineReservationService.getAllMedicine();
+    public ResponseEntity<Iterable<Medicine>> getAllMedicine() {
+        return new ResponseEntity<>(medicineReservationService.getAllMedicine(), HttpStatus.OK);
     }
 
     @GetMapping("/pharmacies")
-    public List<Pharmacy> getPharmaciesWithMedicineOnStock(String medicineId) {
-        return medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId);
+    public ResponseEntity<Iterable<Pharmacy>> getPharmaciesWithMedicineOnStock(String medicineId) {
+        return new ResponseEntity<>(medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId), HttpStatus.OK);
     }
 
     @PostMapping("")
-    public void confirmReservation(MedicineReservationDto medicineReservationDto) {
+    public ResponseEntity<Void> confirmReservation(MedicineReservationDto medicineReservationDto) {
         if (medicineReservationService.isReservationValid(medicineReservationDto)) {
             medicineReservationService.confirmReservation(medicineReservationDto);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
