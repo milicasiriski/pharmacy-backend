@@ -14,7 +14,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 public class PharmacyApplication {
 
     public static void main(String[] args) {
-//        SpringApplication.run(PharmacyApplication.class, args);
+        SpringApplication.run(PharmacyApplication.class, args);
 
         // Used for testing
 //        ApplicationContext ctx = SpringApplication.run(PharmacyApplication.class, args);

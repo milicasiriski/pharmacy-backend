@@ -26,12 +26,12 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public List<Medicine> getAllMedicine() {
-        return null;
+    public Iterable<Medicine> getAllMedicine() {
+        return medicineRepository.findAll();
     }
 
     @Override
-    public List<Pharmacy> getPharmaciesWithMedicineOnStock(String medicineId) {
+    public Iterable<Pharmacy> getPharmaciesWithMedicineOnStock(String medicineId) {
         return null;
     }
 
