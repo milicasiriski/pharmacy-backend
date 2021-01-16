@@ -21,6 +21,8 @@ public class Order implements Serializable {
     @Column(name = "amount")
     private int amount;
 
+    @Basic
+    @Temporal(TemporalType.DATE)
     @Column(name = "deadline")
     private Calendar deadline;
 

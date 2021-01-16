@@ -6,12 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
-
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyBasicInfoDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @RestController
