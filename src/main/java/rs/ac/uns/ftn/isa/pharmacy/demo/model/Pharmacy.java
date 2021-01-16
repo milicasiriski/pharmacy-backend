@@ -23,15 +23,17 @@ public class Pharmacy implements Serializable {
     @Column(name = "about")
     private String about;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pharmacy_id")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "pharmacy_dermatologist",
+            joinColumns = {@JoinColumn(name = "pharmacy_id")},
+            inverseJoinColumns = {@JoinColumn(name = "dermatologist_id")})
     private List<Dermatologist> dermatologists;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pharmacy_id")
     private List<Pharmacist> pharmacists;
 
-//        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pharmacy_id")
     private List<Medicine> medicine;
@@ -42,7 +44,6 @@ public class Pharmacy implements Serializable {
     @Column(name = "price")
     private Map<Medicine, Double> medicinePriceList;
 
-//        @ElementCollection(fetch = FetchType.EAGER)
     @ElementCollection
     @CollectionTable(name = "pharmacy_medicine_stock_mapping", joinColumns = @JoinColumn(name = "pharmacy_id"))
     @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")

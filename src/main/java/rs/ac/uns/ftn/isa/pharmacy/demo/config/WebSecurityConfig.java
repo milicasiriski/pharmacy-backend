@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/medicine-reservation/**").permitAll()
                 .antMatchers("/api/foo").permitAll()
                 .antMatchers("/order/**").permitAll()
+                .antMatchers("/user/getAllDermatologists").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
