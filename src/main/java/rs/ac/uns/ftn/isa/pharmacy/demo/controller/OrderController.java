@@ -24,8 +24,8 @@ public class OrderController {
 
     @PostMapping("/")
     public void createOrder(@RequestBody OrderDto orderDto) {
-        System.out.println(orderDto.getName());
-        System.out.println(orderDto.getAmount());
+        System.out.println(orderDto.getOrderItems());
+        System.out.println(orderDto.getDeadline());
         orderService.save(orderDto);
     }
 
