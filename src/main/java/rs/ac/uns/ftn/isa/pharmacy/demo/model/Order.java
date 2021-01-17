@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -14,21 +15,19 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "medicine_id")
-    private Medicine medicine;
-
-    @Column(name = "amount")
-    private int amount;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "order_medicine_mapping", joinColumns = @JoinColumn(name = "order_id"))
+    @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")
+    @Column(name = "order_medicine_amount")
+    private Map<Medicine, Integer> medicineAmount;
 
     @Basic
     @Temporal(TemporalType.DATE)
     @Column(name = "deadline")
     private Calendar deadline;
 
-    public Order(Medicine medicine, Integer amount, Calendar deadline) {
-        this.medicine = medicine;
-        this.amount = amount;
+    public Order(Map<Medicine, Integer> medicineAmount, Calendar deadline) {
+        this.medicineAmount = medicineAmount;
         this.deadline = deadline;
     }
 
@@ -44,20 +43,12 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public Medicine getMedicine() {
-        return medicine;
+    public Map<Medicine, Integer> getMedicineAmount() {
+        return medicineAmount;
     }
 
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setMedicineAmount(Map<Medicine, Integer> medicineAmount) {
+        this.medicineAmount = medicineAmount;
     }
 
     public Calendar getDeadline() {
@@ -73,21 +64,21 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return medicine.equals(order.medicine) &&
-                amount == order.amount &&
+        return id.equals(order.id) &&
+                medicineAmount.equals(order.medicineAmount) &&
                 deadline.equals(order.deadline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(medicine, amount, deadline);
+        return Objects.hash(id, medicineAmount, deadline);
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "medicine=" + medicine +
-                ", amount=" + amount +
+                "id=" + id +
+                ", medicineAmount=" + medicineAmount +
                 ", deadline=" + deadline +
                 '}';
     }

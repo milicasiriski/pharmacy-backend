@@ -2,37 +2,23 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class OrderDto implements Serializable {
-    private String name;
-    private int amount;
+    private HashMap<String, Integer> orderItems;
     private Date deadline;
 
     public OrderDto() {
 
     }
 
-    public OrderDto(String name, int amount, Date deadline) {
-        this.name = name;
-        this.amount = amount;
-        this.deadline = deadline;
+    public HashMap<String, Integer> getOrderItems() {
+        return orderItems;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setOrderItems(HashMap<String, Integer> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public Date getDeadline() {
@@ -48,13 +34,20 @@ public class OrderDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDto orderDto = (OrderDto) o;
-        return amount == orderDto.amount &&
-                name.equals(orderDto.name) &&
+        return orderItems.equals(orderDto.orderItems) &&
                 deadline.equals(orderDto.deadline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, amount, deadline);
+        return Objects.hash(orderItems, deadline);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "orderItems=" + orderItems +
+                ", deadline=" + deadline +
+                '}';
     }
 }

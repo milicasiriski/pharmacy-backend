@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Medicine implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "medicine_sequence_generator", sequenceName = "medicine_sequence", initialValue = 4)
+    @SequenceGenerator(name = "medicine_sequence_generator", sequenceName = "medicine_sequence", initialValue = 5)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_sequence_generator")
     private Long id;
 
@@ -28,6 +28,11 @@ public class Medicine implements Serializable {
         this.name = name;
         this.description = description;
         this.form = form;
+    }
+
+    // USE THIS WHEN CREATING ORDER
+    public Medicine(String name) {
+        this.name = name;
     }
 
     public Long getId() {
