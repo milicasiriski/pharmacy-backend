@@ -7,6 +7,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
@@ -33,7 +34,5 @@ public class PharmacyApplication {
 //        repository.findAll().forEach(user -> {
 //            System.out.println(user.toString());
 //        });
-
-
     }
 }

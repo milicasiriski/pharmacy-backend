@@ -3,6 +3,9 @@ INSERT INTO pharmacy_user(id, type, email, password, patient_address, patient_ci
 INSERT INTO pharmacy_user(id, type, email, password, patient_address, patient_city, patient_country, patient_name, patient_phone_num, patient_surname, enabled, last_password_reset_date) VALUES ('3', 'PATIENT', 'duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07');
 
 INSERT INTO pharmacy(id, about, address, name) VALUES ('1', 'This is a pharmacy.', 'Bulevar Oslobodjenja 123', 'Apoteka');
+INSERT INTO pharmacy(id, about, address, name) VALUES ('2', 'This is a pharmacy.', 'Bulevar Oslobodjenja 666', 'Sputnik');
+INSERT INTO pharmacy(id, about, address, name) VALUES ('3', 'This is a pharmacy.', 'Hadziruvimova 54', 'Jankovic');
+INSERT INTO pharmacy(id, about, address, name) VALUES ('4', 'This is a pharmacy.', 'Bulevar Evrope 43', 'Apoteka');
 
 INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('1', 'Antinflamatory meidicine. Use on adults only.', 'tablet', 'Ibuprofen', '1');
 INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('2', 'Heart medicine. Reduces cholesterol.', 'tablet', 'Roxera', '1');
