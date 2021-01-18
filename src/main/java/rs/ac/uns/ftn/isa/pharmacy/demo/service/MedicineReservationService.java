@@ -4,12 +4,10 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
 
-import java.util.List;
-
 public interface MedicineReservationService {
     Iterable<Medicine> getAllMedicine();
 
-    Iterable<Pharmacy> getPharmaciesWithMedicineOnStock(String medicineId);
+    Iterable<Pharmacy> getPharmaciesWithMedicineOnStock(Long medicineId);
 
     boolean isReservationValid(MedicineReservationDto medicineReservationDto);
 
