@@ -13,6 +13,11 @@ public class OrderDto implements Serializable {
 
     }
 
+    public OrderDto(HashMap<String, Integer> orderItems, Date deadline) {
+        this.orderItems = orderItems;
+        this.deadline = deadline;
+    }
+
     public HashMap<String, Integer> getOrderItems() {
         return orderItems;
     }
@@ -34,8 +39,8 @@ public class OrderDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDto orderDto = (OrderDto) o;
-        return orderItems.equals(orderDto.orderItems) &&
-                deadline.equals(orderDto.deadline);
+        return Objects.equals(orderItems, orderDto.orderItems) &&
+                Objects.equals(deadline, orderDto.deadline);
     }
 
     @Override
