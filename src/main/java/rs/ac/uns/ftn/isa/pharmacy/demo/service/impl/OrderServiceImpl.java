@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,28 +28,36 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void save(OrderDto orderDto) {
-
-        HashMap<Medicine, Integer> medicineAmount = getMedicineOrderMap(orderDto);
+        HashMap<Medicine, Integer> medicineAmount = convertMedicineOrderDtoToMap(orderDto);
         Calendar deadline = Calendar.getInstance();
         deadline.setTime(orderDto.getDeadline());
         Order order = new Order(medicineAmount, deadline);
         orderRepository.save(order);
     }
 
-    private HashMap<Medicine, Integer> getMedicineOrderMap(OrderDto orderDto) {
+    @Override
+    public List<Order> getOrders() {
+        return orderRepository.findAll();
+    }
 
+    private HashMap<Medicine, Integer> convertMedicineOrderDtoToMap(OrderDto orderDto) {
         HashMap<String, Integer> medicineAmount = orderDto.getOrderItems();
         HashMap<Medicine, Integer> newMedicineAmount = new HashMap<>();
 
         for (Map.Entry<String, Integer> medicineOrder : medicineAmount.entrySet()) {
-            Medicine medicine = medicineRepository.findByName(medicineOrder.getKey());
-            if (medicine == null) {
-                medicine = new Medicine(medicineOrder.getKey());
-                medicineRepository.save(medicine);
-            }
-
+            Medicine medicine = checkIfMedicineExists(medicineOrder);
             newMedicineAmount.put(medicine, medicineOrder.getValue());
         }
         return newMedicineAmount;
+    }
+
+    private Medicine checkIfMedicineExists(Map.Entry<String, Integer> medicineOrder) {
+        Medicine medicine = medicineRepository.findByName(medicineOrder.getKey());
+
+        if (medicine == null) {
+            medicine = new Medicine(medicineOrder.getKey());
+            medicineRepository.save(medicine);
+        }
+        return medicine;
     }
 }
