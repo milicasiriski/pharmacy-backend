@@ -1,11 +1,8 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity

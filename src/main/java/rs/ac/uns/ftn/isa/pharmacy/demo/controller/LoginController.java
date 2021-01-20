@@ -17,23 +17,20 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.CustomUserDetailsService;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-public class LoginControler {
+public class LoginController {
 
-    private TokenUtils tokenUtils;
-    private AuthenticationManager authenticationManager;
-    private CustomUserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public LoginControler(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
-                          CustomUserDetailsService userDetailsService){
+    public LoginController(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
+                           CustomUserDetailsService userDetailsService) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/")

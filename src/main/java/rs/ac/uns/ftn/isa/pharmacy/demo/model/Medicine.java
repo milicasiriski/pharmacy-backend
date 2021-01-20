@@ -30,7 +30,6 @@ public class Medicine implements Serializable {
         this.form = form;
     }
 
-    // USE THIS WHEN CREATING ORDER
     public Medicine(String name) {
         this.name = name;
     }
