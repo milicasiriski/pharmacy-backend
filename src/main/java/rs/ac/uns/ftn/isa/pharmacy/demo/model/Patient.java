@@ -32,6 +32,9 @@ public class Patient extends User {
     @Column(name = "patient_phone_num")
     private String phoneNumber;
 
+    @Column(name = "patient_activation_code", length = 64)
+    private String activationCode;
+
     public Patient() {
         super();
     }
@@ -94,6 +97,10 @@ public class Patient extends User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getActivationCode() { return activationCode; }
+
+    public void setActivationCode(String activationCode) { this.activationCode = activationCode; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,16 +123,18 @@ public class Patient extends User {
     @Override
     public String toString() {
         return "Patient{" +
-                "name='" + name + '\'' +
+                "administrationRole='" + administrationRole + '\'' +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", activationCode='" + activationCode + '\'' +
+                ", id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", enabled=" + enabled +
                 '}';
     }
-
-
 }
