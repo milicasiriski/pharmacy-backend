@@ -1,16 +1,34 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.PharmacyServiceImpl;
 
-@Controller
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/pharmacy", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PharmacyController {
 
-    private PharmacyService pharmacyService;
+    private final PharmacyServiceImpl pharmacyService;
 
     @Autowired
-    public PharmacyController(PharmacyService pharmacyService) {
+    public PharmacyController(PharmacyServiceImpl pharmacyService) {
         this.pharmacyService = pharmacyService;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<PharmacyNameAndAddressDto>> getOrders() {
+        List<Pharmacy> pharmacies = pharmacyService.findAll();
+        List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
+        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress())));
+        return ResponseEntity.ok(dtoPharmacies);
     }
 }
