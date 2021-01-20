@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.DtoResponseConverters;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
@@ -25,16 +23,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserControler {
+public class UserController {
 
-    private TokenUtils tokenUtils;
-    private CustomUserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final CustomUserDetailsService userDetailsService;
 
     @Qualifier("userServiceImpl")
     private final UserService userService;
 
     @Autowired
-    public UserControler(TokenUtils tokenUtils, CustomUserDetailsService userDetailsService, UserService userService) {
+    public UserController(TokenUtils tokenUtils, CustomUserDetailsService userDetailsService, UserService userService) {
         this.userService = userService;
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;

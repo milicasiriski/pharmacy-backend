@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
