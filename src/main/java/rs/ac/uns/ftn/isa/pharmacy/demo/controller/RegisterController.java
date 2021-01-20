@@ -2,8 +2,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDTO;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
-import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterService;
-
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,6 +28,7 @@ public class RegisterController {
         this.registerService = registerService;
     }
 
+    //@TODO: Check if values are ok
     @PostMapping("/patient")
     public ResponseEntity<String> register(HttpServletRequest request, @RequestBody PatientDTO patientDTO, UriComponentsBuilder ucBuilder) {
         Patient existUser = this.registerService.findByEmail(patientDTO.getEmail());
@@ -44,10 +44,13 @@ public class RegisterController {
         }
     }
 
-    @PutMapping("/activate/{code}/{email}")
-    public ResponseEntity<String> activate(@Param("email")String email, @Param("activationCode") String activationCode) {
+    @PostMapping("/activate")
+    public ResponseEntity<String> activate(@RequestBody ActivateDto dto) {
+        System.out.println(dto);
+        String email = dto.getEmail();
+        String code = dto.getCode();
         try {
-            this.registerService.activate(email, activationCode);
+            this.registerService.activate(email, code);
             return new ResponseEntity<>("/activation/success", HttpStatus.OK);
         } catch (BadActivationCodeException e) {
             e.printStackTrace();
@@ -56,8 +59,9 @@ public class RegisterController {
     }
 
     private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
+        //String siteURL = request.getRequestURL().toString();
+        //return siteURL.replace(request.getServletPath(), "");
+        return "http://localhost:8081";
     }
 
 }
