@@ -13,6 +13,35 @@ public class PatientDTO {
     private String email;
     private String password;
 
+    public PatientDTO() {
+
+    }
+
+    public PatientDTO(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientDTO{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public String getName() {
         return name;
     }
@@ -78,15 +107,8 @@ public class PatientDTO {
     }
 
     public Patient createPatient() {
-        Patient patient = new Patient();
-
-        patient.setName(this.name);
-        patient.setSurname(this.surname);
-        patient.setAddress(this.address);
-        patient.setCity(this.city);
-        patient.setCountry(this.country);
-        patient.setPhoneNumber(this.phoneNumber);
-        patient.setEmail(this.email);
+        Patient patient = new Patient(this.email,this.password,this.name,this.surname,
+                this.address,this.city, this.country, this.phoneNumber);
         patient.Disable();
 
         return patient;

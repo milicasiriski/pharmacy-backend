@@ -74,10 +74,6 @@ public abstract class User implements UserDetails {
         this.password = password;
     }
 
-    public long getId() {
-        return this.id;
-    }
-
     public String getAdministrationRole() {
         return this.administrationRole;
     }
