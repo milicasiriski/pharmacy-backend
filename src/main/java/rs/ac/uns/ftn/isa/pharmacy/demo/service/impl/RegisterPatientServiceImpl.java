@@ -3,9 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.EmailSubjectMaker;
-
-import java.io.IOException;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -27,29 +26,33 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     private UserRepository userRepository;
     private AuthorityService authService;
     private JavaMailSender javaMailSender;
+    private PasswordEncoder passwordEncoder;
     private Environment env;
+
 
     @Autowired
     public RegisterPatientServiceImpl(UserRepository userRepository,
                                       AuthorityService authService,
                                       JavaMailSender javaMailSender,
-                                      Environment env) {
+                                      Environment env,
+                                      PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authService = authService;
         this.javaMailSender = javaMailSender;
         this.env = env;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
-    public Patient register(PatientDTO dto, String siteURL) throws MailException{
+    public Patient register(PatientDTO dto, String siteURL) throws MessagingException {
 
         Patient patient = dto.createPatient();
         List<Authority> auth = authService.findByname(patient.getAdministrationRole());
         patient.setAuthorities(auth);
+        patient.setPassword(passwordEncoder.encode(dto.getPassword()));
         String activationCode = RandomString.make(64);
         patient.setActivationCode(activationCode);
-        System.out.println(patient);
         patient = (Patient) userRepository.save(patient);
         sendActivationLink(patient, siteURL);
         return patient;
@@ -58,7 +61,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     @Override
     public Patient activate(String email, String activationCode) throws BadActivationCodeException {
         Patient patient = findByEmail(email);
-        if (patient.getActivationCode() != activationCode) {
+        if (!patient.getActivationCode().equals(activationCode)) {
             throw new BadActivationCodeException();
         }
         patient.Enable();
@@ -73,16 +76,16 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     }
 
     @Async
-    public void sendActivationLink(Patient patient, String siteUrl) throws MailException {
+    public void sendActivationLink(Patient patient, String siteUrl) throws MessagingException{
         EmailSubjectMaker emailSubjectMaker = new EmailSubjectMaker();
-        SimpleMailMessage mail = new SimpleMailMessage();
+        String verifyURL = siteUrl + "/activation?code=" + patient.getActivationCode() + "&email=" + patient.getEmail();
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper mail = new MimeMessageHelper(message);
         mail.setTo(patient.getEmail());
         mail.setFrom(this.env.getProperty("spring.mail.username"));
         mail.setSubject("Wellcome to ®™PharmacyManager!");
-        String verifyURL = siteUrl + "/activation?code=" + patient.getActivationCode() + "&email=" + patient.getEmail();
         mail.setText(emailSubjectMaker.makeActivationHtml(verifyURL));
-        javaMailSender.send(mail);
-
+        javaMailSender.send(message);
         System.out.println("Email sent!");
     }
 
