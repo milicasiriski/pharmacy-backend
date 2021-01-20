@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.DtoResponseConverters;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
@@ -59,23 +60,7 @@ public class UserControler {
         List<Dermatologist> dermatologists = userService.getAllDermatologists();
         List<DermatologistDto> dermatologistsDto = new ArrayList<>();
 
-        System.out.println("APOTEKA0");
-
-        dermatologists.forEach(dermatologist -> {
-                    List<Pharmacy> pharmacies = dermatologist.getPharmacies();
-                    List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-                    pharmacies.forEach(pharmacy -> {
-                        System.out.println("APOTEKA");
-                        System.out.println(pharmacy);
-                        PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress());
-                        dtoPharmacies.add(pharmacyNameAndAddressDto);
-                    });
-
-                    DermatologistDto dermatologistDto = new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(), 4.75, dtoPharmacies);
-                    dermatologistsDto.add(dermatologistDto);
-                }
-        );
-
+        DtoResponseConverters.createDermatologistsResponseDtoFromDermatologists(dermatologists, dermatologistsDto);
         return ResponseEntity.ok(dermatologistsDto);
     }
 }
