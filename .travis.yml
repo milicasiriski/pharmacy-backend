@@ -16,7 +16,14 @@ before_install:
 
 script:
   - ./gradlew clean build -i --continue
+  - ./gradlew sonarqube
 
+addons:
+  sonarcloud:
+    organization: "isa-team6"
+    token: ${SONAR_TOKEN}
+	
+  
 
 
 
