@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.DtoResponseConverters;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController {
+public class UserController implements DtoResponseConverters {
 
     private TokenUtils tokenUtils;
     private CustomUserDetailsService userDetailsService;
@@ -59,9 +60,11 @@ public class UserController {
     @GetMapping(value = "/getAllDermatologists")
     public ResponseEntity<List<DermatologistDto>> getAllDermatologists() {
         List<Dermatologist> dermatologists = userService.getAllDermatologists();
-        List<DermatologistDto> dermatologistsDto = new ArrayList<>();
+        return ResponseEntity.ok(createDermatologistsResponseDtoFromDermatologists(dermatologists));
+    }
 
-        DtoResponseConverters.createDermatologistsResponseDtoFromDermatologists(dermatologists, dermatologistsDto);
-        return ResponseEntity.ok(dermatologistsDto);
+    @GetMapping(value = "/getAllPharmacists")
+    public ResponseEntity<List<PharmacistDto>> getAllPharmacists() {
+        return ResponseEntity.ok(createPharmacistsResponseDtoFromPharmacists(userService.getAllPharmacists()));
     }
 }

@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
 
@@ -25,5 +26,15 @@ public class UserServiceImpl implements UserService {
 
     public List<Dermatologist> getDermatologistsByPharmacy(String pharmacyName) {
         return userRepository.getDermatologistsByPharmacy(pharmacyName);
+    }
+
+    @Override
+    public List<Pharmacist> getPharmacistsByPharmacy(String pharmacyName) {
+        return userRepository.getPharmacistByPharmacy(pharmacyName);
+    }
+
+    @Override
+    public List<Pharmacist> getAllPharmacists() {
+        return userRepository.getAllPharmacists();
     }
 }

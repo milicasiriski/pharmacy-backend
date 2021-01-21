@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/dermatologist", produces = MediaType.APPLICATION_JSON_VALUE)
-public class DermatologistsController {
+public class DermatologistsController implements DtoResponseConverters {
 
     private final UserService userService;
 
@@ -24,11 +24,9 @@ public class DermatologistsController {
     }
 
     @GetMapping(value = "/getDermatologistsByPharmacy/{pharmacyName}")
-    public ResponseEntity<List<DermatologistDto>> getAllDermatologists(@PathVariable String pharmacyName) {
+    public ResponseEntity<List<DermatologistDto>> getDermatologistsByPharmacy(@PathVariable String pharmacyName) {
         List<Dermatologist> dermatologists = userService.getDermatologistsByPharmacy(pharmacyName);
-        List<DermatologistDto> dermatologistsDto = new ArrayList<>();
-
-        DtoResponseConverters.createDermatologistsResponseDtoFromDermatologists(dermatologists, dermatologistsDto);
+        List<DermatologistDto> dermatologistsDto = createDermatologistsResponseDtoFromDermatologists(dermatologists);
         return ResponseEntity.ok(dermatologistsDto);
     }
 }
