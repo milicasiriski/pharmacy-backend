@@ -9,7 +9,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
-
 import java.util.List;
 import java.util.Objects;
 

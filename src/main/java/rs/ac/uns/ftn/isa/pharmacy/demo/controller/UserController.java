@@ -19,7 +19,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.CustomUserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
