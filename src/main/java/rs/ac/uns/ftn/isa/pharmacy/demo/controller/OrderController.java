@@ -11,7 +11,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderResponseDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
