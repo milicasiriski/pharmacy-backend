@@ -23,14 +23,16 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LoginController {
 
-    private final TokenUtils tokenUtils;
-    private final AuthenticationManager authenticationManager;
+    private TokenUtils tokenUtils;
+    private AuthenticationManager authenticationManager;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     public LoginController(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
                            CustomUserDetailsService userDetailsService) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/")
@@ -41,10 +43,14 @@ public class LoginController {
                         authenticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getUsername());
-        int expiresIn = tokenUtils.getExpiredIn();
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        String username = user.getUsername();
+        String userType = user.getClass().getSimpleName();
+        String accessToken = tokenUtils.generateToken(username);
+        int accessExpiresIn = tokenUtils.getAccessTokenExpiresIn();
+        String refreshToken = tokenUtils.generateRefreshToken(username);
+        int refreshExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
+        UserTokenState state = new UserTokenState(userType, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn);
+        return ResponseEntity.ok(state);
     }
 }

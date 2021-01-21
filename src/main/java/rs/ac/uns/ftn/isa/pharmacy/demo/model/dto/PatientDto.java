@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 
-public class PatientDTO {
+public class PatientDto {
 
     private String name;
     private String surname;
@@ -13,11 +13,11 @@ public class PatientDTO {
     private String email;
     private String password;
 
-    public PatientDTO() {
+    public PatientDto() {
 
     }
 
-    public PatientDTO(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password) {
+    public PatientDto(String name, String surname, String address, String city, String country, String phoneNumber, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.address = address;
@@ -107,8 +107,8 @@ public class PatientDTO {
     }
 
     public Patient createPatient() {
-        Patient patient = new Patient(this.email,this.password,this.name,this.surname,
-                this.address,this.city, this.country, this.phoneNumber);
+        Patient patient = new Patient(this.email, this.password, this.name, this.surname,
+                this.address, this.city, this.country, this.phoneNumber);
         patient.Disable();
 
         return patient;

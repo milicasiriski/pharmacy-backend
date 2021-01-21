@@ -47,6 +47,16 @@ public class TokenUtils {
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
 
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setIssuer(APP_NAME)
+                .setSubject(username)
+                .setAudience(generateAudience())
+                .setIssuedAt(new Date())
+                .setExpiration(generateExpirationRefreshDate())
+                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+    }
+
     private String generateAudience() {
         return AUDIENCE_WEB;
     }
@@ -54,6 +64,11 @@ public class TokenUtils {
     private Date generateExpirationDate() {
         return new Date(new Date().getTime() + EXPIRES_IN);
     }
+
+    private Date generateExpirationRefreshDate() {
+        return new Date(new Date().getTime() + EXPIRES_IN * 3);
+    }
+
 
     public String refreshToken(String token) {
         String refreshedToken;
@@ -129,9 +144,14 @@ public class TokenUtils {
         return expiration;
     }
 
-    public int getExpiredIn() {
+    public int getAccessTokenExpiresIn() {
         return EXPIRES_IN;
     }
+
+    public int getRefreshTokenExpiresIn() {
+        return EXPIRES_IN * 3;
+    }
+
 
     public String getToken(HttpServletRequest request) {
         String authHeader = getAuthHeaderFromHeader(request);
