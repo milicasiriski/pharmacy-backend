@@ -25,8 +25,8 @@ import java.util.List;
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    private final TokenUtils tokenUtils;
-    private final CustomUserDetailsService userDetailsService;
+    private TokenUtils tokenUtils;
+    private CustomUserDetailsService userDetailsService;
 
     @Qualifier("userServiceImpl")
     private final UserService userService;
@@ -43,10 +43,13 @@ public class UserController {
         String token = tokenUtils.getToken(request);
         String username = this.tokenUtils.getUsernameFromToken(token);
         User user = (User) this.userDetailsService.loadUserByUsername(username);
+        String userType = user.getClass().getSimpleName();
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token);
-            int expiresIn = tokenUtils.getExpiredIn();
-            return ResponseEntity.ok(new UserTokenState(refreshedToken, expiresIn));
+            String refreshToken = tokenUtils.generateRefreshToken(username);
+            String accessToken = tokenUtils.generateToken(username);
+            int accessTokenExpiresIn = tokenUtils.getAccessTokenExpiresIn();
+            int refreshTokenExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
+            return ResponseEntity.ok(new UserTokenState(userType, accessToken, refreshToken, accessTokenExpiresIn, refreshTokenExpiresIn));
         } else {
             UserTokenState userTokenState = new UserTokenState();
             return ResponseEntity.badRequest().body(userTokenState);

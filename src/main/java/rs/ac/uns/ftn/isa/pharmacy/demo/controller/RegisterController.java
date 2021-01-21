@@ -10,11 +10,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDTO;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
+
 import javax.servlet.http.HttpServletRequest;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,15 +29,15 @@ public class RegisterController {
 
     //@TODO: Check if values are ok
     @PostMapping("/patient")
-    public ResponseEntity<String> register(HttpServletRequest request, @RequestBody PatientDTO patientDTO, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<String> register(HttpServletRequest request, @RequestBody PatientDto patientDTO, UriComponentsBuilder ucBuilder) {
         Patient existUser = this.registerService.findByEmail(patientDTO.getEmail());
         if (existUser != null) {
             return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
         }
         try {
-            this.registerService.register(patientDTO,getSiteURL(request));
+            this.registerService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Registration failed!", HttpStatus.INTERNAL_SERVER_ERROR);
         }

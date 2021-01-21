@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Authority;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDTO;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
@@ -29,7 +29,6 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     private PasswordEncoder passwordEncoder;
     private Environment env;
 
-
     @Autowired
     public RegisterPatientServiceImpl(UserRepository userRepository,
                                       AuthorityService authService,
@@ -43,9 +42,8 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
-    public Patient register(PatientDTO dto, String siteURL) throws MessagingException {
+    public Patient register(PatientDto dto, String siteURL) throws MessagingException {
 
         Patient patient = dto.createPatient();
         List<Authority> auth = authService.findByname(patient.getAdministrationRole());
@@ -84,10 +82,9 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         mail.setTo(patient.getEmail());
         mail.setFrom(this.env.getProperty("spring.mail.username"));
         mail.setSubject("Wellcome to ®™PharmacyManager!");
-        mail.setText(emailSubjectMaker.makeActivationHtml(verifyURL));
+        mail.setText(emailSubjectMaker.makeActivationHtml(verifyURL), true);
         javaMailSender.send(message);
         System.out.println("Email sent!");
     }
-
 
 }
