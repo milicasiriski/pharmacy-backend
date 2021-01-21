@@ -56,5 +56,6 @@ test {
 sonarqube {
     properties {
         property "sonar.projectKey", "lukaDoric_pharmacy-backend"
+        property 'sonar.coverage.exclusions', "**/test/**,**/test"
     }
 }
