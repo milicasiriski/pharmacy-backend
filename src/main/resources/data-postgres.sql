@@ -25,9 +25,9 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('5', 'DERMATOLOGIST', 'dermatologist2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Pera', 'Peric');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('6', 'DERMATOLOGIST', 'dermatologist3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Mika', 'Mikic');
 
-INSERT INTO pharmacy_user(id, user_type, email, password, pharmacy_id, enabled, last_password_reset_date) VALUES ('7', 'PHARMACIST', 'pharmacist1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '1', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, pharmacy_id, enabled, last_password_reset_date) VALUES ('8', 'PHARMACIST', 'pharmacist2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '1', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, pharmacy_id, enabled, last_password_reset_date) VALUES ('9', 'PHARMACIST', 'pharmacist3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '1', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('7', 'PHARMACIST', 'pharmacist1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Savo', 'Oroz');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('8', 'PHARMACIST', 'pharmacist2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Dujo', 'Damjanovic');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('9', 'PHARMACIST', 'pharmacist3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Marko', 'Markovic');
 
 INSERT INTO exam(id, duration) VALUES ('1', '30');
 INSERT INTO exam(id, duration) VALUES ('2', '45');
@@ -49,6 +49,13 @@ INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('2', '
 INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('3', '6');
 INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('4', '4');
 INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('5', '5');
+
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '7');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '7');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('3', '8');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '8');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('5', '9');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('6', '9');
 
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');

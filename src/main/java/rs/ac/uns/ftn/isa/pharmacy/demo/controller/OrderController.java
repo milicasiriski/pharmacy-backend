@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_VALUE)
-public class OrderController {
+public class OrderController implements DtoResponseConverters {
 
     @Qualifier("orderServiceImpl")
     private final OrderService orderService;
@@ -34,8 +34,6 @@ public class OrderController {
     @GetMapping("/")
     public ResponseEntity<List<OrderResponseDto>> getOrders() {
         List<Order> orders = orderService.getOrders();
-        List<OrderResponseDto> ordersDto = new ArrayList<>();
-        DtoResponseConverters.createOrderResponseDtoFromOrder(orders, ordersDto);
-        return ResponseEntity.ok(ordersDto);
+        return ResponseEntity.ok(createOrderResponseDtoFromOrder(orders));
     }
 }

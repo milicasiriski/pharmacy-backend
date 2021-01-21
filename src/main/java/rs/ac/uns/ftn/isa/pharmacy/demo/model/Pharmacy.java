@@ -30,8 +30,11 @@ public class Pharmacy implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "dermatologist_id")})
     private List<Dermatologist> dermatologists;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pharmacy_id")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "pharmacy_pharmacists",
+            joinColumns = {@JoinColumn(name = "pharmacy_id")},
+            inverseJoinColumns = {@JoinColumn(name = "pharmacist_id")})
     private List<Pharmacist> pharmacists;
 
     @OneToMany(cascade = CascadeType.ALL)
