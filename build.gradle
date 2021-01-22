@@ -14,7 +14,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.session:spring-session-core'
@@ -45,8 +44,6 @@ dependencies {
 
     // mail
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
-
-
 }
 
 test {
