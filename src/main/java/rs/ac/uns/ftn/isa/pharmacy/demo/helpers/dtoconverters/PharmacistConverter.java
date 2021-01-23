@@ -14,20 +14,19 @@ public interface PharmacistConverter {
         List<PharmacistDto> pharmacistsDto = new ArrayList<>();
         pharmacists.forEach(pharmacist -> {
                     List<Pharmacy> pharmacies = pharmacist.getPharmacies();
-                    List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-
-                    findAllRelevantPharmacies(pharmacies, dtoPharmacies);
-                    PharmacistDto pharmacistDto = new PharmacistDto(pharmacist.getName(), pharmacist.getSurname(), 4.75, dtoPharmacies);
+                    PharmacistDto pharmacistDto = new PharmacistDto(pharmacist.getName(), pharmacist.getSurname(), 4.75, extractPharmacyInfo(pharmacies));
                     pharmacistsDto.add(pharmacistDto);
                 }
         );
         return pharmacistsDto;
     }
 
-    private void findAllRelevantPharmacies(List<Pharmacy> pharmacies, List<PharmacyNameAndAddressDto> dtoPharmacies) {
+    private List<PharmacyNameAndAddressDto> extractPharmacyInfo(List<Pharmacy> pharmacies) {
+        List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
         pharmacies.forEach(pharmacy -> {
             PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });
+        return dtoPharmacies;
     }
 }
