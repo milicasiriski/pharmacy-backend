@@ -14,20 +14,19 @@ public interface DermatologistConverter {
         List<DermatologistDto> dermatologistsDto = new ArrayList<>();
         dermatologists.forEach(dermatologist -> {
                     List<Pharmacy> pharmacies = dermatologist.getPharmacies();
-                    List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-
-                    findAllRelevantPharmacies(pharmacies, dtoPharmacies);
-                    DermatologistDto dermatologistDto = new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(), 4.75, dtoPharmacies);
+                    DermatologistDto dermatologistDto = new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(), 4.75, extractPharmacyInfo(pharmacies));
                     dermatologistsDto.add(dermatologistDto);
                 }
         );
         return dermatologistsDto;
     }
 
-    private void findAllRelevantPharmacies(List<Pharmacy> pharmacies, List<PharmacyNameAndAddressDto> dtoPharmacies) {
+    private List<PharmacyNameAndAddressDto> extractPharmacyInfo(List<Pharmacy> pharmacies) {
+        List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
         pharmacies.forEach(pharmacy -> {
             PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });
+        return dtoPharmacies;
     }
 }
