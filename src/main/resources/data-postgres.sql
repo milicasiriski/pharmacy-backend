@@ -57,6 +57,16 @@ INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '8');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('5', '9');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('6', '9');
 
+INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start) VALUES (1, false, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00');
+INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start) VALUES (2, false, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00');
+INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start) VALUES (3, false, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00');
+INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start) VALUES (4, false, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00');
+
+INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES (1, 7);
+INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES (2, 8);
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES (3, 4);
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES (4, 5);
+
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');
