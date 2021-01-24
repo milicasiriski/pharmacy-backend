@@ -2,8 +2,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -17,6 +15,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 @Service
@@ -47,29 +46,25 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public ResponseEntity<Void> sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException {
-        VacationTimeRequest vacation = vacationRepository.findById(vacationDto.getId()).orElse(null);
+    public void sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestPharmacist vacationTimeRequestPharmacist = pharmacistVacationRepository.findById(vacationDto.getId()).orElse(null);
 
-        if (vacation == null || vacationTimeRequestPharmacist == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(vacationTimeRequestPharmacist == null) {
+            throw new EntityNotFoundException();
         }
-        updateVacation(vacationDto, vacation);
+        updateVacation(vacationDto, vacationTimeRequestPharmacist);
         sendVacationStatusToEmail(vacationTimeRequestPharmacist.getPharmacist(), vacationDto);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Void> sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException {
-        VacationTimeRequest vacation = vacationRepository.findById(vacationDto.getId()).orElse(null);
+    public void sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestDermatologist vacationTimeRequestDermatologist = dermatologistVacationRepository.findById(vacationDto.getId()).orElse(null);
 
-        if (vacation == null || vacationTimeRequestDermatologist == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(vacationTimeRequestDermatologist == null) {
+            throw new EntityNotFoundException();
         }
-        updateVacation(vacationDto, vacation);
+        updateVacation(vacationDto, vacationTimeRequestDermatologist);
         sendVacationStatusToEmail(vacationTimeRequestDermatologist.getDermatologist(), vacationDto);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Async
