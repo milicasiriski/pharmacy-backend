@@ -17,7 +17,7 @@ public class Medicine implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_sequence_generator")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique=true)
     private String name;
 
     @Column(name = "description")
