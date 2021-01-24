@@ -11,15 +11,10 @@ INSERT INTO pharmacy(id, about, address, name) VALUES ('6', 'This is a pharmacy.
 INSERT INTO pharmacy(id, about, address, name) VALUES ('7', 'This is a pharmacy.', 'Maksima Gorkog 20', 'Phizer');
 INSERT INTO pharmacy(id, about, address, name) VALUES ('8', 'This is a pharmacy.', 'Bul Evrope 32', 'Apoteka Jovanovic');
 
-INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('1', 'Antinflamatory meidicine. Use on adults only.', 'tablet', 'Ibuprofen', '1');
-INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('2', 'Heart medicine. Reduces cholesterol.', 'tablet', 'Roxera', '1');
-INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('3', 'Antibiotic medicine.', 'syrup', 'Panklav', '1');
-INSERT INTO medicine(id, description, form, name, pharmacy_id) VALUES ('4', 'Painkiller.', 'tablet', 'Paracetamol', '1');
-
-INSERT INTO public.pharmacy_medicine_stock_mapping(pharmacy_id, stock, medicine_id) VALUES ('1', '10', '1');
-INSERT INTO public.pharmacy_medicine_stock_mapping(pharmacy_id, stock, medicine_id) VALUES ('1', '20', '2');
-INSERT INTO public.pharmacy_medicine_stock_mapping(pharmacy_id, stock, medicine_id) VALUES ('1', '0', '3');
-INSERT INTO public.pharmacy_medicine_stock_mapping(pharmacy_id, stock, medicine_id) VALUES ('1', '4', '4');
+INSERT INTO medicine(id, description, form, name) VALUES ('1', 'Antinflamatory meidicine. Use on adults only.', 'tablet', 'Ibuprofen');
+INSERT INTO medicine(id, description, form, name) VALUES ('2', 'Heart medicine. Reduces cholesterol.', 'tablet', 'Roxera');
+INSERT INTO medicine(id, description, form, name) VALUES ('3', 'Antibiotic medicine.', 'syrup', 'Panklav');
+INSERT INTO medicine(id, description, form, name) VALUES ('4', 'Painkiller.', 'tablet', 'Paracetamol');
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('4', 'DERMATOLOGIST', 'pharmacyisa6+djuro@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Djuro', 'Djuric');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('5', 'DERMATOLOGIST', 'pharmacyisa6+pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Pera', 'Peric');

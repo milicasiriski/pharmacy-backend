@@ -26,31 +26,33 @@ public class VacationController implements VacationConverter {
         this.vacationService = vacationService;
     }
 
-    @GetMapping("/getAllPharmacistsVacation")
+    @GetMapping("/pharmacistVacation")
     public ResponseEntity<Iterable<VacationDto>> getPharmacistsVacation() {
         Iterable<VacationTimeRequestPharmacist> vacationTimeRequestPharmacists = vacationService.getAllPharmacistsVacation();
         return ResponseEntity.ok(createResponseForPharmacist(vacationTimeRequestPharmacists));
     }
 
-    @GetMapping("/getAllDermatologistsVacation")
+    @GetMapping("/dermatologistVacation")
     public ResponseEntity<Iterable<VacationDto>> getDermatologistsVacation() {
         Iterable<VacationTimeRequestDermatologist> vacationTimeRequestDermatologists = vacationService.getAllDermatologistsVacation();
         return ResponseEntity.ok(createResponseForDermatologist(vacationTimeRequestDermatologists));
     }
 
-    @PostMapping("/sendVacationResponsePharmacist")
+    @PostMapping("/pharmacistVacation")
     public ResponseEntity<Void> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) {
         try {
-            return vacationService.sendVacationResponsePharmacist(vacationDto);
+            vacationService.sendVacationResponsePharmacist(vacationDto);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/sendVacationResponseDermatologist")
+    @PostMapping("/dermatologistVacation")
     public ResponseEntity<Void> sendVacationResponseDermatologist(@RequestBody VacationDto vacationDto) {
         try {
-            return vacationService.sendVacationResponseDermatologist(vacationDto);
+            vacationService.sendVacationResponseDermatologist(vacationDto);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
