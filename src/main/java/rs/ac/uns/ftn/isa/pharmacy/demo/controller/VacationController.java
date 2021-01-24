@@ -15,8 +15,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.VacationTimeRequestPharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
-import javax.mail.MessagingException;
-
 @Controller
 @RequestMapping(value = "/vacation", produces = MediaType.APPLICATION_JSON_VALUE)
 public class VacationController implements VacationConverter {
@@ -41,15 +39,22 @@ public class VacationController implements VacationConverter {
     }
 
     @PostMapping("/sendVacationResponsePharmacist")
-    public ResponseEntity<Void> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) throws MessagingException {
-        System.out.println("VREDNOST:");
-        System.out.println(vacationDto.toString());
-        return vacationService.sendVacationResponsePharmacist(vacationDto);
+    public ResponseEntity<Void> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) {
+        try {
+            return vacationService.sendVacationResponsePharmacist(vacationDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-//    @PostMapping("/sendVacationResponseDermatologist")
-//    public void sendVacationResponseDermatologist() {
-//
-//    }
-
+    @PostMapping("/sendVacationResponseDermatologist")
+    public ResponseEntity<Void> sendVacationResponseDermatologist(@RequestBody VacationDto vacationDto) {
+        try {
+            return vacationService.sendVacationResponseDermatologist(vacationDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
