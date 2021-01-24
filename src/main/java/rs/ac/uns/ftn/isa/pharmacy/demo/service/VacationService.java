@@ -11,5 +11,5 @@ public interface VacationService {
     Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation();
     Iterable<VacationTimeRequestDermatologist> getAllDermatologistsVacation();
     ResponseEntity<Void> sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException;
-    void sendVacationResponseDermatologist(VacationDto vacationDto);
+    ResponseEntity<Void> sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException;
 }

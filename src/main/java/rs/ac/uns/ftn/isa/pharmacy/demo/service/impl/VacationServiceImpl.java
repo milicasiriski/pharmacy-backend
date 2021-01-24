@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Objects;
 
 @Service
 public class VacationServiceImpl implements VacationService {
@@ -48,45 +49,54 @@ public class VacationServiceImpl implements VacationService {
     @Override
     public ResponseEntity<Void> sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException {
         VacationTimeRequest vacation = vacationRepository.findById(vacationDto.getId()).orElse(null);
-        if (vacation == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        vacation.setApproved(vacationDto.isApproved());
-        vacation.setRejectedReason(vacationDto.getReason());
-        vacation.setStatus("Responded");
-        vacationRepository.save(vacation);
-
         VacationTimeRequestPharmacist vacationTimeRequestPharmacist = pharmacistVacationRepository.findById(vacationDto.getId()).orElse(null);
-        if (vacationTimeRequestPharmacist == null) {
+
+        if (vacation == null || vacationTimeRequestPharmacist == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        updateVacation(vacationDto, vacation);
         sendVacationStatusToEmail(vacationTimeRequestPharmacist.getPharmacist(), vacationDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public void sendVacationResponseDermatologist(VacationDto vacationDto) {
+    public ResponseEntity<Void> sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException {
+        VacationTimeRequest vacation = vacationRepository.findById(vacationDto.getId()).orElse(null);
+        VacationTimeRequestDermatologist vacationTimeRequestDermatologist = dermatologistVacationRepository.findById(vacationDto.getId()).orElse(null);
+
+        if (vacation == null || vacationTimeRequestDermatologist == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        updateVacation(vacationDto, vacation);
+        sendVacationStatusToEmail(vacationTimeRequestDermatologist.getDermatologist(), vacationDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Async
-    public void sendVacationStatusToEmail(Pharmacist pharmacist, VacationDto vacationDto) throws MessagingException {
+    public void sendVacationStatusToEmail(User user, VacationDto vacationDto) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper mail = new MimeMessageHelper(message);
-        mail.setTo(pharmacist.getEmail());
-        mail.setFrom(this.env.getProperty("spring.mail.username"));
+        mail.setTo(user.getEmail());
+        mail.setFrom(Objects.requireNonNull(this.env.getProperty("spring.mail.username")));
+        formatEmail(vacationDto, mail);
+        javaMailSender.send(message);
+    }
+
+    private void formatEmail(VacationDto vacationDto, MimeMessageHelper mail) throws MessagingException {
         mail.setSubject("Vacation");
-
         String vacationStatus;
-
         if (vacationDto.isApproved()) {
             vacationStatus = "Accepted!";
         } else {
             vacationStatus = "Rejected! " + "Reason:" + vacationDto.getReason();
         }
-
         mail.setText("Your vacation request is" + vacationStatus);
-        javaMailSender.send(message);
-        System.out.println("Email sent!");
+    }
+
+    private void updateVacation(VacationDto vacationDto, VacationTimeRequest vacation) {
+        vacation.setApproved(vacationDto.isApproved());
+        vacation.setRejectedReason(vacationDto.getReason());
+        vacation.setStatus("Responded");
+        vacationRepository.save(vacation);
     }
 }
