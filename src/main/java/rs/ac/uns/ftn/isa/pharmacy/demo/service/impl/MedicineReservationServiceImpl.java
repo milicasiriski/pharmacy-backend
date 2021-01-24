@@ -47,12 +47,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         try {
             Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
             Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
-
-            if (pharmacy.getMedicineStock().containsKey(medicine)) {
-                return pharmacy.getMedicineStock().get(medicine) > 0;
-            } else {
-                return false;
-            }
+        // TODO: Milica#1
+//            if (pharmacy.getMedicineStock().containsKey(medicine)) {
+//                return pharmacy.getMedicineStock().get(medicine) > 0;
+//            } else {
+//                return false;
+//            }
+            return false;
         } catch (EntityNotFoundException e) {
             return false;
         }
@@ -72,8 +73,9 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate);
         medicineReservationRepository.save(medicineReservation);
 
-        pharmacy.getMedicineStock().put(medicine, pharmacy.getMedicineStock().get(medicine) - 1);
-        pharmacyRepository.save(pharmacy);
+        // TODO: Milica#2
+//        pharmacy.getMedicineStock().put(medicine, pharmacy.getMedicineStock().get(medicine) - 1);
+//        pharmacyRepository.save(pharmacy);
     }
 
     private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
