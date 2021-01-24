@@ -97,13 +97,19 @@ public class VacationDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VacationDto that = (VacationDto) o;
-        return Objects.equals(id, that.id) &&
+        return approved == that.approved &&
+                Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(surname, that.surname) &&
                 Objects.equals(vacationInterval, that.vacationInterval) &&
                 Objects.equals(role, that.role) &&
-                Objects.equals(approved, that.approved) &&
-                Objects.equals(reason, that.reason);
+                Objects.equals(reason, that.reason) &&
+                Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, vacationInterval, role, approved, reason, status);
     }
 
     @Override
