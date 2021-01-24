@@ -43,7 +43,6 @@ public class VacationController implements VacationConverter {
         try {
             return vacationService.sendVacationResponsePharmacist(vacationDto);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,7 +52,6 @@ public class VacationController implements VacationConverter {
         try {
             return vacationService.sendVacationResponseDermatologist(vacationDto);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
