@@ -27,6 +27,9 @@ public abstract class VacationTimeRequest implements Serializable {
     @Column(name = "rejected_reason")
     protected String rejectedReason;
 
+    @Column(name = "status")
+    protected String status;
+
     protected VacationTimeRequest() {
 
     }
@@ -35,6 +38,14 @@ public abstract class VacationTimeRequest implements Serializable {
         this.requestedTimeForVacation = requestedTimeForVacation;
         this.isApproved = isApproved;
         this.rejectedReason = rejectedReason;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {

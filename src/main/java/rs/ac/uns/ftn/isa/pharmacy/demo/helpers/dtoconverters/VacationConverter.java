@@ -16,8 +16,8 @@ public interface VacationConverter {
         List<VacationDto> vacationDtos = new ArrayList<>();
         vacationTimeRequestPharmacists.forEach(vacation -> {
             String vacationInterval = formatVacationTime(vacation.getRequestedTimeForVacation());
-            VacationDto vacationDto = new VacationDto(vacation.getPharmacist().getName(), vacation.getPharmacist().getSurname(),
-                    vacationInterval, "Pharmacist");
+            VacationDto vacationDto = new VacationDto(vacation.getId(), vacation.getPharmacist().getName(), vacation.getPharmacist().getSurname(),
+                    vacationInterval, "Pharmacist", vacation.isApproved(), vacation.getRejectedReason(), vacation.getStatus());
             vacationDtos.add(vacationDto);
         });
         return vacationDtos;
@@ -27,8 +27,8 @@ public interface VacationConverter {
         List<VacationDto> vacationDtos = new ArrayList<>();
         vacationTimeRequestDermatologists.forEach(vacation -> {
             String vacationInterval = formatVacationTime(vacation.getRequestedTimeForVacation());
-            VacationDto vacationDto = new VacationDto(vacation.getDermatologist().getName(), vacation.getDermatologist().getSurname(),
-                    vacationInterval, "Dermatologist");
+            VacationDto vacationDto = new VacationDto(vacation.getId(), vacation.getDermatologist().getName(), vacation.getDermatologist().getSurname(),
+                    vacationInterval, "Pharmacist", vacation.isApproved(), vacation.getRejectedReason(), vacation.getStatus());
             vacationDtos.add(vacationDto);
         });
         return vacationDtos;
@@ -38,6 +38,6 @@ public interface VacationConverter {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String startVacation = dateFormat.format(requestedTimeForVacation.getStart().getTime());
         String endVacation = dateFormat.format(requestedTimeForVacation.getEnd().getTime());
-        return startVacation + "-" + endVacation;
+        return startVacation + " / " + endVacation;
     }
 }
