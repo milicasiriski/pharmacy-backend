@@ -1,14 +1,14 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.enums;
 
 public enum MedicineForm {
+    TABLET("Tablet"),
+    SYRUP("Syrup"),
     POWDER("Powder"),
     CAPSULE("Capsule"),
-    TABLET("Tablet"),
     INHALER("Inhaler"),
     INJECTION("Injection"),
     DROPS("Drops"),
     GEL("Gel"),
-    SYRUP("Syrup"),
     PASTE("Paste");
 
     public final String label;
