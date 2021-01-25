@@ -12,7 +12,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
 import javax.mail.MessagingException;
@@ -26,7 +25,6 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     private MedicineRepository medicineRepository;
     private MedicineReservationRepository medicineReservationRepository;
     private PharmacyRepository pharmacyRepository;
-    private UserRepository userRepository;
     private MailService<MedicineReservationEmailParams> mailService;
 
     @Autowired
@@ -34,14 +32,12 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
             MedicineRepository medicineRepository,
             MedicineReservationRepository medicineReservationRepository,
             PharmacyRepository pharmacyRepository,
-            UserRepository userRepository,
             Environment env,
             JavaMailSender javaMailSender) {
         this.medicineRepository = medicineRepository;
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
-        this.userRepository = userRepository;
-        this.mailService = new MailService(env, javaMailSender, new MedicineReservationConfirmMailFormatter());
+        this.mailService = new MailService<>(env, javaMailSender, new MedicineReservationConfirmMailFormatter());
     }
 
     @Override

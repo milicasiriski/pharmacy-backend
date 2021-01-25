@@ -11,7 +11,7 @@ INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('6', 'This is a p
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('7', 'This is a pharmacy.', 'Maksima Gorkog 20', 'Phizer', 5);
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('8', 'This is a pharmacy.', 'Bul Evrope 32', 'Apoteka Jovanovic', 5);
 
-INSERT INTO medicine(id, description, form, name) VALUES ('1', 'Antinflamatory meidicine. Use on adults only.', 'tablet', 'Ibuprofen');
+INSERT INTO medicine(id, description, form, name) VALUES ('1', 'Anti-inflammatory medicine. Use on adults only.', 'tablet', 'Ibuprofen');
 INSERT INTO medicine(id, description, form, name) VALUES ('2', 'Heart medicine. Reduces cholesterol.', 'tablet', 'Roxera');
 INSERT INTO medicine(id, description, form, name) VALUES ('3', 'Antibiotic medicine.', 'syrup', 'Panklav');
 INSERT INTO medicine(id, description, form, name) VALUES ('4', 'Painkiller.', 'tablet', 'Paracetamol');

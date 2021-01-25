@@ -3,8 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +36,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         this.userRepository = userRepository;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
-        this.mailService = new MailService(env, javaMailSender, new AccountActivationLinkMailFormatter());
+        this.mailService = new MailService<>(env, javaMailSender, new AccountActivationLinkMailFormatter());
     }
 
     @Override
