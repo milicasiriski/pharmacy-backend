@@ -3,12 +3,13 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.mail;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationTimeResponseEmailParams;
 
 public class VacationTimeResponseMailFormatter implements MailFormatter<VacationTimeResponseEmailParams> {
+    private static final String APPROVED_TEXT = "Your vacation time request has been approved!";
 
     @Override
     public String getText(VacationTimeResponseEmailParams params) {
         String message = "";
         if (params.isApproved())
-            message = getApprovedText();
+            message = APPROVED_TEXT;
         else
             message = getDeclinedText(params.getReason());
         return "<!DOCTYPE html>\n" +
@@ -29,10 +30,6 @@ public class VacationTimeResponseMailFormatter implements MailFormatter<Vacation
                 "\t\n" +
                 "</body>\n" +
                 "</html>";
-    }
-
-    private String getApprovedText() {
-        return "Your vacation time request has been approved!";
     }
 
     private String getDeclinedText(String reason) {

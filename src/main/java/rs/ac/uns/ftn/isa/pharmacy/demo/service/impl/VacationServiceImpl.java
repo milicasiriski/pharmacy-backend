@@ -3,8 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.VacationTimeResponseMailFormatter;
@@ -17,9 +15,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.VacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
-import java.util.Objects;
+
 
 @Service
 public class VacationServiceImpl implements VacationService {
@@ -35,7 +32,7 @@ public class VacationServiceImpl implements VacationService {
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.vacationRepository = vacationRepository;
-        this.mailService = new MailService(env, javaMailSender, new VacationTimeResponseMailFormatter());
+        this.mailService = new MailService<>(env, javaMailSender, new VacationTimeResponseMailFormatter());
     }
 
     public Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation() {

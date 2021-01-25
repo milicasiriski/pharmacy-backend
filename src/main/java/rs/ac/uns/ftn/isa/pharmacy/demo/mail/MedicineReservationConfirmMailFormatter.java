@@ -1,9 +1,12 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.mail;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
-import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
+
+import java.text.SimpleDateFormat;
 
 public class MedicineReservationConfirmMailFormatter implements MailFormatter<MedicineReservationEmailParams> {
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
     @Override
     public String getText(MedicineReservationEmailParams params) {
         return "<!DOCTYPE html>\n" +
@@ -19,7 +22,7 @@ public class MedicineReservationConfirmMailFormatter implements MailFormatter<Me
                 "\t<hr>\n" +
                 "\t<p>\n" +
                 "\t\tYour " + params.getMedicineName() + " reservation is confirmed! <br>\n" +
-                "\t\tPlease make sure to pick it up by " + Constants.DATE_FORMAT.format(params.getDeadline()) +
+                "\t\tPlease make sure to pick it up by " + dateFormat.format(params.getDeadline()) +
                 " in " + params.getPharmacyName() + ", " + params.getPharmacyAddress() + "<br><br>\n" +
                 "\t\tUnique reservation number is: " + params.getUniqueReservationNumber() + "<br><br>\n" +
                 "\t\tThank you for using our application!\n" +
