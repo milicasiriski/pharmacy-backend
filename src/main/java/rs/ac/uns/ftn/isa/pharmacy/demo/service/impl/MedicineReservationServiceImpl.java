@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.Calendar;
 import java.util.Optional;
@@ -47,13 +48,11 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         try {
             Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
             Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
-        // TODO: Milica#1
-//            if (pharmacy.getMedicineStock().containsKey(medicine)) {
-//                return pharmacy.getMedicineStock().get(medicine) > 0;
-//            } else {
-//                return false;
-//            }
-            return false;
+            if (pharmacy.getMedicine().containsKey(medicine)) {
+                return pharmacy.getMedicine().get(medicine).getStock() > 0;
+            } else {
+                return false;
+            }
         } catch (EntityNotFoundException e) {
             return false;
         }
@@ -73,9 +72,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate);
         medicineReservationRepository.save(medicineReservation);
 
-        // TODO: Milica#2
-//        pharmacy.getMedicineStock().put(medicine, pharmacy.getMedicineStock().get(medicine) - 1);
-//        pharmacyRepository.save(pharmacy);
+        MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
+        int currentStock = medicineStatus.getStock();
+        medicineStatus.setStock(currentStock - 1);
+        pharmacy.getMedicine().put(medicine, medicineStatus);
+        pharmacyRepository.save(pharmacy);
+
+        // TODO: send email to user
     }
 
     private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
