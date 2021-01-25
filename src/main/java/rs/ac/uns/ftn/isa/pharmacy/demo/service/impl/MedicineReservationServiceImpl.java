@@ -70,19 +70,15 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public void confirmReservation(MedicineReservationDto medicineReservationDto) throws MessagingException {
+    public void confirmReservation(MedicineReservationDto medicineReservationDto, Patient patient) throws MessagingException {
         Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
         Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
-
-        // TODO: get user/userId based on session
-        Patient patient = getPatientById(1l);
 
         Calendar expirationDate = Calendar.getInstance();
         expirationDate.setTime(medicineReservationDto.getExpirationDate());
 
-        // TODO: create unique reservation number and save
         String uniqueReservationNumber = UUID.randomUUID().toString();
-        MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate);
+        MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate, uniqueReservationNumber);
         medicineReservationRepository.save(medicineReservation);
 
         MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
@@ -112,15 +108,6 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         Optional<Medicine> optionalMedicine = medicineRepository.findById(medicineId);
         if (optionalMedicine.isPresent()) {
             return optionalMedicine.get();
-        } else {
-            throw new EntityNotFoundException();
-        }
-    }
-
-    private Patient getPatientById(Long patientId) throws EntityNotFoundException, ClassCastException {
-        Optional<User> optionalPatient = userRepository.findById(patientId);
-        if (optionalPatient.isPresent()) {
-            return (Patient) optionalPatient.get();
         } else {
             throw new EntityNotFoundException();
         }
