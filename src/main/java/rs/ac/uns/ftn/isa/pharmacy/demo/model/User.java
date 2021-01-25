@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -41,8 +42,7 @@ public abstract class User implements UserDetails {
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-
-    private transient List<Authority> authorities;
+    private List<Authority> authorities;
 
     protected User() {
     }
@@ -150,5 +150,17 @@ public abstract class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public void setAdministrationRole(String administrationRole) {
+        this.administrationRole = administrationRole;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

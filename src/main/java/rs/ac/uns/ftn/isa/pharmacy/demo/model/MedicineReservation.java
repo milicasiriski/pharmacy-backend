@@ -24,13 +24,17 @@ public class MedicineReservation implements Serializable {
     @Column(name = "expiration_date")
     private Calendar expirationDate;
 
+    @Column(name = "unique_number")
+    private String uniqueNumber;
+
     public MedicineReservation() {
     }
 
-    public MedicineReservation(Medicine medicine, Patient patient, Calendar expirationDate) {
+    public MedicineReservation(Medicine medicine, Patient patient, Calendar expirationDate, String uniqueNumber) {
         this.medicine = medicine;
         this.patient = patient;
         this.expirationDate = expirationDate;
+        this.uniqueNumber = uniqueNumber;
     }
 
     public Long getId() {
@@ -63,5 +67,13 @@ public class MedicineReservation implements Serializable {
 
     public void setExpirationDate(Calendar expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getUniqueNumber() {
+        return uniqueNumber;
+    }
+
+    public void setUniqueNumber(String uniqueNumber) {
+        this.uniqueNumber = uniqueNumber;
     }
 }
