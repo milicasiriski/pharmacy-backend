@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PharmacyService {
     List<Pharmacy> findAll();
+    Iterable<Pharmacy> findAllPharmaciesByPharmacyAdmin(Long pharmacyAdminId);
 }

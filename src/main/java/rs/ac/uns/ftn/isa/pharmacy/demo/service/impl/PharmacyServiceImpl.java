@@ -22,4 +22,9 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<Pharmacy> findAll() {
         return pharmacyRepository.findAll();
     }
+
+    @Override
+    public Iterable<Pharmacy> findAllPharmaciesByPharmacyAdmin(Long pharmacyAdminId) {
+        return pharmacyRepository.findAllPharmaciesByPharmacyAdmin(pharmacyAdminId);
+    }
 }

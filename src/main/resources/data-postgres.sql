@@ -11,7 +11,6 @@ INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('6', 'This is a p
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('7', 'This is a pharmacy.', 'Maksima Gorkog 20', 'Phizer', 5);
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('8', 'This is a pharmacy.', 'Bul Evrope 32', 'Apoteka Jovanovic', 5);
 
-
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects) VALUES ('1','Ibuprofen' ,'Antinflamatory meidicine. Use on adults only.', '0', 'Advil®', 'microcrystalline, cellulose, lactose, hypromellose', '0', true, 5, 'A1', '1 tablet', 'Death');
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false, 4,  'A2', '1 tablet', 'Death');
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects) VALUES ('3', 'Panklav', 'Antibiotic medicine.', '1', 'Hemofarm', 'Amoxicillin','0', true,4,  'A3', '1 spoon', 'Death' );
@@ -57,6 +56,10 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('8', 'PHARMACIST', 'pharmacyisa6+dujo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Dujo', 'Damjanovic');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('9', 'PHARMACIST', 'pharmacyisa6+marko@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Marko', 'Markovic');
 
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('10', 'PHARMACY_ADMIN', 'pharmacyisa6+admin1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('11', 'PHARMACY_ADMIN', 'pharmacyisa6+admin2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('12', 'PHARMACY_ADMIN', 'pharmacyisa6+admin3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+
 INSERT INTO exam(id, duration) VALUES ('1', '30');
 INSERT INTO exam(id, duration) VALUES ('2', '45');
 INSERT INTO exam(id, duration) VALUES ('3', '20');
@@ -90,10 +93,10 @@ INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_
 INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (3, false, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', 'Waiting for response');
 INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (4, false, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', 'Waiting for response');
 
-INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES (1, 7);
-INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES (2, 8);
-INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES (3, 4);
-INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES (4, 5);
+INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
+INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('3', '4');
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('4', '5');
 
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
@@ -111,3 +114,8 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (6, 3);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (7, 2);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (8, 2);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (9, 2);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('10', 4);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('11', 4);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('12', 4);
+
+
