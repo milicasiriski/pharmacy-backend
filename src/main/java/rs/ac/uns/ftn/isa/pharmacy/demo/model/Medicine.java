@@ -29,6 +29,9 @@ public class Medicine implements Serializable {
     @Column(name = "composition")
     private String composition;
 
+    @Column(name = "ratings")
+    private Double ratings;
+
     @Column(name = "form")
     private MedicineForm form;
 
@@ -48,12 +51,13 @@ public class Medicine implements Serializable {
     public Medicine() {
     }
 
-    public Medicine(String name, String description, String manufacturer, String composition,
+    public Medicine(String name, String description, String manufacturer, String composition, double ratings,
                     MedicineForm form, MedicineType type, boolean prescribed, List<Medicine> alternatives) {
         this.name = name;
         this.description = description;
         this.manufacturer = manufacturer;
         this.composition = composition;
+        this.ratings = ratings;
         this.form = form;
         this.type = type;
         this.prescribed = prescribed;
@@ -104,6 +108,14 @@ public class Medicine implements Serializable {
         this.composition = composition;
     }
 
+    public Double getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(double ratings) {
+        this.ratings = ratings;
+    }
+
     public MedicineForm getForm() {
         return form;
     }
@@ -142,11 +154,12 @@ public class Medicine implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Medicine medicine = (Medicine) o;
         return prescribed == medicine.prescribed &&
-                id.equals(medicine.id) &&
-                name.equals(medicine.name) &&
+                Objects.equals(id, medicine.id) &&
+                Objects.equals(name, medicine.name) &&
                 Objects.equals(description, medicine.description) &&
                 Objects.equals(manufacturer, medicine.manufacturer) &&
                 Objects.equals(composition, medicine.composition) &&
+                Objects.equals(ratings, medicine.ratings) &&
                 form == medicine.form &&
                 type == medicine.type &&
                 Objects.equals(alternatives, medicine.alternatives);
@@ -154,7 +167,7 @@ public class Medicine implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, manufacturer, composition, form, type, prescribed, alternatives);
+        return Objects.hash(id, name, description, manufacturer, composition, ratings, form, type, prescribed, alternatives);
     }
 
     @Override
@@ -169,6 +182,7 @@ public class Medicine implements Serializable {
                 ", type=" + type +
                 ", prescribed=" + prescribed +
                 ", alternatives=" + alternatives +
+                ", ratings=" + ratings +
                 '}';
     }
 }
