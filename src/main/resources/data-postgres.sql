@@ -12,10 +12,10 @@ INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('7', 'This is a p
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('8', 'This is a pharmacy.', 'Bul Evrope 32', 'Apoteka Jovanovic', 5);
 
 
-INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed) VALUES ('1','Ibuprofen' ,'Antinflamatory meidicine. Use on adults only.', '0', 'Advil®', 'microcrystalline, cellulose, lactose, hypromellose', '0', true);
-INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false);
-INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed) VALUES ('3', 'Panklav', 'Antibiotic medicine.', '1', 'Hemofarm', 'Amoxicillin','0', true);
-INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed) VALUES ('4', 'Paracetamol', 'Painkiller.', '0', 'KRKA-FARMA D.O.O Beograd', 'Paracetamol', '0', false);
+INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings) VALUES ('1','Ibuprofen' ,'Antinflamatory meidicine. Use on adults only.', '0', 'Advil®', 'microcrystalline, cellulose, lactose, hypromellose', '0', true, 5);
+INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false, 4);
+INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings) VALUES ('3', 'Panklav', 'Antibiotic medicine.', '1', 'Hemofarm', 'Amoxicillin','0', true,4 );
+INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings) VALUES ('4', 'Paracetamol', 'Painkiller.', '0', 'KRKA-FARMA D.O.O Beograd', 'Paracetamol', '0', false, 3);
 
 
 INSERT INTO medicine_status(id, stock) VALUES ('1', '20');
