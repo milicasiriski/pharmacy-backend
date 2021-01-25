@@ -4,6 +4,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
 
+import javax.mail.MessagingException;
+
 public interface MedicineReservationService {
     Iterable<Medicine> getAllMedicine();
 
@@ -11,5 +13,5 @@ public interface MedicineReservationService {
 
     boolean isReservationValid(MedicineReservationDto medicineReservationDto);
 
-    void confirmReservation(MedicineReservationDto medicineReservationDto);
+    void confirmReservation(MedicineReservationDto medicineReservationDto) throws MessagingException;
 }

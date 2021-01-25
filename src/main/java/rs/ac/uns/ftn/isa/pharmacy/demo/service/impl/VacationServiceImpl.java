@@ -6,8 +6,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.VacationTimeResponseMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationTimeResponseEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.VacationRepository;
@@ -24,8 +27,7 @@ public class VacationServiceImpl implements VacationService {
     private final PharmacistVacationRepository pharmacistVacationRepository;
     private final DermatologistVacationRepository dermatologistVacationRepository;
     private final VacationRepository vacationRepository;
-    private final JavaMailSender javaMailSender;
-    private final Environment env;
+    private final MailService<VacationTimeResponseEmailParams> mailService;
 
     @Autowired
     public VacationServiceImpl(PharmacistVacationRepository pharmacistVacationRepository, DermatologistVacationRepository dermatologistVacationRepository, VacationRepository vacationRepository,
@@ -33,8 +35,7 @@ public class VacationServiceImpl implements VacationService {
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.vacationRepository = vacationRepository;
-        this.javaMailSender = javaMailSender;
-        this.env = env;
+        this.mailService = new MailService(env, javaMailSender, new VacationTimeResponseMailFormatter());
     }
 
     public Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation() {
@@ -49,7 +50,7 @@ public class VacationServiceImpl implements VacationService {
     public void sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestPharmacist vacationTimeRequestPharmacist = pharmacistVacationRepository.findById(vacationDto.getId()).orElse(null);
 
-        if(vacationTimeRequestPharmacist == null) {
+        if (vacationTimeRequestPharmacist == null) {
             throw new EntityNotFoundException();
         }
         updateVacation(vacationDto, vacationTimeRequestPharmacist);
@@ -60,32 +61,16 @@ public class VacationServiceImpl implements VacationService {
     public void sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestDermatologist vacationTimeRequestDermatologist = dermatologistVacationRepository.findById(vacationDto.getId()).orElse(null);
 
-        if(vacationTimeRequestDermatologist == null) {
+        if (vacationTimeRequestDermatologist == null) {
             throw new EntityNotFoundException();
         }
         updateVacation(vacationDto, vacationTimeRequestDermatologist);
         sendVacationStatusToEmail(vacationTimeRequestDermatologist.getDermatologist(), vacationDto);
     }
 
-    @Async
-    public void sendVacationStatusToEmail(User user, VacationDto vacationDto) throws MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper mail = new MimeMessageHelper(message);
-        mail.setTo(user.getEmail());
-        mail.setFrom(Objects.requireNonNull(this.env.getProperty("spring.mail.username")));
-        formatEmail(vacationDto, mail);
-        javaMailSender.send(message);
-    }
-
-    private void formatEmail(VacationDto vacationDto, MimeMessageHelper mail) throws MessagingException {
-        mail.setSubject("Vacation");
-        String vacationStatus;
-        if (vacationDto.isApproved()) {
-            vacationStatus = "Accepted!";
-        } else {
-            vacationStatus = "Rejected! " + "Reason:" + vacationDto.getReason();
-        }
-        mail.setText("Your vacation request is" + vacationStatus);
+    private void sendVacationStatusToEmail(User user, VacationDto vacationDto) throws MessagingException {
+        VacationTimeResponseEmailParams params = new VacationTimeResponseEmailParams(vacationDto.isApproved(), vacationDto.getReason());
+        mailService.sendMail(user.getEmail(), params);
     }
 
     private void updateVacation(VacationDto vacationDto, VacationTimeRequest vacation) {

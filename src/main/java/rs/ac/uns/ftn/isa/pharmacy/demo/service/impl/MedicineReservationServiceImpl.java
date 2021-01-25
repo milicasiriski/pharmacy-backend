@@ -1,18 +1,25 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MedicineReservationServiceImpl implements MedicineReservationService {
@@ -20,17 +27,21 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     private MedicineReservationRepository medicineReservationRepository;
     private PharmacyRepository pharmacyRepository;
     private UserRepository userRepository;
+    private MailService<MedicineReservationEmailParams> mailService;
 
     @Autowired
     public MedicineReservationServiceImpl(
             MedicineRepository medicineRepository,
             MedicineReservationRepository medicineReservationRepository,
             PharmacyRepository pharmacyRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            Environment env,
+            JavaMailSender javaMailSender) {
         this.medicineRepository = medicineRepository;
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.userRepository = userRepository;
+        this.mailService = new MailService(env, javaMailSender, new MedicineReservationConfirmMailFormatter());
     }
 
     @Override
@@ -59,7 +70,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public void confirmReservation(MedicineReservationDto medicineReservationDto) {
+    public void confirmReservation(MedicineReservationDto medicineReservationDto) throws MessagingException {
         Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
         Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
 
@@ -69,6 +80,8 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         Calendar expirationDate = Calendar.getInstance();
         expirationDate.setTime(medicineReservationDto.getExpirationDate());
 
+        // TODO: create unique reservation number and save
+        String uniqueReservationNumber = UUID.randomUUID().toString();
         MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate);
         medicineReservationRepository.save(medicineReservation);
 
@@ -78,7 +91,12 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
 
-        // TODO: send email to user
+        MedicineReservationEmailParams params = new MedicineReservationEmailParams(medicine.getName(),
+                medicineReservationDto.getExpirationDate(),
+                pharmacy.getName(),
+                pharmacy.getAddress(),
+                uniqueReservationNumber);
+        mailService.sendMail(patient.getEmail(), params);
     }
 
     private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {

@@ -9,15 +9,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.AccountActivationLinkMailFormatter;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Authority;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
-import rs.ac.uns.ftn.isa.pharmacy.demo.util.EmailSubjectMaker;
+
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -25,21 +26,19 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
 
     private UserRepository userRepository;
     private AuthorityService authService;
-    private JavaMailSender javaMailSender;
     private PasswordEncoder passwordEncoder;
-    private Environment env;
+    private MailService<String> mailService;
 
     @Autowired
     public RegisterPatientServiceImpl(UserRepository userRepository,
                                       AuthorityService authService,
+                                      PasswordEncoder passwordEncoder,
                                       JavaMailSender javaMailSender,
-                                      Environment env,
-                                      PasswordEncoder passwordEncoder) {
+                                      Environment env) {
         this.userRepository = userRepository;
         this.authService = authService;
-        this.javaMailSender = javaMailSender;
-        this.env = env;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = new MailService(env, javaMailSender, new AccountActivationLinkMailFormatter());
     }
 
     @Override
@@ -73,18 +72,9 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         return (Patient) userRepository.findByEmail(email);
     }
 
-    @Async
-    public void sendActivationLink(Patient patient, String siteUrl) throws MessagingException{
-        EmailSubjectMaker emailSubjectMaker = new EmailSubjectMaker();
+    private void sendActivationLink(Patient patient, String siteUrl) throws MessagingException {
         String verifyURL = siteUrl + "/activation?code=" + patient.getActivationCode() + "&email=" + patient.getEmail();
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper mail = new MimeMessageHelper(message);
-        mail.setTo(patient.getEmail());
-        mail.setFrom(this.env.getProperty("spring.mail.username"));
-        mail.setSubject("Wellcome to ®™PharmacyManager!");
-        mail.setText(emailSubjectMaker.makeActivationHtml(verifyURL), true);
-        javaMailSender.send(message);
-        System.out.println("Email sent!");
+        mailService.sendMail(patient.getEmail(), verifyURL);
     }
 
 }
