@@ -36,6 +36,12 @@ public class Pharmacy implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "pharmacist_id")})
     private List<Pharmacist> pharmacists;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "pharmacy_admins",
+            joinColumns = {@JoinColumn(name = "pharmacy_id")},
+            inverseJoinColumns = {@JoinColumn(name = "pharmacy_admin_id")})
+    private List<Pharmacist> pharmacyAdmins;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "medicine_status_mapping",
@@ -177,5 +183,20 @@ public class Pharmacy implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, address, about, dermatologists, pharmacists, medicine, examPriceList);
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", about='" + about + '\'' +
+                ", dermatologists=" + dermatologists +
+                ", pharmacists=" + pharmacists +
+                ", medicine=" + medicine +
+                ", examPriceList=" + examPriceList +
+                ", rating=" + rating +
+                '}';
     }
 }
