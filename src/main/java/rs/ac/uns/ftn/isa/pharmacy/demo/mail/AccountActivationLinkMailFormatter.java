@@ -1,9 +1,8 @@
-package rs.ac.uns.ftn.isa.pharmacy.demo.util;
+package rs.ac.uns.ftn.isa.pharmacy.demo.mail;
 
-public class EmailSubjectMaker {
-
-    public String makeActivationHtml(String link) {
-
+public class AccountActivationLinkMailFormatter implements MailFormatter<String> {
+    @Override
+    public String getText(String link) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "    <head>\n" +
@@ -19,10 +18,14 @@ public class EmailSubjectMaker {
                 "            Your activation link is <a href=\"" +
                 link +
                 "\">here</a>.\n" +
-                "<br> Thank you for using our application!"  +
+                "<br> Thank you for using our application!" +
                 "        </p>\n" +
                 "    </body>\n" +
                 "</html>";
     }
 
+    @Override
+    public String getSubject() {
+        return "Welcome to ®™PharmacyManager!";
+    }
 }
