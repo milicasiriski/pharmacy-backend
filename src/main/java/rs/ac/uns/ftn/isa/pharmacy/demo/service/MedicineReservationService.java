@@ -15,4 +15,6 @@ public interface MedicineReservationService {
     boolean isReservationValid(MedicineReservationDto medicineReservationDto);
 
     void confirmReservation(MedicineReservationDto medicineReservationDto, Patient patient) throws MessagingException;
+
+    Medicine getMedicineById(Long medicineId);
 }

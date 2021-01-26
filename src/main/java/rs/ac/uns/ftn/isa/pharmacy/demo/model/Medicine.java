@@ -17,7 +17,10 @@ public class Medicine implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_sequence_generator")
     private Long id;
 
-    @Column(name = "name", unique=true)
+    @Column(name = "uuid", unique = true)
+    private String uuid;
+
+    @Column(name = "name")
     private String name;
 
     @Column(name = "description")
@@ -41,6 +44,12 @@ public class Medicine implements Serializable {
     @Column(name = "prescribed")
     private boolean prescribed;
 
+    @Column(name = "recommended_dose")
+    private String recommendedDose;
+
+    @Column(name = "side_effects")
+    private String sideEffects;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "medicine_alternatives",
@@ -51,8 +60,13 @@ public class Medicine implements Serializable {
     public Medicine() {
     }
 
-    public Medicine(String name, String description, String manufacturer, String composition, double ratings,
-                    MedicineForm form, MedicineType type, boolean prescribed, List<Medicine> alternatives) {
+    public Medicine(String name) {
+        this.name = name;
+    }
+
+    public Medicine(Long id, String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<Medicine> alternatives) {
+        this.id = id;
+        this.uuid = uuid;
         this.name = name;
         this.description = description;
         this.manufacturer = manufacturer;
@@ -61,11 +75,9 @@ public class Medicine implements Serializable {
         this.form = form;
         this.type = type;
         this.prescribed = prescribed;
+        this.recommendedDose = recommendedDose;
+        this.sideEffects = sideEffects;
         this.alternatives = alternatives;
-    }
-
-    public Medicine(String name) {
-        this.name = name;
     }
 
     public Long getId() {
@@ -74,6 +86,14 @@ public class Medicine implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getName() {
@@ -112,7 +132,7 @@ public class Medicine implements Serializable {
         return ratings;
     }
 
-    public void setRatings(double ratings) {
+    public void setRatings(Double ratings) {
         this.ratings = ratings;
     }
 
@@ -140,6 +160,22 @@ public class Medicine implements Serializable {
         this.prescribed = prescribed;
     }
 
+    public String getRecommendedDose() {
+        return recommendedDose;
+    }
+
+    public void setRecommendedDose(String recommendedDose) {
+        this.recommendedDose = recommendedDose;
+    }
+
+    public String getSideEffects() {
+        return sideEffects;
+    }
+
+    public void setSideEffects(String sideEffects) {
+        this.sideEffects = sideEffects;
+    }
+
     public List<Medicine> getAlternatives() {
         return alternatives;
     }
@@ -149,12 +185,32 @@ public class Medicine implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", composition='" + composition + '\'' +
+                ", ratings=" + ratings +
+                ", form=" + form +
+                ", type=" + type +
+                ", prescribed=" + prescribed +
+                ", recommendedDose='" + recommendedDose + '\'' +
+                ", sideEffects='" + sideEffects + '\'' +
+                ", alternatives=" + alternatives +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Medicine medicine = (Medicine) o;
         return prescribed == medicine.prescribed &&
                 Objects.equals(id, medicine.id) &&
+                Objects.equals(uuid, medicine.uuid) &&
                 Objects.equals(name, medicine.name) &&
                 Objects.equals(description, medicine.description) &&
                 Objects.equals(manufacturer, medicine.manufacturer) &&
@@ -162,27 +218,13 @@ public class Medicine implements Serializable {
                 Objects.equals(ratings, medicine.ratings) &&
                 form == medicine.form &&
                 type == medicine.type &&
+                Objects.equals(recommendedDose, medicine.recommendedDose) &&
+                Objects.equals(sideEffects, medicine.sideEffects) &&
                 Objects.equals(alternatives, medicine.alternatives);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, manufacturer, composition, ratings, form, type, prescribed, alternatives);
-    }
-
-    @Override
-    public String toString() {
-        return "Medicine{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", composition='" + composition + '\'' +
-                ", form=" + form +
-                ", type=" + type +
-                ", prescribed=" + prescribed +
-                ", alternatives=" + alternatives +
-                ", ratings=" + ratings +
-                '}';
+        return Objects.hash(id, uuid, name, description, manufacturer, composition, ratings, form, type, prescribed, recommendedDose, sideEffects, alternatives);
     }
 }
