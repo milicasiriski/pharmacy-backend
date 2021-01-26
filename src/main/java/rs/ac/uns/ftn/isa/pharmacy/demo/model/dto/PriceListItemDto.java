@@ -1,69 +1,55 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.Date;
 
 public class PriceListItemDto implements Serializable {
 
-    Double currentPrice;
-    String startDate;
-    String endDate;
+    private Long medicineId;
+    private Double price;
+    private Date from;
+    private Date to;
 
     public PriceListItemDto() {
 
     }
 
-    public PriceListItemDto(Double currentPrice, String startDate, String endDate) {
-        this.currentPrice = currentPrice;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public PriceListItemDto(Long medicineId, Double price, Date from, Date to) {
+        this.medicineId = medicineId;
+        this.price = price;
+        this.from = from;
+        this.to = to;
     }
 
-    public Double getCurrentPrice() {
-        return currentPrice;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setCurrentPrice(Double currentPrice) {
-        this.currentPrice = currentPrice;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public Date getFrom() {
+        return from;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setFrom(Date from) {
+        this.from = from;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public Date getTo() {
+        return to;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setTo(Date to) {
+        this.to = to;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PriceListItemDto that = (PriceListItemDto) o;
-        return Objects.equals(currentPrice, that.currentPrice) &&
-                Objects.equals(startDate, that.startDate) &&
-                Objects.equals(endDate, that.endDate);
+    public Long getMedicineId() {
+        return medicineId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(currentPrice, startDate, endDate);
-    }
-
-    @Override
-    public String toString() {
-        return "PriceListItemDto{" +
-                "currentPrice=" + currentPrice +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                '}';
+    public void setMedicineId(Long medicineId) {
+        this.medicineId = medicineId;
     }
 }

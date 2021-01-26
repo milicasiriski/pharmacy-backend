@@ -56,9 +56,9 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('8', 'PHARMACIST', 'pharmacyisa6+dujo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Dujo', 'Damjanovic');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('9', 'PHARMACIST', 'pharmacyisa6+marko@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Marko', 'Markovic');
 
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('10', 'PHARMACY_ADMIN', 'pharmacyisa6+admin1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('11', 'PHARMACY_ADMIN', 'pharmacyisa6+admin2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('12', 'PHARMACY_ADMIN', 'pharmacyisa6+admin3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('10', 'PHARMACY_ADMIN', 'pharmacyisa6+admin1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 4);
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('11', 'PHARMACY_ADMIN', 'pharmacyisa6+admin2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 5);
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('12', 'PHARMACY_ADMIN', 'pharmacyisa6+admin3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 6);
 
 INSERT INTO exam(id, duration) VALUES ('1', '30');
 INSERT INTO exam(id, duration) VALUES ('2', '45');
@@ -117,5 +117,3 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (9, 2);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('10', 4);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('11', 4);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES ('12', 4);
-
-
