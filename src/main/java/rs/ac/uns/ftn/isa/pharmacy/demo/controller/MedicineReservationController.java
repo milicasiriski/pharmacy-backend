@@ -34,7 +34,9 @@ public class MedicineReservationController {
     public ResponseEntity<Iterable<PharmaciesMedicinePriceDto>> getPharmaciesWithMedicineOnStock(@PathVariable("medicineId") Long medicineId) {
         ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();
         Medicine medicine = medicineReservationService.getMedicineById(medicineId);
+
         medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId).forEach(pharmacy -> {
+            System.out.println(pharmacy.getCurrentMedicinePrice(medicine));
             result.add(new PharmaciesMedicinePriceDto(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getCurrentMedicinePrice(medicine)));
         });
         return new ResponseEntity<>(result, HttpStatus.OK);
