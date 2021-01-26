@@ -37,14 +37,14 @@ public class PriceListController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<List<PriceListItemResponseDto>> getPriceLists() {
         List<PriceListItemResponseDto> priceItems = collectRelevantMedicinePrices();
         return ResponseEntity.ok(priceItems);
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> saveNewPrice(@RequestBody PriceListItemDto priceListItemDto) {
         try {
             priceListService.updatePriceList(priceListItemDto);
