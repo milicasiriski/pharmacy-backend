@@ -100,7 +100,8 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         }
     }
 
-    private Medicine getMedicineById(Long medicineId) throws EntityNotFoundException {
+    @Override
+    public Medicine getMedicineById(Long medicineId) throws EntityNotFoundException {
         Optional<Medicine> optionalMedicine = medicineRepository.findById(medicineId);
         if (optionalMedicine.isPresent()) {
             return optionalMedicine.get();

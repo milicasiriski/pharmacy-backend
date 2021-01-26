@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyBasicInfoDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
 import java.util.ArrayList;
@@ -31,10 +31,11 @@ public class MedicineReservationController {
     }
 
     @GetMapping("/pharmacies/{medicineId}")
-    public ResponseEntity<Iterable<PharmacyBasicInfoDto>> getPharmaciesWithMedicineOnStock(@PathVariable("medicineId") Long medicineId) {
-        ArrayList<PharmacyBasicInfoDto> result = new ArrayList<>();
+    public ResponseEntity<Iterable<PharmaciesMedicinePriceDto>> getPharmaciesWithMedicineOnStock(@PathVariable("medicineId") Long medicineId) {
+        ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();
+        Medicine medicine = medicineReservationService.getMedicineById(medicineId);
         medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId).forEach(pharmacy -> {
-            result.add(new PharmacyBasicInfoDto(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout()));
+            result.add(new PharmaciesMedicinePriceDto(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getCurrentMedicinePrice(medicine)));
         });
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

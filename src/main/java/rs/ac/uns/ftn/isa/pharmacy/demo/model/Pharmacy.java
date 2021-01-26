@@ -2,9 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "pharmacy")
@@ -141,6 +139,24 @@ public class Pharmacy implements Serializable {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public double getCurrentMedicinePrice(Medicine medicine){
+        List<MedicinePriceListItem> prices = this.medicine.get(medicine).getPrices();
+        return currentPrice(prices);
+    }
+
+    private Double currentPrice(List<MedicinePriceListItem> prices) {
+        Calendar calendar = Calendar.getInstance();
+
+        Optional<MedicinePriceListItem> currentPriceListItem = prices.stream().filter(price ->
+                (calendar.compareTo(price.getTimeInterval().getStart()) >= 0 && calendar.compareTo(price.getTimeInterval().getEnd()) <= 0)).findAny();
+
+        if (currentPriceListItem.isEmpty()) {
+            return 0.0;
+        } else {
+            return currentPriceListItem.get().getPrice();
+        }
     }
 
     @Override
