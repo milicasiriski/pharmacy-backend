@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class OrderDto implements Serializable {
+
     private HashMap<String, Integer> orderItems;
     private Date deadline;
 

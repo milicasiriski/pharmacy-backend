@@ -24,7 +24,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public Iterable<Pharmacy> findAllPharmaciesByPharmacyAdmin(Long pharmacyAdminId) {
-        return pharmacyRepository.findAllPharmaciesByPharmacyAdmin(pharmacyAdminId);
+    public Pharmacy findPharmacyByPharmacyAdmin(Long pharmacyAdminId) {
+        return pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdminId);
     }
 }
