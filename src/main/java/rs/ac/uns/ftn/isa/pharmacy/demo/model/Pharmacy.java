@@ -41,6 +41,10 @@ public class Pharmacy implements Serializable {
     private List<PharmacyAdmin> pharmacyAdmins;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacy_id")
+    private List<Promotion> pharmacyPromotions;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "medicine_status_mapping",
             joinColumns = {@JoinColumn(name = "pharmacy_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "medicine_status_id", referencedColumnName = "id")})
