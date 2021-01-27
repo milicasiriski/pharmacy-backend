@@ -57,13 +57,13 @@ public class Pharmacy {
     private Map<Exam, Double> examPriceList;
 
     @Column(name = "rating")
-    private double rating;
+    private Double rating;
 
     public Pharmacy() {
 
     }
 
-    public Pharmacy(Long id, String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
+    public Pharmacy(Long id, String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
         this.id = id;
         this.name = name;
         this.address = address;

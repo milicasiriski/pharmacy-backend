@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;

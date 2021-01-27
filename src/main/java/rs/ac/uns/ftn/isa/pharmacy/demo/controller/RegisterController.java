@@ -13,7 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
 
@@ -59,7 +59,7 @@ public class RegisterController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<String> registerSystemAdmin(@RequestBody LogInDto adminCredentials, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<String> registerSystemAdmin(@RequestBody UserRegistrationDto adminCredentials, UriComponentsBuilder ucBuilder) {
         User existUser = this.registerUserService.findByEmail(adminCredentials.getEmail());
         if (existUser != null) {
             return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);

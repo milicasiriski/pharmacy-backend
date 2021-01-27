@@ -5,14 +5,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.UserType;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserService {
@@ -20,22 +22,33 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     private UserRepository userRepository;
     private AuthorityService authService;
     private PasswordEncoder passwordEncoder;
+    private PharmacyRepository pharmacyRepository;
 
     @Autowired
     public RegisterUserServiceImpl(UserRepository userRepository,
                                    AuthorityService authService,
-                                   PasswordEncoder passwordEncoder) {
+                                   PasswordEncoder passwordEncoder,
+                                   PharmacyRepository pharmacyRepository) {
         this.userRepository = userRepository;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
+        this.pharmacyRepository = pharmacyRepository;
 
     }
 
     @Override
-    public User register(LogInDto dto) {
+    public User register(UserRegistrationDto dto) {
         User user;
         UserType type = dto.getType();
         user = createUserByType(type);
+        //TODO:Vladimir, this will be potential transaction
+        if(user.getClass()==PharmacyAdmin.class){
+            Optional<Pharmacy> pharmacy = pharmacyRepository.findById(dto.getPharmacyId());
+            if(pharmacy.isEmpty()){
+                throw new BadUserInformationException();
+            }
+            ((PharmacyAdmin) user).setPharmacy(pharmacy.get());
+        }
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setName(dto.getName());

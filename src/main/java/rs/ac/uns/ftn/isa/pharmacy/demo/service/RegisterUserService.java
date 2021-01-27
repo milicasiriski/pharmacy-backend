@@ -1,10 +1,10 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 
-public interface RegisterUserService extends RegisterService<LogInDto, User>{
+public interface RegisterUserService extends RegisterService<UserRegistrationDto, User>{
 
-    User register(LogInDto dto);
+    User register(UserRegistrationDto dto);
 
 }
