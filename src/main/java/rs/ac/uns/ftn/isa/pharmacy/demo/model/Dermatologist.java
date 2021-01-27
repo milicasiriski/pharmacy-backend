@@ -14,12 +14,6 @@ public class Dermatologist extends User implements Serializable {
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "surname")
-    private String surname;
-
     @ManyToMany(mappedBy = "dermatologists")
     private List<Pharmacy> pharmacies;
 
@@ -28,26 +22,10 @@ public class Dermatologist extends User implements Serializable {
     }
 
     public Dermatologist(String email, String password, String name, String surname, List<Pharmacy> pharmacies) {
-        super(email, password);
+        super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
         this.pharmacies = pharmacies;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public List<Pharmacy> getPharmacies() {
@@ -64,11 +42,27 @@ public class Dermatologist extends User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Dermatologist that = (Dermatologist) o;
-        return Objects.equals(name, that.name) && Objects.equals(surname, that.surname);
+        return Objects.equals(administrationRole, that.administrationRole) &&
+                Objects.equals(pharmacies, that.pharmacies);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), administrationRole, name, surname);
+        return Objects.hash(super.hashCode(), administrationRole, pharmacies);
+    }
+
+    @Override
+    public String toString() {
+        return "Dermatologist{" +
+                "administrationRole='" + administrationRole + '\'' +
+                ", pharmacies=" + pharmacies +
+                ", id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", lastPasswordResetDate=" + lastPasswordResetDate +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 }

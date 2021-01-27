@@ -18,8 +18,8 @@ public class PharmacyAdmin extends User implements Serializable {
         super();
     }
 
-    public PharmacyAdmin(String email, String password, Pharmacy pharmacy) {
-        super(email, password);
+    public PharmacyAdmin(String email, String password, Pharmacy pharmacy, String name, String surname) {
+        super(email, password, name, surname);
         this.pharmacy = pharmacy;
     }
 
@@ -51,8 +51,4 @@ public class PharmacyAdmin extends User implements Serializable {
         return Objects.hash(super.hashCode(), administrationRole, pharmacy);
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

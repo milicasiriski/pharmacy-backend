@@ -1,6 +1,6 @@
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, patient_name, patient_phone_num, patient_surname, enabled, last_password_reset_date) VALUES ('1', 'PATIENT', 'mika@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Mikin bulevar 123', 'Mikici', 'Srbija', 'Mika', '0601231234', 'Mikic', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, patient_name, patient_phone_num, patient_surname, enabled, last_password_reset_date) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, patient_name, patient_phone_num, patient_surname, enabled, last_password_reset_date) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date) VALUES ('1', 'PATIENT', 'mika@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Mikin bulevar 123', 'Mikici', 'Srbija', 'Mika', '0601231234', 'Mikic', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07');
 
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('1', 'This is a pharmacy.', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 5);
 INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('2', 'This is a pharmacy.', 'Bulevar Oslobodjenja 666', 'Sputnik', 5);
@@ -102,7 +102,8 @@ INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (4, 'ROLE_PHARMACY_ADMINISTRATOR');
 INSERT INTO AUTHORITY (id ,name) VALUES (5, 'ROLE_SYSTEM_ADMINISTRATOR');
-INSERT INTO AUTHORITY (id ,name) VALUES (6, 'ROLE_UNAUTHORISED');
+INSERT INTO AUTHORITY (id ,name) VALUES (6, 'ROLE_SUPPLIER');
+INSERT INTO AUTHORITY (id ,name) VALUES (7, 'ROLE_UNAUTHORISED');
 
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (1, 1);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (2, 1);

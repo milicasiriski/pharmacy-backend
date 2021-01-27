@@ -14,12 +14,6 @@ public class Pharmacist extends User implements Serializable {
 
     private transient final String administrationRole = "ROLE_PHARMACIST";
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "surname")
-    private String surname;
-
     @ManyToMany(mappedBy = "pharmacists")
     private List<Pharmacy> pharmacies;
 
@@ -28,26 +22,8 @@ public class Pharmacist extends User implements Serializable {
     }
 
     public Pharmacist(String email, String password, String name, String surname, List<Pharmacy> pharmacies) {
-        super(email, password);
-        this.name = name;
-        this.surname = surname;
+        super(email, password, name, surname);
         this.pharmacies = pharmacies;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public List<Pharmacy> getPharmacies() {
@@ -64,21 +40,26 @@ public class Pharmacist extends User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Pharmacist that = (Pharmacist) o;
-        return Objects.equals(name, that.name) && Objects.equals(surname, that.surname) && Objects.equals(pharmacies, that.pharmacies);
+        return Objects.equals(administrationRole, that.administrationRole) &&
+                Objects.equals(pharmacies, that.pharmacies);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), administrationRole, name, surname, pharmacies);
+        return Objects.hash(super.hashCode(), administrationRole, pharmacies);
     }
 
     @Override
     public String toString() {
         return "Pharmacist{" +
                 "administrationRole='" + administrationRole + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
                 ", pharmacies=" + pharmacies +
+                ", id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", name=" + name +
+                ", enabled=" + enabled +
                 '}';
     }
 }

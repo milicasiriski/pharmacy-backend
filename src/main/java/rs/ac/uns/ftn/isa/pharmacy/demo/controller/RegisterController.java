@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NotAPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,23 +24,49 @@ import javax.servlet.http.HttpServletRequest;
 public class RegisterController {
 
     @Qualifier("registerPatientServiceImpl")
-    private RegisterPatientService registerService;
+    private RegisterPatientService registerPatientService;
+
+    @Qualifier("registerUserServiceImpl")
+    private RegisterUserService registerUserService;
 
     @Autowired
-    public RegisterController(RegisterPatientService registerService) {
-        this.registerService = registerService;
+    public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService) {
+        this.registerPatientService = registerPatientService;
+        this.registerUserService = registerUserService;
     }
 
     //@TODO: Check if values are ok
     @PostMapping("/patient")
-    public ResponseEntity<String> register(HttpServletRequest request, @RequestBody PatientDto patientDTO, UriComponentsBuilder ucBuilder) {
-        Patient existUser = this.registerService.findByEmail(patientDTO.getEmail());
+    public ResponseEntity<String> registerPatient(HttpServletRequest request, @RequestBody PatientDto patientDTO, UriComponentsBuilder ucBuilder) {
+        Patient existUser;
+        try {
+            existUser = this.registerPatientService.findByEmail(patientDTO.getEmail());
+        }
+        catch (NotAPatientException e){
+            return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+        }
+
         if (existUser != null) {
             return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
         }
         try {
-            this.registerService.register(patientDTO, getSiteURL(request));
+            this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Registration failed!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<String> registerSystemAdmin(@RequestBody LogInDto adminCredentials, UriComponentsBuilder ucBuilder) {
+        User existUser = this.registerUserService.findByEmail(adminCredentials.getEmail());
+        if (existUser != null) {
+            return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            this.registerUserService.register(adminCredentials);
+            return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Registration failed!", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,11 +75,10 @@ public class RegisterController {
 
     @PostMapping("/activate")
     public ResponseEntity<String> activate(@RequestBody ActivateDto dto) {
-        System.out.println(dto);
         String email = dto.getEmail();
         String code = dto.getCode();
         try {
-            this.registerService.activate(email, code);
+            this.registerPatientService.activate(email, code);
             return new ResponseEntity<>("/activation/success", HttpStatus.OK);
         } catch (BadActivationCodeException e) {
             e.printStackTrace();

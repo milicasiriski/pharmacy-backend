@@ -20,7 +20,7 @@ public abstract class User implements UserDetails {
     private transient String administrationRole = "";
 
     @Id
-    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 10)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 13)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
     @Column(name = "id", unique = true)
     protected Long id;
@@ -36,7 +36,13 @@ public abstract class User implements UserDetails {
     protected boolean enabled = false;
 
     @Column(name = "last_password_reset_date")
-    private Timestamp lastPasswordResetDate;
+    protected Timestamp lastPasswordResetDate;
+
+    @Column(name = "name")
+    protected String name;
+
+    @Column(name = "surname")
+    protected String surname;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
@@ -47,9 +53,11 @@ public abstract class User implements UserDetails {
     protected User() {
     }
 
-    protected User(String email, String password) {
+    protected User(String email, String password, String name, String surname) {
         this.email = email;
         this.password = password;
+        this.name = name;
+        this.surname = surname;
     }
 
     public void setAuthorities(List<Authority> authorities) {
@@ -72,6 +80,22 @@ public abstract class User implements UserDetails {
         Timestamp now = new Timestamp(new Date().getTime());
         this.setLastPasswordResetDate(now);
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getAdministrationRole() {
@@ -97,21 +121,36 @@ public abstract class User implements UserDetails {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword());
+        return enabled == user.enabled &&
+                Objects.equals(administrationRole, user.administrationRole) &&
+                Objects.equals(id, user.id) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(lastPasswordResetDate, user.lastPasswordResetDate) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(authorities, user.authorities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEmail(), getPassword());
+        return Objects.hash(administrationRole, id, email, password, enabled, lastPasswordResetDate, name, surname, authorities);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "username='" + email + '\'' +
+                "administrationRole='" + administrationRole + '\'' +
+                ", id=" + id +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", lastPasswordResetDate=" + lastPasswordResetDate +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", authorities=" + authorities +
                 '}';
     }
 
