@@ -11,12 +11,6 @@ public class Patient extends User {
 
     private transient final String administrationRole = "ROLE_PATIENT";
 
-    @Column(name = "patient_name")
-    private String name;
-
-    @Column(name = "patient_surname")
-    private String surname;
-
     @Column(name = "patient_address")
     private String address;
 
@@ -37,29 +31,13 @@ public class Patient extends User {
     }
 
     public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber) {
-        super(email, password);
+        super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
         this.address = address;
         this.city = city;
         this.country = country;
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getAddress() {
@@ -104,9 +82,7 @@ public class Patient extends User {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Patient patient = (Patient) o;
-        return Objects.equals(name, patient.name) &&
-                Objects.equals(surname, patient.surname) &&
-                Objects.equals(address, patient.address) &&
+        return Objects.equals(address, patient.address) &&
                 Objects.equals(city, patient.city) &&
                 Objects.equals(country, patient.country) &&
                 Objects.equals(phoneNumber, patient.phoneNumber);
@@ -114,7 +90,7 @@ public class Patient extends User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, surname, address, city, country, phoneNumber);
+        return Objects.hash(super.hashCode(), address, city, country, phoneNumber);
     }
 
     @Override

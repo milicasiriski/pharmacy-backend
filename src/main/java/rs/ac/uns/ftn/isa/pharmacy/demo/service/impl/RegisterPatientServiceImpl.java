@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NotAPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.AccountActivationLinkMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Authority;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
@@ -52,7 +54,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     }
 
     @Override
-    public Patient activate(String email, String activationCode) throws BadActivationCodeException {
+    public Patient activate(String email, String activationCode) throws BadActivationCodeException, NotAPatientException {
         Patient patient = findByEmail(email);
         if (!patient.getActivationCode().equals(activationCode)) {
             throw new BadActivationCodeException();
@@ -64,8 +66,17 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     }
 
     @Override
-    public Patient findByEmail(String email) {
-        return (Patient) userRepository.findByEmail(email);
+    public Patient findByEmail(String email) throws NotAPatientException{
+        User user = userRepository.findByEmail(email);
+        if(user==null){
+            return null;
+        }
+        if(!user.getClass().equals(Patient.class)){
+            throw new NotAPatientException();
+        }
+        else{
+            return (Patient) user;
+        }
     }
 
     private void sendActivationLink(Patient patient, String siteUrl) throws MessagingException {
