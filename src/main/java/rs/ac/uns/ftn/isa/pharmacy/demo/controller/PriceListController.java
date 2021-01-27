@@ -27,19 +27,17 @@ import java.util.*;
 @RequestMapping(value = "/priceList", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PriceListController {
 
-    private final PharmacyService pharmacyService;
     private final PriceListService priceListService;
 
     @Autowired
-    public PriceListController(PharmacyService pharmacyService, PriceListService priceListService) {
-        this.pharmacyService = pharmacyService;
+    public PriceListController(PriceListService priceListService) {
         this.priceListService = priceListService;
     }
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<List<PriceListItemResponseDto>> getPriceLists() {
-        List<PriceListItemResponseDto> priceItems = collectRelevantMedicinePrices();
+        List<PriceListItemResponseDto> priceItems = priceListService.collectCurrentMedicinePrices();
         return ResponseEntity.ok(priceItems);
     }
 
@@ -54,39 +52,5 @@ public class PriceListController {
             return new ResponseEntity<>("Pharmacy doesnt have such medicine!", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private List<PriceListItemResponseDto> collectRelevantMedicinePrices() {
-        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pharmacy pharmacy = pharmacyService.findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
-
-        Map<Medicine, MedicineStatus> medicines = pharmacy.getMedicine();
-        List<PriceListItemResponseDto> priceItems = new ArrayList<>();
-
-        pharmacy.getMedicine().keySet().forEach(medicine -> {
-            List<MedicinePriceListItem> prices = medicines.get(medicine).getPrices();
-            PriceListItemResponseDto priceListItem = currentPriceListItem(prices);
-            priceListItem.setMedicine(medicine);
-            priceItems.add(priceListItem);
-        });
-        return priceItems;
-    }
-
-    private PriceListItemResponseDto currentPriceListItem(List<MedicinePriceListItem> prices) {
-        Calendar calendar = Calendar.getInstance();
-        PriceListItemResponseDto priceListItemDto = new PriceListItemResponseDto();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Optional<MedicinePriceListItem> currentPriceListItem = prices.stream().filter(price ->
-                (calendar.compareTo(price.getTimeInterval().getStart()) >= 0 && calendar.compareTo(price.getTimeInterval().getEnd()) <= 0)).findAny();
-
-        if (currentPriceListItem.isEmpty()) {
-            priceListItemDto.setCurrentPrice(0.0);
-        } else {
-            priceListItemDto.setCurrentPrice(currentPriceListItem.get().getPrice());
-            priceListItemDto.setStartDate(dateFormat.format(currentPriceListItem.get().getTimeInterval().getStart().getTime()));
-            priceListItemDto.setEndDate(dateFormat.format(currentPriceListItem.get().getTimeInterval().getEnd().getTime()));
-        }
-        return priceListItemDto;
     }
 }
