@@ -16,7 +16,6 @@ INSERT INTO medicine(id, name, description, form, manufacturer, composition, typ
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects) VALUES ('3', 'Panklav', 'Antibiotic medicine.', '1', 'Hemofarm', 'Amoxicillin','0', true,4,  'A3', '1 spoon', 'Death' );
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects) VALUES ('4', 'Paracetamol', 'Painkiller.', '0', 'KRKA-FARMA D.O.O Beograd', 'Paracetamol', '0', false, 3,  'A4', '2 tablets', 'Death');
 
-
 INSERT INTO medicine_status(id, stock) VALUES ('1', '20');
 INSERT INTO medicine_status(id, stock) VALUES ('2', '40');
 INSERT INTO medicine_status(id, stock) VALUES ('3', '60');
