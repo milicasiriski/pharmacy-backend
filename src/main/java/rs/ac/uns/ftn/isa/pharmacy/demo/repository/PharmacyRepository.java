@@ -19,4 +19,6 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
 
     @Query(value = "SELECT p.id, about, address, p.name, rating FROM pharmacy AS p JOIN pharmacy_user AS u ON p.id = pharmacy_id where u.id = :pharmacyAdminId AND user_type = 'PHARMACY_ADMIN'", nativeQuery = true)
     Pharmacy findPharmacyByPharmacyAdmin(@Param("pharmacyAdminId") Long pharmacyAdminId);
+
+    Pharmacy findByNameAndAddress(String name, String address);
 }

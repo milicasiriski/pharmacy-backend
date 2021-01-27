@@ -48,7 +48,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         patient.setPassword(passwordEncoder.encode(dto.getPassword()));
         String activationCode = RandomString.make(64);
         patient.setActivationCode(activationCode);
-        patient = (Patient) userRepository.save(patient);
+        patient = userRepository.save(patient);
         sendActivationLink(patient, siteURL);
         return patient;
     }

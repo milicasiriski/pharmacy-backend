@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LogInService;
 
 
