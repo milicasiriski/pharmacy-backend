@@ -13,10 +13,8 @@ public class Promotion {
     private Long id;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "start", column = @Column(name = "time_start")),
-            @AttributeOverride(name = "end", column = @Column(name = "time_end"))
-    })
+    @AttributeOverride(name = "start", column = @Column(name = "time_start"))
+    @AttributeOverride(name = "end", column = @Column(name = "time_end"))
     TimeInterval periodOfValidity;
 
     @Column(name = "promo_message")
