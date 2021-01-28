@@ -1,12 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "pharmacy")
-public class Pharmacy implements Serializable {
+public class Pharmacy {
 
     @Id
     @SequenceGenerator(name = "pharmacy_sequence_generator", sequenceName = "pharmacy_sequence", initialValue = 2)
@@ -148,7 +147,7 @@ public class Pharmacy implements Serializable {
         this.rating = rating;
     }
 
-    public double getCurrentMedicinePrice(Medicine medicine){
+    public double getCurrentMedicinePrice(Medicine medicine) {
         List<MedicinePriceListItem> prices = this.medicine.get(medicine).getPrices();
         return currentPrice(prices);
     }
