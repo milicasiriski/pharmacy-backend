@@ -24,33 +24,33 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
     }
 
     @Override
-    public Iterable<DermatologistShiftDto> getDermatologistShifts() {
+    public DermatologistShiftDto getDermatologistShifts(Long dermatologistId) {
         PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(10L);
+        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
 
         Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
 
+        Dermatologist dermatologist = (Dermatologist) dermatologists.keySet()
+                .stream()
+                .filter(d -> d.getId().equals(dermatologistId)).toArray()[0];
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        ArrayList<DermatologistShiftDto> dermatologistShiftDtos = new ArrayList<>();
 
-        dermatologists.keySet().forEach(dermatologist -> {
-            DermatologistShiftDto dermatologistShiftDto = new DermatologistShiftDto();
-            dermatologistShiftDto.setDermatologist(dermatologist);
-            dermatologistShiftDto.setPrice(dermatologists.get(dermatologist).getPrice().toString());
-            dermatologistShiftDto.setDurationInMinutes(dermatologists.get(dermatologist).getPrice().toString());
-            Map<DaysOfWeek, TimeInterval> shifts = dermatologists.get(dermatologist).getShifts();
-            List<String> dermatologistShifts = new ArrayList<>();
+        DermatologistShiftDto dermatologistShiftDto = new DermatologistShiftDto();
+        dermatologistShiftDto.setDermatologist(dermatologist);
+        dermatologistShiftDto.setPrice(dermatologists.get(dermatologist).getPrice().toString());
+        dermatologistShiftDto.setDurationInMinutes(dermatologists.get(dermatologist).getPrice().toString());
+        Map<DaysOfWeek, TimeInterval> shifts = dermatologists.get(dermatologist).getShifts();
+        List<String> dermatologistShifts = new ArrayList<>();
 
-            EnumSet.allOf(DaysOfWeek.class)
-                    .forEach(day -> {
-                        dermatologistShifts.add(dateFormat.format(shifts.get(day).getStart().getTime()).split(" ")[1]
-                                + '-' + dateFormat.format(shifts.get(day).getEnd().getTime()).split(" ")[1]);
-                    });
+        EnumSet.allOf(DaysOfWeek.class)
+                .forEach(day -> {
+                    dermatologistShifts.add(dateFormat.format(shifts.get(day).getStart().getTime()).split(" ")[1]
+                            + '-' + dateFormat.format(shifts.get(day).getEnd().getTime()).split(" ")[1]);
+                });
 
-            dermatologistShiftDto.setHourIntervals(dermatologistShifts);
-            dermatologistShiftDtos.add(dermatologistShiftDto);
-        });
+        dermatologistShiftDto.setHourIntervals(dermatologistShifts);
 
-        return dermatologistShiftDtos;
+        return dermatologistShiftDto;
     }
 }
