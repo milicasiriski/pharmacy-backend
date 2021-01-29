@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MedicineReservationServiceImplTest {
+class MedicineReservationServiceImplTest {
     @Mock
     private MedicineRepository medicineRepository;
     @Mock
@@ -33,12 +33,12 @@ public class MedicineReservationServiceImplTest {
     private MedicineReservationServiceImpl subject;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         subject = new MedicineReservationServiceImpl(medicineRepository, medicineReservationRepository, pharmacyRepository, mailService);
     }
 
     @Test
-    public void testIsReservationValid_PharmacyHasMedicineOnStock_ReturnsTrue() {
+    void testIsReservationValid_PharmacyHasMedicineOnStock_ReturnsTrue() {
         // GIVEN
         when(medicineRepository.findById(any())).thenReturn(Optional.of(TestConstants.MEDICINE_TEST_OBJECT));
         when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_TEST_OBJECT));
@@ -51,7 +51,7 @@ public class MedicineReservationServiceImplTest {
     }
 
     @Test
-    public void testIsReservationValid_MedicineDoesNotExist_ReturnsFalse() {
+    void testIsReservationValid_MedicineDoesNotExist_ReturnsFalse() {
         // WHEN
         boolean result = subject.isReservationValid(TestConstants.MEDICINE_RESERVATION_DTO_TEST_OBJECT);
 
@@ -60,7 +60,7 @@ public class MedicineReservationServiceImplTest {
     }
 
     @Test
-    public void testIsReservationValid_PharmacyDoesNotExist_ReturnsFalse() {
+    void testIsReservationValid_PharmacyDoesNotExist_ReturnsFalse() {
         // GIVEN
         when(medicineRepository.findById(any())).thenReturn(Optional.of(TestConstants.MEDICINE_TEST_OBJECT));
 
@@ -72,7 +72,7 @@ public class MedicineReservationServiceImplTest {
     }
 
     @Test
-    public void testIsReservationValid_PharmacyDoesNotHaveMedicineOnStock_ReturnsFalse() {
+    void testIsReservationValid_PharmacyDoesNotHaveMedicineOnStock_ReturnsFalse() {
         // GIVEN
         when(medicineRepository.findById(any())).thenReturn(Optional.of(TestConstants.MEDICINE_TEST_OBJECT));
         when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_STOCK_EMPTY_TEST_OBJECT));
@@ -85,7 +85,7 @@ public class MedicineReservationServiceImplTest {
     }
 
     @Test
-    public void testIsReservationValid_PharmacyDoesNotHaveMedicine_ReturnsFalse() {
+    void testIsReservationValid_PharmacyDoesNotHaveMedicine_ReturnsFalse() {
         // GIVEN
         when(medicineRepository.findById(any())).thenReturn(Optional.of(TestConstants.MEDICINE_TEST_OBJECT));
         when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_MEDICINE_EMPTY_TEST_OBJECT));
