@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.dtoconverters.DermatologistConverter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistShiftDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistService;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.List;
 public class DermatologistsController implements DermatologistConverter {
 
     private final DermatologistService dermatologistService;
+    private final DermatologistEmploymentService dermatologistEmploymentService;
 
     @Autowired
-    public DermatologistsController(DermatologistService dermatologistService) {
+    public DermatologistsController(DermatologistService dermatologistService, DermatologistEmploymentService dermatologistEmploymentService) {
         this.dermatologistService = dermatologistService;
+        this.dermatologistEmploymentService = dermatologistEmploymentService;
     }
 
     @GetMapping(value = "/getDermatologistsByPharmacy/{pharmacyName}")
@@ -33,5 +37,10 @@ public class DermatologistsController implements DermatologistConverter {
     public ResponseEntity<List<DermatologistDto>> getAllDermatologists() {
         List<Dermatologist> dermatologists = dermatologistService.getAllDermatologists();
         return ResponseEntity.ok(createResponse(dermatologists));
+    }
+
+    @GetMapping(value = "/shiftIntervals")
+    public ResponseEntity<Iterable<DermatologistShiftDto>> getAllDermatologistShifts() {
+        return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts());
     }
 }

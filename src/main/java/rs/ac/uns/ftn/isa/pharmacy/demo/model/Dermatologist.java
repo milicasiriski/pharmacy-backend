@@ -2,9 +2,9 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -13,25 +13,35 @@ public class Dermatologist extends User implements Serializable {
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 
-    @ManyToMany(mappedBy = "dermatologists")
-    private List<Pharmacy> pharmacies;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "dermatologist_employment_mapping",
+            joinColumns = {@JoinColumn(name = "dermatologist_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "dermatologist_employment_id", referencedColumnName = "id")})
+    @MapKeyJoinColumn(name = "pharmacy_id")
+    private Map<Pharmacy, Employment> pharmacies;
 
     public Dermatologist() {
         super();
     }
 
-    public Dermatologist(String email, String password, String name, String surname, List<Pharmacy> pharmacies) {
+    public Dermatologist(String email, String password, String name, String surname, Map<Pharmacy, Employment> pharmacies) {
         super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
         this.pharmacies = pharmacies;
     }
 
-    public List<Pharmacy> getPharmacies() {
+    public Map<Pharmacy, Employment> getPharmacies() {
         return pharmacies;
     }
 
-    public void setPharmacies(List<Pharmacy> pharmacies) {
+    public void setPharmacies(Map<Pharmacy, Employment> pharmacies) {
         this.pharmacies = pharmacies;
     }
 

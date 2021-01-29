@@ -21,12 +21,12 @@ public class Pharmacy {
     @Column(name = "about")
     private String about;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "pharmacy_dermatologist",
-            joinColumns = {@JoinColumn(name = "pharmacy_id")},
-            inverseJoinColumns = {@JoinColumn(name = "dermatologist_id")})
-    private List<Dermatologist> dermatologists;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "dermatologist_employment_mapping",
+            joinColumns = {@JoinColumn(name = "pharmacy_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "dermatologist_employment_id", referencedColumnName = "id")})
+    @MapKeyJoinColumn(name = "dermatologist_id")
+    private Map<Dermatologist, Employment> dermatologists;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -67,12 +67,25 @@ public class Pharmacy {
         this.name = name;
         this.address = address;
         this.about = about;
-        this.dermatologists = new ArrayList<>();
+        this.dermatologists = new HashMap<>();
         this.pharmacyAdmins = new ArrayList<>();
         this.examPriceList = new HashMap<>();
     }
 
-    public Pharmacy(Long id, String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
+    public Pharmacy(String name, String address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
+        this.name = name;
+        this.address = address;
+        this.about = about;
+        this.dermatologists = dermatologists;
+        this.pharmacists = pharmacists;
+        this.pharmacyAdmins = pharmacyAdmins;
+        this.pharmacyPromotions = pharmacyPromotions;
+        this.medicine = medicine;
+        this.examPriceList = examPriceList;
+        this.rating = rating;
+    }
+
+    public Pharmacy(Long id, String name, String address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -116,12 +129,28 @@ public class Pharmacy {
         this.about = about;
     }
 
-    public List<Dermatologist> getDermatologists() {
+    public Map<Dermatologist, Employment> getDermatologists() {
         return dermatologists;
     }
 
-    public void setDermatologists(List<Dermatologist> dermatologists) {
+    public void setDermatologists(Map<Dermatologist, Employment> dermatologists) {
         this.dermatologists = dermatologists;
+    }
+
+    public List<PharmacyAdmin> getPharmacyAdmins() {
+        return pharmacyAdmins;
+    }
+
+    public void setPharmacyAdmins(List<PharmacyAdmin> pharmacyAdmins) {
+        this.pharmacyAdmins = pharmacyAdmins;
+    }
+
+    public List<Promotion> getPharmacyPromotions() {
+        return pharmacyPromotions;
+    }
+
+    public void setPharmacyPromotions(List<Promotion> pharmacyPromotions) {
+        this.pharmacyPromotions = pharmacyPromotions;
     }
 
     public List<Pharmacist> getPharmacists() {
@@ -179,33 +208,21 @@ public class Pharmacy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pharmacy pharmacy = (Pharmacy) o;
-        return Objects.equals(id, pharmacy.id) &&
+        return Double.compare(pharmacy.rating, rating) == 0 &&
+                Objects.equals(id, pharmacy.id) &&
                 Objects.equals(name, pharmacy.name) &&
                 Objects.equals(address, pharmacy.address) &&
                 Objects.equals(about, pharmacy.about) &&
                 Objects.equals(dermatologists, pharmacy.dermatologists) &&
                 Objects.equals(pharmacists, pharmacy.pharmacists) &&
+                Objects.equals(pharmacyAdmins, pharmacy.pharmacyAdmins) &&
+                Objects.equals(pharmacyPromotions, pharmacy.pharmacyPromotions) &&
                 Objects.equals(medicine, pharmacy.medicine) &&
                 Objects.equals(examPriceList, pharmacy.examPriceList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, about, dermatologists, pharmacists, medicine, examPriceList);
-    }
-
-    @Override
-    public String toString() {
-        return "Pharmacy{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", about='" + about + '\'' +
-                ", dermatologists=" + dermatologists +
-                ", pharmacists=" + pharmacists +
-                ", medicine=" + medicine +
-                ", examPriceList=" + examPriceList +
-                ", rating=" + rating +
-                '}';
+        return Objects.hash(id, name, address, about, dermatologists, pharmacists, pharmacyAdmins, pharmacyPromotions, medicine, examPriceList, rating);
     }
 }

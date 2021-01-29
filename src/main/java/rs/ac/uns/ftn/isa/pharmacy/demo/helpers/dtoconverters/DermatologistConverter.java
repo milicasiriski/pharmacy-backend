@@ -13,15 +13,15 @@ public interface DermatologistConverter {
     default List<DermatologistDto> createResponse(List<Dermatologist> dermatologists) {
         List<DermatologistDto> dermatologistsDto = new ArrayList<>();
         dermatologists.forEach(dermatologist -> {
-                    List<Pharmacy> pharmacies = dermatologist.getPharmacies();
-                    DermatologistDto dermatologistDto = new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(), 4.75, extractPharmacyInfo(pharmacies));
+                    Iterable<Pharmacy> pharmacies = dermatologist.getPharmacies().keySet();
+                    DermatologistDto dermatologistDto = new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(), 4.75, dermatologist.getId(), extractPharmacyInfo(pharmacies));
                     dermatologistsDto.add(dermatologistDto);
                 }
         );
         return dermatologistsDto;
     }
 
-    private List<PharmacyNameAndAddressDto> extractPharmacyInfo(List<Pharmacy> pharmacies) {
+    private List<PharmacyNameAndAddressDto> extractPharmacyInfo(Iterable<Pharmacy> pharmacies) {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
         pharmacies.forEach(pharmacy -> {
             PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress());
