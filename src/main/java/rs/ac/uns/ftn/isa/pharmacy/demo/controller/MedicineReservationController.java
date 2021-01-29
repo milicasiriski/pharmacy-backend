@@ -50,7 +50,6 @@ public class MedicineReservationController {
                 medicineReservationService.confirmReservation(medicineReservationDto, getSignedInUser());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (MessagingException e) {
-                System.out.println("MAIL SERVICE FAILED");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
