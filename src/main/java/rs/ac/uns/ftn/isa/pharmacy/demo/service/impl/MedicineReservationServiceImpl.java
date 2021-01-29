@@ -27,6 +27,17 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     private PharmacyRepository pharmacyRepository;
     private MailService<MedicineReservationEmailParams> mailService;
 
+    public MedicineReservationServiceImpl(
+            MedicineRepository medicineRepository,
+            MedicineReservationRepository medicineReservationRepository,
+            PharmacyRepository pharmacyRepository,
+            MailService<MedicineReservationEmailParams> mailService) {
+        this.medicineRepository = medicineRepository;
+        this.medicineReservationRepository = medicineReservationRepository;
+        this.pharmacyRepository = pharmacyRepository;
+        this.mailService = mailService;
+    }
+
     @Autowired
     public MedicineReservationServiceImpl(
             MedicineRepository medicineRepository,
