@@ -1,8 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
@@ -27,6 +25,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     private PharmacyRepository pharmacyRepository;
     private MailService<MedicineReservationEmailParams> mailService;
 
+    @Autowired
     public MedicineReservationServiceImpl(
             MedicineRepository medicineRepository,
             MedicineReservationRepository medicineReservationRepository,
@@ -36,19 +35,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.mailService = mailService;
-    }
-
-    @Autowired
-    public MedicineReservationServiceImpl(
-            MedicineRepository medicineRepository,
-            MedicineReservationRepository medicineReservationRepository,
-            PharmacyRepository pharmacyRepository,
-            Environment env,
-            JavaMailSender javaMailSender) {
-        this.medicineRepository = medicineRepository;
-        this.medicineReservationRepository = medicineReservationRepository;
-        this.pharmacyRepository = pharmacyRepository;
-        this.mailService = new MailService<>(env, javaMailSender, new MedicineReservationConfirmMailFormatter());
+        this.mailService.setMailFormatter(new MedicineReservationConfirmMailFormatter());
     }
 
     @Override
