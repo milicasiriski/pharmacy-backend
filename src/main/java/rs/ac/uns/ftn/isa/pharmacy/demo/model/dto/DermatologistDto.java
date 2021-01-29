@@ -8,16 +8,14 @@ public class DermatologistDto {
     private String name;
     private String surname;
     private Double rating;
+    private long id;
     private List<PharmacyNameAndAddressDto> pharmacies;
 
-    public DermatologistDto() {
-
-    }
-
-    public DermatologistDto(String name, String surname, Double rating, List<PharmacyNameAndAddressDto> pharmacies) {
+    public DermatologistDto(String name, String surname, Double rating, long id, List<PharmacyNameAndAddressDto> pharmacies) {
         this.name = name;
         this.surname = surname;
         this.rating = rating;
+        this.id = id;
         this.pharmacies = pharmacies;
     }
 
@@ -51,6 +49,14 @@ public class DermatologistDto {
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override

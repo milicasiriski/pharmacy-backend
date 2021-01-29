@@ -82,12 +82,6 @@ INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('3', '7');
 INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('5', '8');
 INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('6', '9');
 
-INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('1', '4');
-INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('2', '5');
-INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('3', '6');
-INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('4', '4');
-INSERT INTO pharmacy_dermatologist(pharmacy_id, dermatologist_id) VALUES ('5', '5');
-
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('3', '8');
@@ -104,6 +98,16 @@ INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('3', '4');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('4', '5');
+
+INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
+
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 12:00:00', '1970-01-01 08:00:00', '2');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 09:00:00', '3');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '4');
+
+INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '1', '4');
 
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');

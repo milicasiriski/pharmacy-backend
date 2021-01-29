@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -8,7 +9,10 @@ import java.util.Objects;
 @Embeddable
 public class TimeInterval implements Serializable {
 
+    @Column(name="start_time")
     private Calendar start;
+
+    @Column(name="end_time")
     private Calendar end;
 
     public TimeInterval() {
