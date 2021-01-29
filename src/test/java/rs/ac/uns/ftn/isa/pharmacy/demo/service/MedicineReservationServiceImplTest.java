@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
@@ -16,8 +15,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.TestConstants;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -54,8 +52,6 @@ public class MedicineReservationServiceImplTest {
 
     @Test
     public void testIsReservationValid_MedicineDoesNotExist_ReturnsFalse() {
-        // GIVEN
-
         // WHEN
         boolean result = subject.isReservationValid(TestConstants.MEDICINE_RESERVATION_DTO_TEST_OBJECT);
 

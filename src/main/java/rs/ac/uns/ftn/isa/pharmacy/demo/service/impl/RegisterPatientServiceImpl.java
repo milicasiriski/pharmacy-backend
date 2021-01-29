@@ -2,8 +2,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
@@ -22,21 +20,21 @@ import java.util.List;
 @Service
 public class RegisterPatientServiceImpl implements RegisterPatientService {
 
-    private UserRepository userRepository;
-    private AuthorityService authService;
-    private PasswordEncoder passwordEncoder;
-    private MailService<String> mailService;
+    private final UserRepository userRepository;
+    private final AuthorityService authService;
+    private final PasswordEncoder passwordEncoder;
+    private final MailService<String> mailService;
 
     @Autowired
     public RegisterPatientServiceImpl(UserRepository userRepository,
                                       AuthorityService authService,
                                       PasswordEncoder passwordEncoder,
-                                      JavaMailSender javaMailSender,
-                                      Environment env) {
+                                      MailService<String> mailService) {
         this.userRepository = userRepository;
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
-        this.mailService = new MailService<>(env, javaMailSender, new AccountActivationLinkMailFormatter());
+        this.mailService = mailService;
+        this.mailService.setMailFormatter(new AccountActivationLinkMailFormatter());
     }
 
     @Override

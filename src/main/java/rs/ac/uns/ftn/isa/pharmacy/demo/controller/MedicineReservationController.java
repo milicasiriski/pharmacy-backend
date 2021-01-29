@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 
 @RestController
@@ -48,7 +49,8 @@ public class MedicineReservationController {
             try {
                 medicineReservationService.confirmReservation(medicineReservationDto, getSignedInUser());
                 return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
+            } catch (MessagingException e) {
+                System.out.println("MAIL SERVICE FAILED");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
