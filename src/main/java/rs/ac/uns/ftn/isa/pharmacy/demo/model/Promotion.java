@@ -34,7 +34,6 @@ public class Promotion {
         this.pharmacy = pharmacy;
     }
 
-
     public TimeInterval getPeriodOfValidity() {
         return periodOfValidity;
     }
