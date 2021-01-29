@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.dtoconverters.DermatologistConverter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
@@ -39,8 +40,9 @@ public class DermatologistsController implements DermatologistConverter {
         return ResponseEntity.ok(createResponse(dermatologists));
     }
 
-    @GetMapping(value = "/shiftIntervals")
-    public ResponseEntity<Iterable<DermatologistShiftDto>> getAllDermatologistShifts() {
-        return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts());
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @GetMapping(value = "/shiftIntervals/{dermatologistId}")
+    public ResponseEntity<DermatologistShiftDto> getAllDermatologistShifts(@PathVariable String dermatologistId) {
+        return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts(Long.parseLong(dermatologistId)));
     }
 }
