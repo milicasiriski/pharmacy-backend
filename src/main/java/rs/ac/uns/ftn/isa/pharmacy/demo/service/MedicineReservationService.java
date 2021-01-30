@@ -7,6 +7,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
 
 import javax.mail.MessagingException;
+import java.util.Calendar;
 
 public interface MedicineReservationService {
     Iterable<Medicine> getAllMedicine();
@@ -20,4 +21,6 @@ public interface MedicineReservationService {
     Medicine getMedicineById(Long medicineId);
 
     Iterable<MedicineReservation> getAllMedicineReservationsForPatient(Patient patient);
+
+    boolean isMedicineReservationCancellable(Calendar deadline);
 }
