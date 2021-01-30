@@ -27,14 +27,14 @@ public class GetMedicineReservationResponse implements Serializable {
         this.cancellable = cancellable;
     }
 
-    public GetMedicineReservationResponse(MedicineReservation medicineReservation) {
+    public GetMedicineReservationResponse(MedicineReservation medicineReservation, boolean cancellable) {
         this.reservationId = medicineReservation.getId();
         this.medicineName = medicineReservation.getMedicine().getName();
         this.medicineForm = medicineReservation.getMedicine().getForm().label;
         this.pharmacyName = medicineReservation.getPharmacy().getName();
         this.pharmacyAddress = medicineReservation.getPharmacy().getAddress();
         this.deadline = new SimpleDateFormat("dd/MM/yyyy").format(medicineReservation.getExpirationDate().getTime());
-        this.cancellable = true;
+        this.cancellable = cancellable;
     }
 
     public long getReservationId() {

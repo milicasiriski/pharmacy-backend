@@ -11,12 +11,15 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class MedicineReservationServiceImpl implements MedicineReservationService {
@@ -70,6 +73,9 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
 
         Calendar expirationDate = Calendar.getInstance();
         expirationDate.setTime(createMedicineReservationParams.getExpirationDate());
+        expirationDate.set(Calendar.HOUR, 23);
+        expirationDate.set(Calendar.MINUTE, 59);
+        expirationDate.set(Calendar.SECOND, 59);
 
         String uniqueReservationNumber = UUID.randomUUID().toString();
         MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, pharmacy, expirationDate, uniqueReservationNumber);
@@ -89,15 +95,6 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
     }
 
-    private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
-        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(pharmacyId);
-        if (optionalPharmacy.isPresent()) {
-            return optionalPharmacy.get();
-        } else {
-            throw new EntityNotFoundException();
-        }
-    }
-
     @Override
     public Medicine getMedicineById(Long medicineId) throws EntityNotFoundException {
         Optional<Medicine> optionalMedicine = medicineRepository.findById(medicineId);
@@ -111,5 +108,23 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     @Override
     public Iterable<MedicineReservation> getAllMedicineReservationsForPatient(Patient patient) {
         return medicineReservationRepository.findByPatient(patient);
+    }
+
+    @Override
+    public boolean isMedicineReservationCancellable(Calendar deadline) {
+        Calendar now = Calendar.getInstance();
+        long differenceInMilliseconds = deadline.getTime().getTime() - now.getTime().getTime();
+        long differenceInHours = TimeUnit.HOURS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+
+        return differenceInHours >= Constants.MEDICINE_RESERVATION_CANCELLATION_HOURS;
+    }
+
+    private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
+        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(pharmacyId);
+        if (optionalPharmacy.isPresent()) {
+            return optionalPharmacy.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }

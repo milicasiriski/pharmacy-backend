@@ -33,7 +33,8 @@ public class MedicineReservationController {
         Patient patient = getSignedInUser();
         Iterable<GetMedicineReservationResponse> medicineReservations = new ArrayList<>() {{
             medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach( medicineReservation -> {
-                add(new GetMedicineReservationResponse(medicineReservation));
+                boolean cancellable = medicineReservationService.isMedicineReservationCancellable(medicineReservation.getExpirationDate());
+                add(new GetMedicineReservationResponse(medicineReservation, cancellable));
             });
         }};
         return new ResponseEntity<>(medicineReservations, HttpStatus.OK);
