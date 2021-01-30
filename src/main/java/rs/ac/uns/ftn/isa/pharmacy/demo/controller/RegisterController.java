@@ -57,7 +57,6 @@ public class RegisterController {
             this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,7 +71,6 @@ public class RegisterController {
             this.registerUserService.register(credentials);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +83,6 @@ public class RegisterController {
             this.registerPatientService.activate(email, code);
             return new ResponseEntity<>("/activation/success", HttpStatus.OK);
         } catch (BadActivationCodeException e) {
-            e.printStackTrace();
             return new ResponseEntity<>("/activation/failed", HttpStatus.BAD_REQUEST);
         }
     }
