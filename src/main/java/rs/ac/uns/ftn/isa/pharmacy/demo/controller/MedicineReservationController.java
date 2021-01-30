@@ -80,8 +80,7 @@ public class MedicineReservationController {
     @DeleteMapping("/cancel/{medicineReservationId}")
     public ResponseEntity<String> deleteReservation(@PathVariable("medicineReservationId") Long medicineReservationId) {
         try {
-            // TODO: fix entities so that medicine is not deleted
-//            medicineReservationService.cancelMedicineReservation(medicineReservationId);
+            medicineReservationService.cancelMedicineReservation(medicineReservationId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("Medicine reservation does not exist!", HttpStatus.BAD_REQUEST);
