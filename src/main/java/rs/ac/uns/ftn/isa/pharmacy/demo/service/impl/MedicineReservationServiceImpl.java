@@ -126,6 +126,15 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
             throw new MedicineReservationCannotBeCancelledException();
         }
         medicineReservationRepository.delete(medicineReservation);
+
+        Pharmacy pharmacy = getPharmacyById(medicineReservation.getPharmacy().getId());
+        Medicine medicine = medicineReservation.getMedicine();
+        MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
+
+        int currentStock = medicineStatus.getStock();
+        medicineStatus.setStock(currentStock + 1);
+        pharmacy.getMedicine().put(medicine, medicineStatus);
+        pharmacyRepository.save(pharmacy);
     }
 
     private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
