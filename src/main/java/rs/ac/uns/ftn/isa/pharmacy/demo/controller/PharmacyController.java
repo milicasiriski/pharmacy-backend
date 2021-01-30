@@ -40,7 +40,7 @@ public class PharmacyController {
         return ResponseEntity.ok(dtoPharmacies);
     }
 
-    //TODO:Vladimir, check if values are ok
+    //TODO:Vladimir, check if values are ok NOSONAR
     @PostMapping("/register")
     public ResponseEntity<String> registerPharmacy(@RequestBody PharmacyDto dto) {
         try {

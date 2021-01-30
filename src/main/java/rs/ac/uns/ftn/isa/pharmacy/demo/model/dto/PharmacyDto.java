@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import javax.persistence.Column;
 import java.util.Objects;
 
 public class PharmacyDto {

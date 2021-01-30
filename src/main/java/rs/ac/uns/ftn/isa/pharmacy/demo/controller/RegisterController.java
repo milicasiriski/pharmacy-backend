@@ -22,12 +22,16 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController {
-    //@TODO:Vladimir Check if values are ok
+    //@TODO:Vladimir Check if values are ok NOSONAR
     @Qualifier("registerPatientServiceImpl")
     private RegisterPatientService registerPatientService;
 
     @Qualifier("registerUserServiceImpl")
     private RegisterUserService registerUserService;
+
+    private final String userExistsAlert = "User already exists!";
+    private final String registrationFailedAlert = "Registration failed!";
+
 
     @Autowired
     public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService) {
@@ -39,21 +43,22 @@ public class RegisterController {
     @PostMapping("/patient")
     public ResponseEntity<String> registerPatient(HttpServletRequest request, @RequestBody PatientDto patientDTO, UriComponentsBuilder ucBuilder) {
         Patient existUser;
+
         try {
             existUser = this.registerPatientService.findByEmail(patientDTO.getEmail());
         } catch (NotAPatientException e) {
-            return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
         }
 
         if (existUser != null) {
-            return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
         }
         try {
             this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Registration failed!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -61,14 +66,14 @@ public class RegisterController {
     public ResponseEntity<String> registerSystemAdmin(@RequestBody UserRegistrationDto credentials) {
         User existUser = this.registerUserService.findByEmail(credentials.getEmail());
         if (existUser != null) {
-            return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
         }
         try {
             this.registerUserService.register(credentials);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Registration failed!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

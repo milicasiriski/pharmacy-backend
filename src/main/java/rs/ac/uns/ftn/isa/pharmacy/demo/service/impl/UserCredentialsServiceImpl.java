@@ -18,10 +18,10 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserCredentialsService;
 public class UserCredentialsServiceImpl implements UserCredentialsService {
 
     @Qualifier("customUserDetailsService")
-    private UserDetailsService userDetailsService;
-    private AuthenticationManager authenticationManager;
-    private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserCredentialsServiceImpl(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository) {

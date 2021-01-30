@@ -6,15 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineNameUuidDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,14 +23,13 @@ public class MedicineCrudController {
         this.medicineService = medicineService;
     }
 
-    //TODO:Vladimir, check if values are ok
+    //TODO:Vladimir, check if values are ok NOSONAR
     @PostMapping("/save")
     public ResponseEntity<String> saveMedicine(@RequestBody MedicineDto dto) {
         try {
             medicineService.save(dto);
             return new ResponseEntity<>("Medicine saved!", HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>("Sorry, you have sent a bad request!", HttpStatus.BAD_REQUEST);
         }
     }
@@ -45,7 +39,7 @@ public class MedicineCrudController {
         try {
             return new ResponseEntity<>(medicineService.getAlternativesGroups(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -54,7 +48,7 @@ public class MedicineCrudController {
         try {
             return new ResponseEntity<>(medicineService.getAll(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
