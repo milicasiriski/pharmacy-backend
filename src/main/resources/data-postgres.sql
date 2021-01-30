@@ -67,21 +67,6 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('11', 'PHARMACY_ADMIN', 'pharmacyisa6+admin2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 5);
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('12', 'PHARMACY_ADMIN', 'pharmacyisa6+admin3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 6);
 
-INSERT INTO exam(id, duration) VALUES ('1', '30');
-INSERT INTO exam(id, duration) VALUES ('2', '45');
-INSERT INTO exam(id, duration) VALUES ('3', '20');
-INSERT INTO exam(id, duration) VALUES ('4', '20');
-INSERT INTO exam(id, duration) VALUES ('5', '20');
-INSERT INTO exam(id, duration) VALUES ('6', '20');
-
-INSERT INTO exam_dermatologist(id, dermatologist_id) VALUES ('1', '4');
-INSERT INTO exam_dermatologist(id, dermatologist_id) VALUES ('2', '5');
-INSERT INTO exam_dermatologist(id, dermatologist_id) VALUES ('4', '6');
-
-INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('3', '7');
-INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('5', '8');
-INSERT INTO exam_pharmacist(id, pharmacist_id) VALUES ('6', '9');
-
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('3', '8');
@@ -100,6 +85,11 @@ INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('3', '4
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('4', '5');
 
 INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
+
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('1', '20', '2021-01-30 15:00:00', '2021-01-30 14:40:00', '1');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('2', '20', '2021-01-30 14:40:00', '2021-01-30 14:20:00', '1');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('3', '20', '2021-01-30 11:40:00', '2021-01-30 11:20:00', '1');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('4', '20', '2021-01-30 10:40:00', '2021-01-30 10:20:00', '1');
 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');

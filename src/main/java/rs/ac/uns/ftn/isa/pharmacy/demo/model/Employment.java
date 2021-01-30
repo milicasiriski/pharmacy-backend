@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,14 +28,31 @@ public class Employment {
     @Column(name = "duration")
     private Integer duration;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "employment_id")
+    private List<Exam> exams;
+
     public Employment() {
 
     }
 
-    public Employment(Map<DaysOfWeek, TimeInterval> shifts, Double price, int duration) {
+    public Employment(Map<DaysOfWeek, TimeInterval> shifts, Double price, Integer duration, List<Exam> exams) {
         this.shifts = shifts;
         this.price = price;
         this.duration = duration;
+        this.exams = exams;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public List<Exam> getExams() {
+        return exams;
+    }
+
+    public void setExams(List<Exam> exams) {
+        this.exams = exams;
     }
 
     public Long getId() {

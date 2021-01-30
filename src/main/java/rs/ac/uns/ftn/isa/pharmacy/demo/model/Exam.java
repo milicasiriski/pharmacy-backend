@@ -2,25 +2,30 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "exam")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Exam implements Serializable {
+public class Exam implements Serializable {
+
     @Id
     @SequenceGenerator(name = "exam_sequence_generator", sequenceName = "exam_sequence", initialValue = 7)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_sequence_generator")
     private Long id;
 
-    @Column(name = "duration")
-    protected int duration;
+    @Column(name = "price")
+    private double price;
 
-    protected Exam() {
+    @Embedded
+    @Column(name = "timeinterval")
+    private TimeInterval timeInterval;
+
+    public Exam() {
     }
 
-    protected Exam(int duration) {
-        this.duration = duration;
+    public Exam(double price, TimeInterval timeInterval) {
+        this.price = price;
+        this.timeInterval = timeInterval;
     }
 
     public Long getId() {
@@ -31,25 +36,20 @@ public abstract class Exam implements Serializable {
         this.id = id;
     }
 
-    public int getDuration() {
-        return duration;
+
+    public double getPrice() {
+        return price;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Exam exam = (Exam) o;
-        return duration == exam.duration;
+    public TimeInterval getTimeInterval() {
+        return timeInterval;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(duration);
+    public void setTimeInterval(TimeInterval timeInterval) {
+        this.timeInterval = timeInterval;
     }
-
 }
