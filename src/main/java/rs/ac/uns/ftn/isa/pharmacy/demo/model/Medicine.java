@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Medicine implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "medicine_sequence_generator", sequenceName = "medicine_sequence", initialValue = 5)
+    @SequenceGenerator(name = "medicine_sequence_generator", sequenceName = "medicine_sequence", initialValue = 6)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_sequence_generator")
     private Long id;
 
@@ -50,6 +50,9 @@ public class Medicine implements Serializable {
     @Column(name = "side_effects")
     private String sideEffects;
 
+    @Column(name = "points")
+    private int points = 0;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "medicine_alternatives",
@@ -64,7 +67,7 @@ public class Medicine implements Serializable {
         this.name = name;
     }
 
-    public Medicine(Long id, String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<Medicine> alternatives) {
+    public Medicine(Long id, String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points, List<Medicine> alternatives) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -77,6 +80,7 @@ public class Medicine implements Serializable {
         this.prescribed = prescribed;
         this.recommendedDose = recommendedDose;
         this.sideEffects = sideEffects;
+        this.points = points;
         this.alternatives = alternatives;
     }
 
@@ -176,6 +180,14 @@ public class Medicine implements Serializable {
         this.sideEffects = sideEffects;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public List<Medicine> getAlternatives() {
         return alternatives;
     }
@@ -185,30 +197,12 @@ public class Medicine implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Medicine{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", composition='" + composition + '\'' +
-                ", ratings=" + ratings +
-                ", form=" + form +
-                ", type=" + type +
-                ", prescribed=" + prescribed +
-                ", recommendedDose='" + recommendedDose + '\'' +
-                ", sideEffects='" + sideEffects + '\'' +
-                ", alternatives=" + alternatives +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Medicine medicine = (Medicine) o;
         return prescribed == medicine.prescribed &&
+                points == medicine.points &&
                 Objects.equals(id, medicine.id) &&
                 Objects.equals(uuid, medicine.uuid) &&
                 Objects.equals(name, medicine.name) &&
@@ -225,6 +219,26 @@ public class Medicine implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, description, manufacturer, composition, ratings, form, type, prescribed, recommendedDose, sideEffects, alternatives);
+        return Objects.hash(id, uuid, name, description, manufacturer, composition, ratings, form, type, prescribed, recommendedDose, sideEffects, points, alternatives);
+    }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", composition='" + composition + '\'' +
+                ", ratings=" + ratings +
+                ", form=" + form +
+                ", type=" + type +
+                ", prescribed=" + prescribed +
+                ", recommendedDose='" + recommendedDose + '\'' +
+                ", sideEffects='" + sideEffects + '\'' +
+                ", points=" + points +
+                ", alternatives=" + alternatives +
+                '}';
     }
 }

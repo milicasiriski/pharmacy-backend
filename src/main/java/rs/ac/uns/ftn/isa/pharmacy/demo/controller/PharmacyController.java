@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
@@ -35,14 +32,22 @@ public class PharmacyController {
         return ResponseEntity.ok(dtoPharmacies);
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PharmacyDto>> getAllPharmacies() {
+        List<Pharmacy> pharmacies = pharmacyService.findAll();
+        List<PharmacyDto> dtoPharmacies = new ArrayList<>();
+        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getId())));
+        return ResponseEntity.ok(dtoPharmacies);
+    }
+
+    //TODO:Vladimir, check if values are ok
     @PostMapping("/register")
-    public ResponseEntity<String> registerPharmacy(PharmacyDto dto) {
-        try{
-            Pharmacy pharmacy = pharmacyService.save(dto);
+    public ResponseEntity<String> registerPharmacy(@RequestBody PharmacyDto dto) {
+        try {
+            pharmacyService.save(dto);
+            return ResponseEntity.ok("Pharmacy registered.");
+        } catch (Exception e) {
+            return new ResponseEntity<>("Pharmacy failed to register.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        catch (Exception e){
-            return new ResponseEntity<>("Pharmacy register.", HttpStatus.OK);
-        }
-        return ResponseEntity.ok("Pharmacy register.");
     }
 }
