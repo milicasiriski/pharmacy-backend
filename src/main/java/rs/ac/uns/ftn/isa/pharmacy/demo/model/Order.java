@@ -26,9 +26,14 @@ public class Order implements Serializable {
     @Column(name = "deadline")
     private Calendar deadline;
 
-    public Order(Map<Medicine, Integer> medicineAmount, Calendar deadline) {
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "pharmacy_admin_id")
+    private PharmacyAdmin pharmacyAdmin;
+
+    public Order(Map<Medicine, Integer> medicineAmount, Calendar deadline, PharmacyAdmin pharmacyAdmin) {
         this.medicineAmount = medicineAmount;
         this.deadline = deadline;
+        this.pharmacyAdmin = pharmacyAdmin;
     }
 
     public Order() {
@@ -57,6 +62,14 @@ public class Order implements Serializable {
 
     public void setDeadline(Calendar deadline) {
         this.deadline = deadline;
+    }
+
+    public PharmacyAdmin getPharmacyAdmin() {
+        return pharmacyAdmin;
+    }
+
+    public void setPharmacyAdmin(PharmacyAdmin pharmacyAdmin) {
+        this.pharmacyAdmin = pharmacyAdmin;
     }
 
     @Override

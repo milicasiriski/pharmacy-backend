@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.dtoconverters.OrderConverter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Order;
@@ -26,6 +27,7 @@ public class OrderController implements OrderConverter {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public void createOrder(@RequestBody OrderDto orderDto) {
         orderService.save(orderDto);
     }
