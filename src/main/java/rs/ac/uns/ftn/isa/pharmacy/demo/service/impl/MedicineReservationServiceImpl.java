@@ -36,7 +36,6 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.mailService = mailService;
-        this.mailService.setMailFormatter(new MedicineReservationConfirmMailFormatter());
     }
 
     @Override
@@ -87,8 +86,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
                 pharmacy.getName(),
                 pharmacy.getAddress(),
                 uniqueReservationNumber);
-        // TODO: fix mail service injection
-//        mailService.sendMail(patient.getEmail(), params);
+        mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
     }
 
     private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {

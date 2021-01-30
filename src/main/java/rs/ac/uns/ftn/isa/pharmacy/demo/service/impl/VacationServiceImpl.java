@@ -31,7 +31,6 @@ public class VacationServiceImpl implements VacationService {
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.vacationRepository = vacationRepository;
         this.mailService = mailService;
-        this.mailService.setMailFormatter(new VacationTimeResponseMailFormatter());
     }
 
     public Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation() {
@@ -66,7 +65,7 @@ public class VacationServiceImpl implements VacationService {
 
     private void sendVacationStatusToEmail(User user, VacationDto vacationDto) throws MessagingException {
         VacationTimeResponseEmailParams params = new VacationTimeResponseEmailParams(vacationDto.isApproved(), vacationDto.getReason());
-        mailService.sendMail(user.getEmail(), params);
+        mailService.sendMail(user.getEmail(), params, new VacationTimeResponseMailFormatter());
     }
 
     private void updateVacation(VacationDto vacationDto, VacationTimeRequest vacation) {

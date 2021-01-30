@@ -36,7 +36,6 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         this.authService = authService;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
-        this.mailService.setMailFormatter(new AccountActivationLinkMailFormatter());
     }
 
     @Override
@@ -89,7 +88,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
 
     private void sendActivationLink(Patient patient, String siteUrl) throws MessagingException {
         String verifyURL = siteUrl + "/activation?code=" + patient.getActivationCode() + "&email=" + patient.getEmail();
-        mailService.sendMail(patient.getEmail(), verifyURL);
+        mailService.sendMail(patient.getEmail(), verifyURL, new AccountActivationLinkMailFormatter());
     }
 
 }

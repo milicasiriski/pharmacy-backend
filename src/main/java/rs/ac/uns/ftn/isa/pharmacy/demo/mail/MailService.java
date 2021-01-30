@@ -15,7 +15,6 @@ import java.util.Objects;
 public class MailService<T> {
     private Environment env;
     private JavaMailSender javaMailSender;
-    private MailFormatter<T> mailFormatter;
 
     @Autowired
     public MailService(Environment env, JavaMailSender javaMailSender) {
@@ -23,14 +22,8 @@ public class MailService<T> {
         this.javaMailSender = javaMailSender;
     }
 
-    public MailService(Environment env, JavaMailSender javaMailSender, MailFormatter<T> mailFormatter) {
-        this.env = env;
-        this.javaMailSender = javaMailSender;
-        this.mailFormatter = mailFormatter;
-    }
-
     @Async
-    public void sendMail(String recipient, T params) throws MessagingException {
+    public void sendMail(String recipient, T params, MailFormatter<T> mailFormatter) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper mail = new MimeMessageHelper(message);
         mail.setTo(recipient);
@@ -40,9 +33,5 @@ public class MailService<T> {
         mail.setText(mailFormatter.getText(params), true);
 
         javaMailSender.send(message);
-    }
-
-    public void setMailFormatter(MailFormatter<T> mailFormatter) {
-        this.mailFormatter = mailFormatter;
     }
 }
