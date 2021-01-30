@@ -23,4 +23,6 @@ public interface MedicineReservationService {
     Iterable<MedicineReservation> getAllMedicineReservationsForPatient(Patient patient);
 
     boolean isMedicineReservationCancellable(Calendar deadline);
+
+    void cancelMedicineReservation(Long medicineReservationId);
 }
