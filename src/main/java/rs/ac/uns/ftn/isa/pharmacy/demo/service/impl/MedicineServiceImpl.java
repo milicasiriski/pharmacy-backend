@@ -72,20 +72,4 @@ public class MedicineServiceImpl implements MedicineService, MedicineConverter {
         Iterable<Medicine> allMedicine = medicineRepository.findAll();
         return createAlternativeGroups(allMedicine);
     }
-
-    private Medicine createBasicMedicine(MedicineDto dto) {
-        Medicine medicine = new Medicine();
-        medicine.setComposition(dto.getComposition());
-        medicine.setDescription(dto.getDescription());
-        medicine.setForm(dto.getForm());
-        medicine.setManufacturer(dto.getManufacturer());
-        medicine.setName(dto.getName());
-        medicine.setPrescribed(dto.isPrescribed());
-        medicine.setRecommendedDose(dto.getRecommendedDose());
-        medicine.setSideEffects(dto.getSideEffects());
-        medicine.setType(dto.getType());
-        medicine.setUuid(dto.getUuid());
-        medicine.setPoints(dto.getPoints());
-        return medicine;
-    }
 }

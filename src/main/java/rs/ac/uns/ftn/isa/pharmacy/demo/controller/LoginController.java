@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LogInService;
-
 
 @RestController
 @RequestMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,11 +29,10 @@ public class LoginController {
         return ResponseEntity.ok(state);
     }
 
-
     @PostMapping("/intialPasswordChange")
     public ResponseEntity<String> firstTimeLogin(@RequestBody String newPassword) {
         try {
-            logInService.firsLoginPasswordChange(newPassword);
+            logInService.firstLogInPasswordChange(newPassword);
             return new ResponseEntity<>("Registration succeeded!", HttpStatus.OK);
         }
         catch (Exception e){

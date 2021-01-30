@@ -11,8 +11,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +40,9 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         UserType type = dto.getType();
         user = createUserByType(type);
         //TODO:Vladimir, this will be potential transaction NOSONAR
-        if(user.getClass()==PharmacyAdmin.class){
+        if (user.getClass() == PharmacyAdmin.class) {
             Optional<Pharmacy> pharmacy = pharmacyRepository.findById(dto.getPharmacyId());
-            if(pharmacy.isEmpty()){
+            if (pharmacy.isEmpty()) {
                 throw new BadUserInformationException();
             }
             ((PharmacyAdmin) user).setPharmacy(pharmacy.get());
@@ -62,7 +60,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
     private User createUserByType(UserType type) throws BadUserInformationException {
         User user;
-        switch (type){
+        switch (type) {
             case PATIENT:
                 user = new Patient();
                 break;
@@ -91,4 +89,10 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public boolean userExists(String email) {
+        return findByEmail(email) != null;
+    }
+
 }

@@ -4,4 +4,5 @@ public interface RegisterService<DTO, USER> {
 
     USER findByEmail(String email);
 
+    boolean userExists(String email);
 }

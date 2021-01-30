@@ -66,16 +66,24 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
     }
 
     @Override
-    public Patient findByEmail(String email) throws NotAPatientException{
+    public Patient findByEmail(String email) throws NotAPatientException {
         User user = userRepository.findByEmail(email);
-        if(user==null){
+        if (user == null) {
             return null;
         }
-        if(!user.getClass().equals(Patient.class)){
+        if (!user.getClass().equals(Patient.class)) {
             throw new NotAPatientException();
-        }
-        else{
+        } else {
             return (Patient) user;
+        }
+    }
+
+    @Override
+    public boolean userExists(String email) {
+        try {
+            return findByEmail(email) != null;
+        } catch (NotAPatientException e) {
+            return false;
         }
     }
 
