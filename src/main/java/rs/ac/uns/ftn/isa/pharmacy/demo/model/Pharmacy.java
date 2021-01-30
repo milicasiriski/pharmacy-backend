@@ -223,6 +223,6 @@ public class Pharmacy {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, about, dermatologists, pharmacists, pharmacyAdmins, pharmacyPromotions, medicine, examPriceList, rating);
+        return Objects.hash(id, name, address);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacyDoesNotContainMedicineException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PriceListItemDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PriceListItemResponseDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
@@ -53,7 +54,8 @@ public class PriceListServiceImpl implements PriceListService {
         pharmacy.getMedicine().keySet().forEach(medicine -> {
             List<MedicinePriceListItem> prices = medicines.get(medicine).getPrices();
             PriceListItemResponseDto priceListItem = currentPriceListItem(prices);
-            priceListItem.setMedicine(medicine);
+            MedicinesBasicInfoDto medicinesBasicInfoDto = new MedicinesBasicInfoDto(medicine.getName(), medicine.getForm().label, medicine.getId());
+            priceListItem.setMedicineInfo(medicinesBasicInfoDto);
             priceItems.add(priceListItem);
         });
         return priceItems;
