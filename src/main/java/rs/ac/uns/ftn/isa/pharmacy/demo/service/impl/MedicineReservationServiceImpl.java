@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
@@ -15,7 +16,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-import java.time.Duration;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
@@ -96,8 +96,8 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public Medicine getMedicineById(Long medicineId) throws EntityNotFoundException {
-        Optional<Medicine> optionalMedicine = medicineRepository.findById(medicineId);
+    public Medicine getMedicineById(Long id) throws EntityNotFoundException {
+        Optional<Medicine> optionalMedicine = medicineRepository.findById(id);
         if (optionalMedicine.isPresent()) {
             return optionalMedicine.get();
         } else {
@@ -119,10 +119,28 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         return differenceInHours >= Constants.MEDICINE_RESERVATION_CANCELLATION_HOURS;
     }
 
-    private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
-        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(pharmacyId);
+    @Override
+    public void cancelMedicineReservation(Long medicineReservationId) throws EntityNotFoundException, MedicineReservationCannotBeCancelledException {
+        MedicineReservation medicineReservation = getMedicineReservationById(medicineReservationId);
+        if (!isMedicineReservationCancellable(medicineReservation.getExpirationDate())) {
+            throw new MedicineReservationCannotBeCancelledException();
+        }
+        medicineReservationRepository.delete(medicineReservation);
+    }
+
+    private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
+        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(id);
         if (optionalPharmacy.isPresent()) {
             return optionalPharmacy.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    private MedicineReservation getMedicineReservationById(Long id) throws EntityNotFoundException {
+        Optional<MedicineReservation> optionalMedicineReservation = medicineReservationRepository.findById(id);
+        if (optionalMedicineReservation.isPresent()) {
+            return optionalMedicineReservation.get();
         } else {
             throw new EntityNotFoundException();
         }

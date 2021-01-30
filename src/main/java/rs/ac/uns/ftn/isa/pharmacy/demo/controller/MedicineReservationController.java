@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
@@ -15,6 +16,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
 @RestController
@@ -32,7 +34,7 @@ public class MedicineReservationController {
     public ResponseEntity<Iterable<GetMedicineReservationResponse>> getAllMedicineReservations() {
         Patient patient = getSignedInUser();
         Iterable<GetMedicineReservationResponse> medicineReservations = new ArrayList<>() {{
-            medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach( medicineReservation -> {
+            medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach(medicineReservation -> {
                 boolean cancellable = medicineReservationService.isMedicineReservationCancellable(medicineReservation.getExpirationDate());
                 add(new GetMedicineReservationResponse(medicineReservation, cancellable));
             });
@@ -72,5 +74,21 @@ public class MedicineReservationController {
 
     private Patient getSignedInUser() {
         return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @DeleteMapping("/cancel/{medicineReservationId}")
+    public ResponseEntity<String> deleteReservation(@PathVariable("medicineReservationId") Long medicineReservationId) {
+        try {
+            // TODO: fix entities so that medicine is not deleted
+//            medicineReservationService.cancelMedicineReservation(medicineReservationId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Medicine reservation does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (MedicineReservationCannotBeCancelledException e) {
+            return new ResponseEntity<>("Selected medicine reservation cannot be deleted!", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
