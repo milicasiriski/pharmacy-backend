@@ -28,6 +28,7 @@ public class ExamServiceImpl implements ExamService {
     public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) {
         Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), generateExamTimeInterval(pharmacyAdminExamDto));
         Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(Long.parseLong(pharmacyAdminExamDto.getDermatologistId()));
+
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getId());
         Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
