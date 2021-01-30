@@ -26,11 +26,14 @@ public class Patient extends User {
     @Column(name = "patient_activation_code", length = 64)
     private String activationCode;
 
+    @Column(name = "patient_penalty_points")
+    private int penaltyPoints;
+
     public Patient() {
         super();
     }
 
-    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber) {
+    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber, int penaltyPoints) {
         super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
@@ -38,6 +41,7 @@ public class Patient extends User {
         this.city = city;
         this.country = country;
         this.phoneNumber = phoneNumber;
+        this.penaltyPoints = penaltyPoints;
     }
 
     public String getAddress() {
@@ -75,6 +79,22 @@ public class Patient extends User {
     public String getActivationCode() { return activationCode; }
 
     public void setActivationCode(String activationCode) { this.activationCode = activationCode; }
+
+    public int getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(int penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
+    }
+
+    public void addPenaltyPoints(int points) {
+        this.penaltyPoints += points;
+    }
+
+    public void subtractPenaltyPoints(int points) {
+        this.penaltyPoints -= points;
+    }
 
     @Override
     public boolean equals(Object o) {

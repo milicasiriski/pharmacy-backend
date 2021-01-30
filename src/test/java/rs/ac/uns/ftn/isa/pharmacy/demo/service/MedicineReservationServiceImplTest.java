@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.MedicineReservationServiceImpl;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.TestConstants;
 
@@ -28,13 +29,15 @@ class MedicineReservationServiceImplTest {
     @Mock
     private PharmacyRepository pharmacyRepository;
     @Mock
+    private UserRepository userRepository;
+    @Mock
     private MailService<MedicineReservationEmailParams> mailService;
 
     private MedicineReservationServiceImpl subject;
 
     @BeforeEach
     void setUp() {
-        subject = new MedicineReservationServiceImpl(medicineRepository, medicineReservationRepository, pharmacyRepository, mailService);
+        subject = new MedicineReservationServiceImpl(medicineRepository, medicineReservationRepository, pharmacyRepository, userRepository, mailService);
     }
 
     @Test

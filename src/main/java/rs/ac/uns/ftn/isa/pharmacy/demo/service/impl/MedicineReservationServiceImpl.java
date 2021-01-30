@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
@@ -11,11 +13,15 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,21 +29,25 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class MedicineReservationServiceImpl implements MedicineReservationService {
+    private MedicineRepository medicineRepository;
+    private MedicineReservationRepository medicineReservationRepository;
+    private PharmacyRepository pharmacyRepository;
+    private UserRepository userRepository;
+    private MailService<MedicineReservationEmailParams> mailService;
 
-    private final MedicineRepository medicineRepository;
-    private final MedicineReservationRepository medicineReservationRepository;
-    private final PharmacyRepository pharmacyRepository;
-    private final MailService<MedicineReservationEmailParams> mailService;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public MedicineReservationServiceImpl(
             MedicineRepository medicineRepository,
             MedicineReservationRepository medicineReservationRepository,
             PharmacyRepository pharmacyRepository,
+            UserRepository userRepository,
             MailService<MedicineReservationEmailParams> mailService) {
         this.medicineRepository = medicineRepository;
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.userRepository = userRepository;
         this.mailService = mailService;
     }
 
@@ -135,6 +145,43 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         medicineStatus.setStock(currentStock + 1);
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    public void removeAllExpiredMedicineReservations() {
+        Iterable<MedicineReservation> reservationsToDelete = getExpiredMedicineReservations();
+        reservationsToDelete.forEach(it -> {
+            givePatientPenaltyPoints(it.getPatient());
+            deleteMedicineReservation(it);
+        });
+    }
+
+    private Iterable<MedicineReservation> getExpiredMedicineReservations() {
+        return new ArrayList<>() {{
+            medicineReservationRepository.findAll().forEach(it -> {
+                if (isMedicineReservationExpired(it)) {
+                    add(it);
+                }
+            });
+        }};
+    }
+
+    private boolean isMedicineReservationExpired(MedicineReservation medicineReservation) {
+        Calendar now = Calendar.getInstance();
+        return medicineReservation.getExpirationDate().compareTo(now) <= 0;
+    }
+
+    private void givePatientPenaltyPoints(Patient patient) {
+        patient.addPenaltyPoints(PenaltyPointsConstants.MEDICINE_RESERVATION_EXPIRED_PENALTY);
+        userRepository.save(patient);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        logger.info(timestamp + " Patient with id " + patient.getId() + " received penalty points.");
+    }
+
+    private void deleteMedicineReservation(MedicineReservation medicineReservation) {
+        medicineReservationRepository.delete(medicineReservation);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        logger.info(timestamp + " Deleted medicine reservation with id: " + medicineReservation.getId());
     }
 
     private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
