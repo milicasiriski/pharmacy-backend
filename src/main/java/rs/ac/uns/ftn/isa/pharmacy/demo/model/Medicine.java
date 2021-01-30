@@ -67,6 +67,23 @@ public class Medicine implements Serializable {
         this.name = name;
     }
 
+    public Medicine(long id, String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points, List<Medicine> alternatives) {
+        this.id = id;
+        this.uuid = uuid;
+        this.name = name;
+        this.description = description;
+        this.manufacturer = manufacturer;
+        this.composition = composition;
+        this.ratings = ratings;
+        this.form = form;
+        this.type = type;
+        this.prescribed = prescribed;
+        this.recommendedDose = recommendedDose;
+        this.sideEffects = sideEffects;
+        this.points = points;
+        this.alternatives = alternatives;
+    }
+
     public Medicine(String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points, List<Medicine> alternatives) {
         this.uuid = uuid;
         this.name = name;
