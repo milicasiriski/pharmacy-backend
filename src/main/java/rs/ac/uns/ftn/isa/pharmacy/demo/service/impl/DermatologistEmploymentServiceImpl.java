@@ -25,22 +25,23 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
 
     @Override
     public DermatologistShiftDto getDermatologistShifts(Long dermatologistId) {
-        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
-
-        Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
-
-        Dermatologist dermatologist = (Dermatologist) dermatologists.keySet()
-                .stream()
-                .filter(d -> d.getId().equals(dermatologistId)).toArray()[0];
-
+        Dermatologist dermatologist = getDermatologistById(dermatologistId);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Map<Dermatologist, Employment> dermatologists = getDermatologistsByPharmacy(getPharmacyAdmin());
 
         DermatologistShiftDto dermatologistShiftDto = new DermatologistShiftDto();
         dermatologistShiftDto.setDermatologist(dermatologist);
         dermatologistShiftDto.setPrice(dermatologists.get(dermatologist).getPrice().toString());
         dermatologistShiftDto.setDurationInMinutes(dermatologists.get(dermatologist).getPrice().toString());
+
         Map<DaysOfWeek, TimeInterval> shifts = dermatologists.get(dermatologist).getShifts();
+        List<String> dermatologistShifts = populateWeekSchedule(dateFormat, shifts);
+        dermatologistShiftDto.setHourIntervals(dermatologistShifts);
+
+        return dermatologistShiftDto;
+    }
+
+    public List<String> populateWeekSchedule(DateFormat dateFormat, Map<DaysOfWeek, TimeInterval> shifts) {
         List<String> dermatologistShifts = new ArrayList<>();
 
         EnumSet.allOf(DaysOfWeek.class)
@@ -49,8 +50,23 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
                             + '-' + dateFormat.format(shifts.get(day).getEnd().getTime()).split(" ")[1]);
                 });
 
-        dermatologistShiftDto.setHourIntervals(dermatologistShifts);
+        return dermatologistShifts;
+    }
 
-        return dermatologistShiftDto;
+    public Dermatologist getDermatologistById(Long dermatologistId) {
+        Map<Dermatologist, Employment> dermatologists = getDermatologistsByPharmacy(getPharmacyAdmin());
+
+        return (Dermatologist) dermatologists.keySet()
+                .stream()
+                .filter(d -> d.getId().equals(dermatologistId)).toArray()[0];
+    }
+
+    public PharmacyAdmin getPharmacyAdmin() {
+        return (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public Map<Dermatologist, Employment> getDermatologistsByPharmacy(PharmacyAdmin pharmacyAdmin) {
+        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
+        return pharmacy.getDermatologists();
     }
 }
