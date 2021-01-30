@@ -1,13 +1,13 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import net.bytebuddy.asm.Advice;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class MedicineDto {
+public class MedicineDto implements Serializable {
 
     private String uuid;
     private String name;
@@ -16,12 +16,13 @@ public class MedicineDto {
     private String composition;
     private MedicineForm form;
     private MedicineType type;
-    private Boolean prescribed;
+    private boolean prescribed;
     private String recommendedDose;
     private String sideEffects;
-    private List<String> alternatives;
+    private List<MedicineNameUuidDto> alternatives;
+    private int points = 0;
 
-    public MedicineDto(String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<String> alternatives) {
+    public MedicineDto(String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points) {
         this.uuid = uuid;
         this.name = name;
         this.description = description;
@@ -33,6 +34,7 @@ public class MedicineDto {
         this.recommendedDose = recommendedDose;
         this.sideEffects = sideEffects;
         this.alternatives = alternatives;
+        this.points = points;
     }
 
     public MedicineDto() {
@@ -94,7 +96,7 @@ public class MedicineDto {
         this.type = type;
     }
 
-    public boolean getPrescribed() {
+    public boolean isPrescribed() {
         return prescribed;
     }
 
@@ -118,12 +120,44 @@ public class MedicineDto {
         this.sideEffects = sideEffects;
     }
 
-    public List<String> getAlternatives() {
+    public List<MedicineNameUuidDto> getAlternatives() {
         return alternatives;
     }
 
-    public void setAlternatives(List<String> alternatives) {
+    public void setAlternatives(List<MedicineNameUuidDto> alternatives) {
         this.alternatives = alternatives;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MedicineDto that = (MedicineDto) o;
+        return prescribed == that.prescribed &&
+                points == that.points &&
+                Objects.equals(uuid, that.uuid) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(manufacturer, that.manufacturer) &&
+                Objects.equals(composition, that.composition) &&
+                form == that.form &&
+                type == that.type &&
+                Objects.equals(recommendedDose, that.recommendedDose) &&
+                Objects.equals(sideEffects, that.sideEffects) &&
+                Objects.equals(alternatives, that.alternatives);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, name, description, manufacturer, composition, form, type, prescribed, recommendedDose, sideEffects, alternatives, points);
     }
 
     @Override
@@ -134,35 +168,13 @@ public class MedicineDto {
                 ", description='" + description + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
                 ", composition='" + composition + '\'' +
-                ", form='" + form + '\'' +
-                ", type='" + type + '\'' +
-                ", prescribed='" + prescribed + '\'' +
+                ", form=" + form +
+                ", type=" + type +
+                ", prescribed=" + prescribed +
                 ", recommendedDose='" + recommendedDose + '\'' +
                 ", sideEffects='" + sideEffects + '\'' +
                 ", alternatives=" + alternatives +
+                ", points=" + points +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MedicineDto that = (MedicineDto) o;
-        return Objects.equals(uuid, that.uuid) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(manufacturer, that.manufacturer) &&
-                Objects.equals(composition, that.composition) &&
-                Objects.equals(form, that.form) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(prescribed, that.prescribed) &&
-                Objects.equals(recommendedDose, that.recommendedDose) &&
-                Objects.equals(sideEffects, that.sideEffects) &&
-                Objects.equals(alternatives, that.alternatives);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, name, description, manufacturer, composition, form, type, prescribed, recommendedDose, sideEffects, alternatives);
     }
 }

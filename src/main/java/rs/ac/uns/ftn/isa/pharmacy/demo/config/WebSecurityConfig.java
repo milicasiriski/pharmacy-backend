@@ -60,10 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/order/**").permitAll()
                 .antMatchers("/dermatologist/getAllDermatologists").permitAll()
                 .antMatchers("/pharmacist/getAllPharmacists").permitAll()
-                .antMatchers("/pharmacy/").permitAll()
+                .antMatchers("/pharmacy/**").permitAll()
                 .antMatchers("/vacation/**").permitAll()
                 .antMatchers("/dermatologist/**").permitAll()
                 .antMatchers("/pharmacist/**").permitAll()
+                .antMatchers("/medicine/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),

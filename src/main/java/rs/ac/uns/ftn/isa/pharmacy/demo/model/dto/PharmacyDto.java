@@ -8,11 +8,13 @@ public class PharmacyDto {
     private String name;
     private String address;
     private String about;
+    private Long id;
 
-    public PharmacyDto(String name, String address, String about) {
+    public PharmacyDto(String name, String address, String about, Long id) {
         this.name = name;
         this.address = address;
         this.about = about;
+        this.id = id;
     }
 
     public PharmacyDto() {
@@ -42,6 +44,14 @@ public class PharmacyDto {
         this.about = about;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,12 +59,13 @@ public class PharmacyDto {
         PharmacyDto that = (PharmacyDto) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(address, that.address) &&
-                Objects.equals(about, that.about);
+                Objects.equals(about, that.about) &&
+                Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, address, about);
+        return Objects.hash(name, address, about, id);
     }
 
     @Override
@@ -63,6 +74,7 @@ public class PharmacyDto {
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", about='" + about + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

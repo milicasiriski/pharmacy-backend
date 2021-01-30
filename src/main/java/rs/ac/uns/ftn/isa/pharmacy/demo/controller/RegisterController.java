@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController {
-
+    //@TODO:Vladimir Check if values are ok
     @Qualifier("registerPatientServiceImpl")
     private RegisterPatientService registerPatientService;
 
@@ -35,14 +35,13 @@ public class RegisterController {
         this.registerUserService = registerUserService;
     }
 
-    //@TODO: Check if values are ok
+
     @PostMapping("/patient")
     public ResponseEntity<String> registerPatient(HttpServletRequest request, @RequestBody PatientDto patientDTO, UriComponentsBuilder ucBuilder) {
         Patient existUser;
         try {
             existUser = this.registerPatientService.findByEmail(patientDTO.getEmail());
-        }
-        catch (NotAPatientException e){
+        } catch (NotAPatientException e) {
             return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
         }
 
@@ -59,13 +58,13 @@ public class RegisterController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<String> registerSystemAdmin(@RequestBody UserRegistrationDto adminCredentials, UriComponentsBuilder ucBuilder) {
-        User existUser = this.registerUserService.findByEmail(adminCredentials.getEmail());
+    public ResponseEntity<String> registerSystemAdmin(@RequestBody UserRegistrationDto credentials) {
+        User existUser = this.registerUserService.findByEmail(credentials.getEmail());
         if (existUser != null) {
             return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
         }
         try {
-            this.registerUserService.register(adminCredentials);
+            this.registerUserService.register(credentials);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

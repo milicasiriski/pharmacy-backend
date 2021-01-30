@@ -8,7 +8,7 @@ import java.util.*;
 public class Pharmacy {
 
     @Id
-    @SequenceGenerator(name = "pharmacy_sequence_generator", sequenceName = "pharmacy_sequence", initialValue = 2)
+    @SequenceGenerator(name = "pharmacy_sequence_generator", sequenceName = "pharmacy_sequence", initialValue = 9)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pharmacy_sequence_generator")
     private Long id;
 
