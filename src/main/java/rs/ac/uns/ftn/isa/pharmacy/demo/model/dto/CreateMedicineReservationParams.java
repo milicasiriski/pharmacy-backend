@@ -3,15 +3,15 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MedicineReservationDto implements Serializable {
+public class CreateMedicineReservationParams implements Serializable {
     private Long medicineId;
     private Long pharmacyId;
     private Date expirationDate;
 
-    public MedicineReservationDto() {
+    public CreateMedicineReservationParams() {
     }
 
-    public MedicineReservationDto(Long medicineId, Long pharmacyId, Date expirationDate) {
+    public CreateMedicineReservationParams(Long medicineId, Long pharmacyId, Date expirationDate) {
         this.medicineId = medicineId;
         this.pharmacyId = pharmacyId;
         this.expirationDate = expirationDate;

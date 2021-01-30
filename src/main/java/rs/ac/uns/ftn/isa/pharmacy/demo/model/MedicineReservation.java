@@ -13,13 +13,17 @@ public class MedicineReservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_reservation_sequence_generator")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pharmacy_id")
+    private Pharmacy pharmacy;
 
     @Column(name = "expiration_date")
     private Calendar expirationDate;
@@ -30,9 +34,10 @@ public class MedicineReservation implements Serializable {
     public MedicineReservation() {
     }
 
-    public MedicineReservation(Medicine medicine, Patient patient, Calendar expirationDate, String uniqueNumber) {
+    public MedicineReservation(Medicine medicine, Patient patient, Pharmacy pharmacy, Calendar expirationDate, String uniqueNumber) {
         this.medicine = medicine;
         this.patient = patient;
+        this.pharmacy = pharmacy;
         this.expirationDate = expirationDate;
         this.uniqueNumber = uniqueNumber;
     }
@@ -59,6 +64,14 @@ public class MedicineReservation implements Serializable {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
     }
 
     public Calendar getExpirationDate() {

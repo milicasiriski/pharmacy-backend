@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
@@ -50,10 +50,10 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public boolean isReservationValid(MedicineReservationDto medicineReservationDto) {
+    public boolean isReservationValid(CreateMedicineReservationParams createMedicineReservationParams) {
         try {
-            Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
-            Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
+            Medicine medicine = getMedicineById(createMedicineReservationParams.getMedicineId());
+            Pharmacy pharmacy = getPharmacyById(createMedicineReservationParams.getPharmacyId());
             if (pharmacy.getMedicine().containsKey(medicine)) {
                 return pharmacy.getMedicine().get(medicine).getStock() > 0;
             } else {
@@ -65,15 +65,15 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public void confirmReservation(MedicineReservationDto medicineReservationDto, Patient patient) throws MessagingException {
-        Medicine medicine = getMedicineById(medicineReservationDto.getMedicineId());
-        Pharmacy pharmacy = getPharmacyById(medicineReservationDto.getPharmacyId());
+    public void confirmReservation(CreateMedicineReservationParams createMedicineReservationParams, Patient patient) throws MessagingException {
+        Medicine medicine = getMedicineById(createMedicineReservationParams.getMedicineId());
+        Pharmacy pharmacy = getPharmacyById(createMedicineReservationParams.getPharmacyId());
 
         Calendar expirationDate = Calendar.getInstance();
-        expirationDate.setTime(medicineReservationDto.getExpirationDate());
+        expirationDate.setTime(createMedicineReservationParams.getExpirationDate());
 
         String uniqueReservationNumber = UUID.randomUUID().toString();
-        MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, expirationDate, uniqueReservationNumber);
+        MedicineReservation medicineReservation = new MedicineReservation(medicine, patient, pharmacy, expirationDate, uniqueReservationNumber);
         medicineReservationRepository.save(medicineReservation);
 
         MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
@@ -83,11 +83,12 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         pharmacyRepository.save(pharmacy);
 
         MedicineReservationEmailParams params = new MedicineReservationEmailParams(medicine.getName(),
-                medicineReservationDto.getExpirationDate(),
+                createMedicineReservationParams.getExpirationDate(),
                 pharmacy.getName(),
                 pharmacy.getAddress(),
                 uniqueReservationNumber);
-        mailService.sendMail(patient.getEmail(), params);
+        // TODO: fix mail service injection
+//        mailService.sendMail(patient.getEmail(), params);
     }
 
     private Pharmacy getPharmacyById(Long pharmacyId) throws EntityNotFoundException {
@@ -107,5 +108,10 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    @Override
+    public Iterable<MedicineReservation> getAllMedicineReservationsForPatient(Patient patient) {
+        return medicineReservationRepository.findByPatient(patient);
     }
 }
