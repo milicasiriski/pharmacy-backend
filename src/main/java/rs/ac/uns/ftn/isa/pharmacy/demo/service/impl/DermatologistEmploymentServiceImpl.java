@@ -29,16 +29,8 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map<Dermatologist, Employment> dermatologists = getDermatologistsByPharmacy(getPharmacyAdmin());
 
-        DermatologistShiftDto dermatologistShiftDto = new DermatologistShiftDto();
-        dermatologistShiftDto.setDermatologist(dermatologist);
-        dermatologistShiftDto.setPrice(dermatologists.get(dermatologist).getPrice().toString());
-        dermatologistShiftDto.setDurationInMinutes(dermatologists.get(dermatologist).getPrice().toString());
-
-        Map<DaysOfWeek, TimeInterval> shifts = dermatologists.get(dermatologist).getShifts();
-        List<String> dermatologistShifts = populateWeekSchedule(dateFormat, shifts);
-        dermatologistShiftDto.setHourIntervals(dermatologistShifts);
-
-        return dermatologistShiftDto;
+        return new DermatologistShiftDto(dermatologist, populateWeekSchedule(dateFormat, dermatologists.get(dermatologist).getShifts()),
+                dermatologists.get(dermatologist).getPrice().toString(), dermatologists.get(dermatologist).getPrice().toString());
     }
 
     public List<String> populateWeekSchedule(DateFormat dateFormat, Map<DaysOfWeek, TimeInterval> shifts) {
