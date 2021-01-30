@@ -2,15 +2,13 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {

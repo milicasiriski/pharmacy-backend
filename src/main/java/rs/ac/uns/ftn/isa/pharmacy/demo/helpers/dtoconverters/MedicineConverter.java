@@ -25,9 +25,9 @@ public interface MedicineConverter {
                     medicineDto.setDescription(medicine.getDescription());
                     medicineDto.setComposition(medicine.getComposition());
                     List<MedicineNameUuidDto> alternatives = new ArrayList<>();
-                    medicine.getAlternatives().forEach(m -> {
-                        alternatives.add(new MedicineNameUuidDto(m.getUuid(), m.getName()));
-                    });
+                    medicine.getAlternatives().forEach(m ->
+                            alternatives.add(new MedicineNameUuidDto(m.getUuid(), m.getName()))
+                    );
                     medicineDto.setAlternatives(alternatives);
                     medicineDto.setPoints(medicine.getPoints());
                     medicinesDto.add(medicineDto);

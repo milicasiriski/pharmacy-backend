@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.UserType;
-
 import java.util.Objects;
 
 public class LogInDto {

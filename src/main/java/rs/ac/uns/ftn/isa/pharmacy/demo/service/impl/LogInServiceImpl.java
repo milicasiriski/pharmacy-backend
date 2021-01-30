@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
@@ -20,17 +19,15 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserCredentialsService;
 @Service
 public class LogInServiceImpl implements LogInService {
 
-    private TokenUtils tokenUtils;
-    private AuthenticationManager authenticationManager;
-    private CustomUserDetailsService userDetailsService;
-    private UserCredentialsService userCredentialsService;
-    private UserRepository userRepository;
+    private final TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserCredentialsService userCredentialsService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, UserCredentialsService userCredentialsService, UserRepository userRepository) {
+    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserCredentialsService userCredentialsService, UserRepository userRepository) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
         this.userCredentialsService = userCredentialsService;
         this.userRepository = userRepository;
     }
@@ -49,8 +46,7 @@ public class LogInServiceImpl implements LogInService {
         int accessExpiresIn = tokenUtils.getAccessTokenExpiresIn();
         String refreshToken = tokenUtils.generateRefreshToken(username);
         int refreshExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
-        UserTokenState state = new UserTokenState(userType, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn);
-        return state;
+        return new UserTokenState(userType, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn);
     }
 
     @Override

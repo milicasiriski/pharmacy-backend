@@ -20,8 +20,8 @@ import java.util.Calendar;
 @Service
 public class PromotionServiceImpl implements PromotionService {
 
-    PromotionRepository promotionRepository;
-    private MailService<PromotionDto> mailService;
+    private final PromotionRepository promotionRepository;
+    private final MailService<PromotionDto> mailService;
 
     @Autowired
     PromotionServiceImpl(PromotionRepository promotionRepository, Environment env,

@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 
 

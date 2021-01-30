@@ -20,10 +20,11 @@ import java.util.UUID;
 
 @Service
 public class MedicineReservationServiceImpl implements MedicineReservationService {
-    private MedicineRepository medicineRepository;
-    private MedicineReservationRepository medicineReservationRepository;
-    private PharmacyRepository pharmacyRepository;
-    private MailService<MedicineReservationEmailParams> mailService;
+
+    private final MedicineRepository medicineRepository;
+    private final MedicineReservationRepository medicineReservationRepository;
+    private final PharmacyRepository pharmacyRepository;
+    private final MailService<MedicineReservationEmailParams> mailService;
 
     @Autowired
     public MedicineReservationServiceImpl(

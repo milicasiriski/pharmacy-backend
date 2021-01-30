@@ -19,10 +19,10 @@ import java.util.Optional;
 @Service
 public class RegisterUserServiceImpl implements RegisterUserService {
 
-    private UserRepository userRepository;
-    private AuthorityService authService;
-    private PasswordEncoder passwordEncoder;
-    private PharmacyRepository pharmacyRepository;
+    private final UserRepository userRepository;
+    private final AuthorityService authService;
+    private final PasswordEncoder passwordEncoder;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
     public RegisterUserServiceImpl(UserRepository userRepository,
@@ -41,7 +41,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         User user;
         UserType type = dto.getType();
         user = createUserByType(type);
-        //TODO:Vladimir, this will be potential transaction
+        //TODO:Vladimir, this will be potential transaction NOSONAR
         if(user.getClass()==PharmacyAdmin.class){
             Optional<Pharmacy> pharmacy = pharmacyRepository.findById(dto.getPharmacyId());
             if(pharmacy.isEmpty()){
