@@ -108,7 +108,7 @@ public class PatientDto {
 
     public Patient createPatient() {
         Patient patient = new Patient(this.email, this.password, this.name, this.surname,
-                this.address, this.city, this.country, this.phoneNumber);
+                this.address, this.city, this.country, this.phoneNumber, 0);
         patient.Disable();
 
         return patient;

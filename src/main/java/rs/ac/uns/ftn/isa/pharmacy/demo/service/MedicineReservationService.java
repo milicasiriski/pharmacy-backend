@@ -25,4 +25,6 @@ public interface MedicineReservationService {
     boolean isMedicineReservationCancellable(Calendar deadline);
 
     void cancelMedicineReservation(Long medicineReservationId);
+
+    void removeAllExpiredMedicineReservations();
 }
