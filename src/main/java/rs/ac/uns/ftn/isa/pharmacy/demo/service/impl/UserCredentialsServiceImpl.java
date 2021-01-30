@@ -35,12 +35,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
     public void changePassword(String oldPassword, String newPassword) throws BadPasswordException {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String username = currentUser.getName();
-
-        if (authenticationManager != null) {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
-        } else {
-            return;
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
         User user = (User) userDetailsService.loadUserByUsername(username);
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);

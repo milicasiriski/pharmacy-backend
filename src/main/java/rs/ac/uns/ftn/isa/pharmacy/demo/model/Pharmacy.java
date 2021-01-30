@@ -63,6 +63,15 @@ public class Pharmacy {
 
     }
 
+    public Pharmacy(String name, String address, String about) {
+        this.name = name;
+        this.address = address;
+        this.about = about;
+        this.dermatologists = new ArrayList<>();
+        this.pharmacyAdmins = new ArrayList<>();
+        this.examPriceList = new HashMap<>();
+    }
+
     public Pharmacy(Long id, String name, String address, String about, List<Dermatologist> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
         this.id = id;
         this.name = name;

@@ -10,20 +10,23 @@ import java.util.List;
 import java.util.Set;
 
 public interface MedicineConverter {
+
     default List<MedicineDto> createResponse(Iterable<Medicine> medicines) {
         List<MedicineDto> medicinesDto = new ArrayList<>();
         medicines.forEach(medicine -> {
-                    MedicineDto medicineDto = new MedicineDto();
-                    medicineDto.setUuid(medicine.getUuid());
-                    medicineDto.setType(medicine.getType());
-                    medicineDto.setSideEffects(medicine.getSideEffects());
-                    medicineDto.setRecommendedDose(medicine.getRecommendedDose());
-                    medicineDto.setPrescribed(medicine.isPrescribed());
-                    medicineDto.setName(medicine.getName());
-                    medicineDto.setManufacturer(medicine.getManufacturer());
-                    medicineDto.setForm(medicine.getForm());
-                    medicineDto.setDescription(medicine.getDescription());
-                    medicineDto.setComposition(medicine.getComposition());
+                    MedicineDto medicineDto = new MedicineDto(
+                            medicine.getUuid(),
+                            medicine.getName(),
+                            medicine.getDescription(),
+                            medicine.getManufacturer(),
+                            medicine.getComposition(),
+                            medicine.getForm(),
+                            medicine.getType(),
+                            medicine.isPrescribed(),
+                            medicine.getRecommendedDose(),
+                            medicine.getSideEffects(),
+                            null,
+                            medicine.getPoints());
                     List<MedicineNameUuidDto> alternatives = new ArrayList<>();
                     medicine.getAlternatives().forEach(m ->
                             alternatives.add(new MedicineNameUuidDto(m.getUuid(), m.getName()))
@@ -56,7 +59,6 @@ public interface MedicineConverter {
                                         alternatives.add(new MedicineNameUuidDto(alternativeUuid, alternativeName));
                                         uuidsUsed.add(alternative.getUuid());
                                     }
-
                                 }
                         );
                         if (!alternatives.isEmpty()) {
@@ -66,6 +68,13 @@ public interface MedicineConverter {
                 }
         );
         return alternativesGroups;
+    }
+
+    default Medicine createBasicMedicine(MedicineDto dto) {
+        Medicine medicine = new Medicine(dto.getUuid(), dto.getName(), dto.getDescription(), dto.getManufacturer(),
+                dto.getComposition(), dto.getForm(), dto.getType(), dto.isPrescribed(), dto.getRecommendedDose(),
+                dto.getSideEffects(), dto.getPoints());
+        return medicine;
     }
 }
 

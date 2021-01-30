@@ -67,8 +67,7 @@ public class Medicine implements Serializable {
         this.name = name;
     }
 
-    public Medicine(Long id, String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points, List<Medicine> alternatives) {
-        this.id = id;
+    public Medicine(String uuid, String name, String description, String manufacturer, String composition, Double ratings, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points, List<Medicine> alternatives) {
         this.uuid = uuid;
         this.name = name;
         this.description = description;
@@ -82,6 +81,20 @@ public class Medicine implements Serializable {
         this.sideEffects = sideEffects;
         this.points = points;
         this.alternatives = alternatives;
+    }
+
+    public Medicine(String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, int points) {
+        this.uuid = uuid;
+        this.name = name;
+        this.description = description;
+        this.manufacturer = manufacturer;
+        this.composition = composition;
+        this.form = form;
+        this.type = type;
+        this.prescribed = prescribed;
+        this.recommendedDose = recommendedDose;
+        this.sideEffects = sideEffects;
+        this.points = points;
     }
 
     public Long getId() {

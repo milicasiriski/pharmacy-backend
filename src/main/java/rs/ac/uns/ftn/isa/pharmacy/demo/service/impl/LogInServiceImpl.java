@@ -15,7 +15,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LogInService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserCredentialsService;
 
-
 @Service
 public class LogInServiceImpl implements LogInService {
 
@@ -50,7 +49,7 @@ public class LogInServiceImpl implements LogInService {
     }
 
     @Override
-    public void firsLoginPasswordChange(String newPassword) {
+    public void firstLogInPasswordChange(String newPassword) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userCredentialsService.changePassword(user.getPassword(), newPassword);
         user.Enable();

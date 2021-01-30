@@ -9,7 +9,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
 import java.util.List;
 
-
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
 
@@ -32,10 +31,7 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public Pharmacy save(PharmacyDto dto) {
-        Pharmacy pharmacy = new Pharmacy();
-        pharmacy.setAbout(dto.getAbout());
-        pharmacy.setAddress(dto.getAddress());
-        pharmacy.setName(dto.getName());
+        Pharmacy pharmacy = new Pharmacy(dto.getName(), dto.getAddress(), dto.getAbout());
         pharmacy = pharmacyRepository.save(pharmacy);
         return pharmacy;
     }
