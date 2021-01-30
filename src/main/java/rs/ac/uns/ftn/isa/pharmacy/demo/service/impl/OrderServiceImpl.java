@@ -1,9 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Order;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
@@ -31,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
         HashMap<Medicine, Integer> medicineAmount = convertMedicineOrderDtoToMap(orderDto);
         Calendar deadline = Calendar.getInstance();
         deadline.setTime(orderDto.getDeadline());
-        Order order = new Order(medicineAmount, deadline);
+        Order order = new Order(medicineAmount, deadline, ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
         orderRepository.save(order);
     }
 
