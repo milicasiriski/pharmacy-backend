@@ -13,7 +13,7 @@ public class MedicineReservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_reservation_sequence_generator")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
@@ -21,7 +21,7 @@ public class MedicineReservation implements Serializable {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "pharmacy_id")
     private Pharmacy pharmacy;
 
