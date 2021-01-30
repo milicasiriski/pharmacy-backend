@@ -36,7 +36,7 @@ public class TestConstants {
     private static final String PHARMACY_NAME = "Pharmacy";
     private static final String PHARMACY_ADDRESS = "Some street 123";
     private static final String PHARMACY_ABOUT = "We sell drugs, but legal.";
-    private static final List<Dermatologist> PHARMACY_DERMATOLOGISTS = new ArrayList<>();
+    private static final Map<Dermatologist, Employment> PHARMACY_DERMATOLOGISTS = new HashMap<>();
     private static final List<Pharmacist> PHARMACY_PHARMACISTS = new ArrayList<>();
     private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE = new HashMap<>() {{
         put(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT);
