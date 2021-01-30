@@ -8,8 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.MedicineReservation;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetMedicineReservationResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 
@@ -24,6 +26,18 @@ public class MedicineReservationController {
     @Autowired
     public MedicineReservationController(MedicineReservationService medicineReservationService) {
         this.medicineReservationService = medicineReservationService;
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/")
+    public ResponseEntity<Iterable<GetMedicineReservationResponse>> getAllMedicineReservations() {
+        Patient patient = getSignedInUser();
+        Iterable<GetMedicineReservationResponse> medicineReservations = new ArrayList<>() {{
+            medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach( medicineReservation -> {
+                add(new GetMedicineReservationResponse(medicineReservation));
+            });
+        }};
+        return new ResponseEntity<>(medicineReservations, HttpStatus.OK);
     }
 
     @GetMapping("/medicine")
@@ -44,10 +58,10 @@ public class MedicineReservationController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
-    public ResponseEntity<Void> confirmReservation(@RequestBody MedicineReservationDto medicineReservationDto) {
-        if (medicineReservationService.isReservationValid(medicineReservationDto)) {
+    public ResponseEntity<Void> confirmReservation(@RequestBody CreateMedicineReservationParams createMedicineReservationParams) {
+        if (medicineReservationService.isReservationValid(createMedicineReservationParams)) {
             try {
-                medicineReservationService.confirmReservation(medicineReservationDto, getSignedInUser());
+                medicineReservationService.confirmReservation(createMedicineReservationParams, getSignedInUser());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (MessagingException e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
