@@ -13,12 +13,6 @@ public class Dermatologist extends User implements Serializable {
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "surname")
-    private String surname;
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dermatologist_employment_mapping",
             joinColumns = {@JoinColumn(name = "dermatologist_id", referencedColumnName = "id")},
