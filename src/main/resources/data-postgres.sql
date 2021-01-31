@@ -2,14 +2,14 @@ INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patie
 INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07', 2);
 INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07', 0);
 
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('1', 'This is a pharmacy.', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('2', 'This is a pharmacy.', 'Bulevar Oslobodjenja 666', 'Sputnik', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('3', 'This is a pharmacy.', 'Hadziruvimova 54', 'Jankovic', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('4', 'This is a pharmacy.', 'Bulevar Evrope 43', 'Apoteka', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('5', 'This is a pharmacy.', 'Strazilovska 19', 'Biljana i Luka', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('6', 'This is a pharmacy.', 'Bulevar Oslobodjenja 100', 'Memfis', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('7', 'This is a pharmacy.', 'Maksima Gorkog 20', 'Phizer', 5);
-INSERT INTO pharmacy(id, about, address, name, rating) VALUES ('8', 'This is a pharmacy.', 'Bul Evrope 32', 'Apoteka Jovanovic', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('1', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('2', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('3', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Hadziruvimova 54', 'Jankovic', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('4', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Slobodana Jovanovica 35', 'Apoteka', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('5', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Strazilovska 19', 'Biljana i Luka', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('6', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 100', 'Memfis', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('7', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Maksima Gorkog 20', 'Phizer', 5);
+INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, rating) VALUES ('8', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bul Evrope 32', 'Apoteka Jovanovic', 5);
 
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('1','Ibuprofen' ,'Anti-inflammatory medicine. Use on adults only.', '0', 'Advil®', 'Microcrystalline, cellulose, lactose, hypromellose', '0', true, 5, 'A1', '1 tablet', 'Death', 0);
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false, 4,  'A2', '1 tablet', 'Death', 0);

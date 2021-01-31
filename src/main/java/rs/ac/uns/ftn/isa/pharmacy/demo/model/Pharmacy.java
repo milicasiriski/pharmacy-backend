@@ -15,8 +15,8 @@ public class Pharmacy {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "address")
-    private String address;
+    @Embedded
+    private Address address;
 
     @Column(name = "about")
     private String about;
@@ -63,7 +63,7 @@ public class Pharmacy {
 
     }
 
-    public Pharmacy(String name, String address, String about) {
+    public Pharmacy(String name, Address address, String about) {
         this.name = name;
         this.address = address;
         this.about = about;
@@ -72,7 +72,7 @@ public class Pharmacy {
         this.examPriceList = new HashMap<>();
     }
 
-    public Pharmacy(String name, String address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
+    public Pharmacy(String name, Address address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
         this.name = name;
         this.address = address;
         this.about = about;
@@ -85,7 +85,7 @@ public class Pharmacy {
         this.rating = rating;
     }
 
-    public Pharmacy(Long id, String name, String address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
+    public Pharmacy(Long id, String name, Address address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -113,12 +113,16 @@ public class Pharmacy {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public String getAbout() {

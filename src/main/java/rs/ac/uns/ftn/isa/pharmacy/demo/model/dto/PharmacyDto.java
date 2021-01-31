@@ -6,12 +6,12 @@ import java.util.Objects;
 public class PharmacyDto implements Serializable {
 
     private String name;
-    private String address;
+    private AddressDto address;
     private String about;
     private Double rating;
     private Long id;
 
-    public PharmacyDto(String name, String address, String about, Long id, Double rating) {
+    public PharmacyDto(String name, AddressDto address, String about, Long id, Double rating) {
         this.name = name;
         this.address = address;
         this.about = about;
@@ -30,11 +30,11 @@ public class PharmacyDto implements Serializable {
         this.name = name;
     }
 
-    public String getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 
