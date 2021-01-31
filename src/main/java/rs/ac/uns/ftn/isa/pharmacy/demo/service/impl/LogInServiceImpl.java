@@ -5,8 +5,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.UserAlreadyEnabled;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Supplier;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.SystemAdmin;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
@@ -22,17 +26,43 @@ public class LogInServiceImpl implements LogInService {
     private final AuthenticationManager authenticationManager;
     private final UserCredentialsService userCredentialsService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserCredentialsService userCredentialsService, UserRepository userRepository) {
+    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserCredentialsService userCredentialsService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
         this.userCredentialsService = userCredentialsService;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserTokenState logIn(LogInDto authenticationRequest) {
+        return getUserTokenState(authenticationRequest);
+    }
+
+    @Override
+    public UserTokenState firstLogInPasswordChange(LogInDto authenticationRequest) {
+        User user = userRepository.findByEmail(authenticationRequest.getEmail());
+        if (user.isEnabled()) {
+            throw new UserAlreadyEnabled();
+        }
+        if (isValidType(user)) {
+            user.Enable();
+            user.setPassword(passwordEncoder.encode(authenticationRequest.getPassword()));
+            userRepository.save(user);
+            return getUserTokenState(authenticationRequest);
+        } else {
+            throw new BadUserInformationException();
+        }
+    }
+
+    private boolean isValidType(User user) {
+        return user.getClass() == SystemAdmin.class || user.getClass() == Supplier.class;
+    }
+
+    private UserTokenState getUserTokenState(LogInDto authenticationRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
@@ -46,13 +76,5 @@ public class LogInServiceImpl implements LogInService {
         String refreshToken = tokenUtils.generateRefreshToken(username);
         int refreshExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
         return new UserTokenState(userType, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn);
-    }
-
-    @Override
-    public void firstLogInPasswordChange(String newPassword) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userCredentialsService.changePassword(user.getPassword(), newPassword);
-        user.Enable();
-        userRepository.save(user);
     }
 }

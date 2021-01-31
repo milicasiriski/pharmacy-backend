@@ -1,8 +1,13 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.Objects;
 
-public class Supplier extends User{
+@Entity
+@DiscriminatorValue("SUPPLIER")
+public class Supplier extends User {
+
     private transient final String administrationRole = "ROLE_SUPPLIER";
 
     public Supplier() {
