@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LogInService;
@@ -30,13 +27,12 @@ public class LoginController {
     }
 
     @PostMapping("/intialPasswordChange")
-    public ResponseEntity<String> firstTimeLogin(@RequestBody String newPassword) {
+    public ResponseEntity<UserTokenState> firstTimeLogin(@RequestBody LogInDto authenticationRequest) {
         try {
-            logInService.firstLogInPasswordChange(newPassword);
-            return new ResponseEntity<>("Registration succeeded!", HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>("Password change failed!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(logInService.firstLogInPasswordChange(authenticationRequest), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

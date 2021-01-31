@@ -7,6 +7,6 @@ public interface LogInService {
 
     UserTokenState logIn(LogInDto authenticationRequest);
 
-    void firstLogInPasswordChange(String newPassword);
+    UserTokenState firstLogInPasswordChange(LogInDto authenticationRequest);
 
 }

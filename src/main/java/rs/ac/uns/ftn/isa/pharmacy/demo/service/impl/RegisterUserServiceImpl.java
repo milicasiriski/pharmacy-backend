@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthorityService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -48,12 +49,11 @@ public class RegisterUserServiceImpl implements RegisterUserService {
             ((PharmacyAdmin) user).setPharmacy(pharmacy.get());
         }
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
         user.setName(dto.getName());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setSurname(dto.getSurname());
         List<Authority> auth = authService.findByname(user.getAdministrationRole());
         user.setAuthorities(auth);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user = userRepository.save(user);
         return user;
     }

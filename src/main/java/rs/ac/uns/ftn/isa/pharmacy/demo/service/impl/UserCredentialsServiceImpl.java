@@ -40,4 +40,5 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
+
 }
