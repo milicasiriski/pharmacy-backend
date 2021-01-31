@@ -19,6 +19,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/medicine-reservation", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,12 +35,12 @@ public class MedicineReservationController {
     @GetMapping("/")
     public ResponseEntity<Iterable<GetMedicineReservationResponse>> getAllMedicineReservations() {
         Patient patient = getSignedInUser();
-        Iterable<GetMedicineReservationResponse> medicineReservations = new ArrayList<>() {{
-            medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach(medicineReservation -> {
-                boolean cancellable = medicineReservationService.isMedicineReservationCancellable(medicineReservation.getExpirationDate());
-                add(new GetMedicineReservationResponse(medicineReservation, cancellable));
-            });
-        }};
+
+        List<GetMedicineReservationResponse> medicineReservations = new ArrayList<>();
+        medicineReservationService.getAllMedicineReservationsForPatient(patient).forEach(medicineReservation -> {
+            boolean cancellable = medicineReservationService.isMedicineReservationCancellable(medicineReservation.getExpirationDate());
+            medicineReservations.add(new GetMedicineReservationResponse(medicineReservation, cancellable));
+        });
         return new ResponseEntity<>(medicineReservations, HttpStatus.OK);
     }
 
@@ -94,7 +95,6 @@ public class MedicineReservationController {
 
     @Scheduled(cron = "${medicineReservationCleanUp.cron}")
     public void executeMedicineReservationCleanUp() {
-        System.out.println("Medicine reservation clean-up starting...");
         medicineReservationService.removeAllExpiredMedicineReservations();
     }
 }

@@ -21,10 +21,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -157,13 +154,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     private Iterable<MedicineReservation> getExpiredMedicineReservations() {
-        return new ArrayList<>() {{
-            medicineReservationRepository.findAll().forEach(it -> {
-                if (isMedicineReservationExpired(it)) {
-                    add(it);
-                }
-            });
-        }};
+        List<MedicineReservation> result = new ArrayList<>();
+        medicineReservationRepository.findAll().forEach(it -> {
+            if (isMedicineReservationExpired(it)) {
+                result.add(it);
+            }
+        });
+        return result;
     }
 
     private boolean isMedicineReservationExpired(MedicineReservation medicineReservation) {
@@ -175,13 +172,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         patient.addPenaltyPoints(PenaltyPointsConstants.MEDICINE_RESERVATION_EXPIRED_PENALTY);
         userRepository.save(patient);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        logger.info(timestamp + " Patient with id " + patient.getId() + " received penalty points.");
+        logger.info("{} Patient with id {} received penalty points.", timestamp, patient.getId());
     }
 
     private void deleteMedicineReservation(MedicineReservation medicineReservation) {
         medicineReservationRepository.delete(medicineReservation);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        logger.info(timestamp + " Deleted medicine reservation with id: " + medicineReservation.getId());
+        logger.info("{} Deleted medicine reservation with id: {}", timestamp, medicineReservation.getId());
     }
 
     private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
