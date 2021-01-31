@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.PharmacyServiceImpl;
 
 import java.util.ArrayList;
@@ -36,8 +37,13 @@ public class PharmacyController {
     public ResponseEntity<List<PharmacyDto>> getAllPharmacies() {
         List<Pharmacy> pharmacies = pharmacyService.findAll();
         List<PharmacyDto> dtoPharmacies = new ArrayList<>();
-        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getId())));
+        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating())));
         return ResponseEntity.ok(dtoPharmacies);
+    }
+
+    @GetMapping("/getPharmacyById/{pharmacyId}")
+    public ResponseEntity<PharmacyProfileDto> getPharmacyById(@PathVariable Long pharmacyId) {
+        return ResponseEntity.ok(pharmacyService.findPharmacyById(pharmacyId));
     }
 
     //TODO:Vladimir, check if values are ok NOSONAR
