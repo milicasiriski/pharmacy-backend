@@ -44,11 +44,6 @@ public class MedicineReservationController {
         return new ResponseEntity<>(medicineReservations, HttpStatus.OK);
     }
 
-    @GetMapping("/medicine")
-    public ResponseEntity<Iterable<Medicine>> getAllMedicine() {
-        return new ResponseEntity<>(medicineReservationService.getAllMedicine(), HttpStatus.OK);
-    }
-
     @GetMapping("/pharmacies/{medicineId}")
     public ResponseEntity<Iterable<PharmaciesMedicinePriceDto>> getPharmaciesWithMedicineOnStock(@PathVariable("medicineId") Long medicineId) {
         ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();

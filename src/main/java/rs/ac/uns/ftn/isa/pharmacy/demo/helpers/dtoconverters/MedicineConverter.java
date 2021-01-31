@@ -15,6 +15,7 @@ public interface MedicineConverter {
         List<MedicineDto> medicinesDto = new ArrayList<>();
         medicines.forEach(medicine -> {
                     MedicineDto medicineDto = new MedicineDto(
+                            medicine.getId(),
                             medicine.getUuid(),
                             medicine.getName(),
                             medicine.getDescription(),
