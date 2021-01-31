@@ -27,7 +27,7 @@ public class PromotionServiceImpl implements PromotionService {
     PromotionServiceImpl(PromotionRepository promotionRepository, Environment env,
                          JavaMailSender javaMailSender) {
         this.promotionRepository = promotionRepository;
-        this.mailService = new MailService<>(env, javaMailSender, new PromotionMailFormatter());
+        this.mailService = new MailService<>(env, javaMailSender);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PromotionServiceImpl implements PromotionService {
         promotionRepository.save(promotion);
 
         // TODO: Send mail to all relevant patients.
-        mailService.sendMail(admin.getEmail(), promotionDto);
+        mailService.sendMail(admin.getEmail(), promotionDto, new PromotionMailFormatter());
     }
 
     public TimeInterval getPromotionInterval(PromotionDto promotionDto) {
