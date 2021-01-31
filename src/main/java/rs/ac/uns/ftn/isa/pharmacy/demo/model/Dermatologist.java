@@ -19,15 +19,19 @@ public class Dermatologist extends User {
     @MapKeyJoinColumn(name = "pharmacy_id")
     private Map<Pharmacy, Employment> pharmacies;
 
+    @Column(name = "rating")
+    private double rating;
+
     public Dermatologist() {
         super();
     }
 
-    public Dermatologist(String email, String password, String name, String surname, Map<Pharmacy, Employment> pharmacies) {
+    public Dermatologist(String email, String password, String name, String surname, Map<Pharmacy, Employment> pharmacies, double rating) {
         super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
         this.pharmacies = pharmacies;
+        this.rating = rating;
     }
 
     public Map<Pharmacy, Employment> getPharmacies() {
@@ -36,6 +40,14 @@ public class Dermatologist extends User {
 
     public void setPharmacies(Map<Pharmacy, Employment> pharmacies) {
         this.pharmacies = pharmacies;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     @Override

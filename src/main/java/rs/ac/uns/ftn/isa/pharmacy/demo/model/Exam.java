@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "exam")
@@ -19,6 +20,10 @@ public class Exam {
     @Column(name = "timeinterval")
     private TimeInterval timeInterval;
 
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
     public Exam() {
     }
 
@@ -35,7 +40,6 @@ public class Exam {
         this.id = id;
     }
 
-
     public double getPrice() {
         return price;
     }
@@ -50,5 +54,32 @@ public class Exam {
 
     public void setTimeInterval(TimeInterval timeInterval) {
         this.timeInterval = timeInterval;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public boolean isScheduled() {
+        return getPatient() != null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Exam exam = (Exam) o;
+        return Double.compare(exam.price, price) == 0 &&
+                Objects.equals(id, exam.id) &&
+                Objects.equals(timeInterval, exam.timeInterval);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, price, timeInterval);
     }
 }

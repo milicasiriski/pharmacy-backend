@@ -3,25 +3,30 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
-import java.util.Calendar;
-import java.util.Map;
+import javax.persistence.EntityNotFoundException;
+import java.util.*;
 
 @Service
 public class ExamServiceImpl implements ExamService {
 
     private final DermatologistEmploymentService dermatologistEmploymentService;
     private final PharmacyRepository pharmacyRepository;
+    private final ExamRepository examRepository;
 
     @Autowired
-    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository) {
+    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository) {
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
+        this.examRepository = examRepository;
     }
 
     @Override
@@ -36,6 +41,55 @@ public class ExamServiceImpl implements ExamService {
 
         employment.getExams().add(exam);
         pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException {
+        if (isExamAvailable(examId)) {
+            Exam exam = getExamById(examId);
+            exam.setPatient(patient);
+            examRepository.save(exam);
+        } else {
+            throw new ExamAlreadyScheduledException();
+        }
+    }
+
+    @Override
+    public boolean isExamAvailable(long examId) {
+        Exam exam = getExamById(examId);
+        return exam.getPatient() == null;
+    }
+
+    @Override
+    public Iterable<ExamAndDermatologistDto> getAvailableDermatologistExamsForPharmacy(long pharmacyId) {
+        Pharmacy pharmacy = getPharmacyById(pharmacyId);
+        List<ExamAndDermatologistDto> result = new ArrayList<>();
+
+        Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
+        dermatologists.keySet().forEach(key -> {
+            dermatologists.get(key).getExams().stream().filter(it -> !it.isScheduled()).forEach(exam -> {
+                result.add(new ExamAndDermatologistDto(exam, key));
+            });
+        });
+        return result;
+    }
+
+    private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
+        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(id);
+        if (optionalPharmacy.isPresent()) {
+            return optionalPharmacy.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    private Exam getExamById(long id) throws EntityNotFoundException {
+        Optional<Exam> optionalExam = examRepository.findById(id);
+        if (optionalExam.isPresent()) {
+            return optionalExam.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     private TimeInterval generateExamTimeInterval(PharmacyAdminExamDto pharmacyAdminExamDto) {
