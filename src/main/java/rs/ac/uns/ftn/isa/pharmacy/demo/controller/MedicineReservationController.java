@@ -49,8 +49,9 @@ public class MedicineReservationController {
         ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();
         Medicine medicine = medicineReservationService.getMedicineById(medicineId);
 
+        // TODO: Give real address to constructor
         medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId).forEach(pharmacy -> {
-            result.add(new PharmaciesMedicinePriceDto(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getCurrentMedicinePrice(medicine)));
+            result.add(new PharmaciesMedicinePriceDto(pharmacy.getId(), pharmacy.getName(), "", pharmacy.getAbout(), pharmacy.getCurrentMedicinePrice(medicine)));
         });
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

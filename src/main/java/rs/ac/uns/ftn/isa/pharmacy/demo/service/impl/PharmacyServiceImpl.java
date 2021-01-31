@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Address;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
@@ -37,7 +38,9 @@ public class PharmacyServiceImpl implements PharmacyService {
             return null;
         }
 
-        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating());
+        Address address = pharmacy.getAddress();
+        AddressDto addressDto = new AddressDto(address.getCity(), address.getCountry(), address.getLatitude(), address.getLongitude(), address.getStreet());
+        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy.getName(), addressDto, pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating());
 
         List<DermatologistDto> dermatologists = new ArrayList<>();
         List<PharmacistDto> pharamcists = new ArrayList<>();
@@ -63,7 +66,8 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public Pharmacy save(PharmacyDto dto) {
-        Pharmacy pharmacy = new Pharmacy(dto.getName(), dto.getAddress(), dto.getAbout());
+        // TODO: Give real address to constructor
+        Pharmacy pharmacy = new Pharmacy(dto.getName(), new Address(), dto.getAbout());
         pharmacy = pharmacyRepository.save(pharmacy);
         return pharmacy;
     }

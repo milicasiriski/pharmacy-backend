@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
@@ -29,7 +30,8 @@ public class PharmacyController {
     public ResponseEntity<List<PharmacyNameAndAddressDto>> getOrders() {
         List<Pharmacy> pharmacies = pharmacyService.findAll();
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress())));
+        // TODO: Give real address to constructor
+        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyNameAndAddressDto(pharmacy.getName(), "")));
         return ResponseEntity.ok(dtoPharmacies);
     }
 
@@ -37,7 +39,8 @@ public class PharmacyController {
     public ResponseEntity<List<PharmacyDto>> getAllPharmacies() {
         List<Pharmacy> pharmacies = pharmacyService.findAll();
         List<PharmacyDto> dtoPharmacies = new ArrayList<>();
-        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(), pharmacy.getAddress(), pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating())));
+        // TODO: Give real address to constructor
+        pharmacies.forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(), new AddressDto(), pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating())));
         return ResponseEntity.ok(dtoPharmacies);
     }
 

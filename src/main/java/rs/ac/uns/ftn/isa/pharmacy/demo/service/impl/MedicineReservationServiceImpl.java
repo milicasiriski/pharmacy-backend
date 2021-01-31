@@ -94,10 +94,11 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
 
+        // TODO: Give real address to constructor
         MedicineReservationEmailParams params = new MedicineReservationEmailParams(medicine.getName(),
                 createMedicineReservationParams.getExpirationDate(),
                 pharmacy.getName(),
-                pharmacy.getAddress(),
+                "",
                 uniqueReservationNumber);
         mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
     }
