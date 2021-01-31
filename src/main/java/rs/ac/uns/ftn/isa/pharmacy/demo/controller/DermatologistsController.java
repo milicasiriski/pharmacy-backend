@@ -42,7 +42,7 @@ public class DermatologistsController implements DermatologistConverter {
 
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @GetMapping(value = "/shiftIntervals/{dermatologistId}")
-    public ResponseEntity<DermatologistShiftDto> getAllDermatologistShifts(@PathVariable String dermatologistId) {
-        return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts(Long.parseLong(dermatologistId)));
+    public ResponseEntity<DermatologistShiftDto> getAllDermatologistShifts(@PathVariable Long dermatologistId) {
+        return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts(dermatologistId));
     }
 }
