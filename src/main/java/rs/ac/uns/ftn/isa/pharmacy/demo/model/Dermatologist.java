@@ -3,13 +3,12 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @DiscriminatorValue("DERMATOLOGIST")
-public class Dermatologist extends User implements Serializable {
+public class Dermatologist extends User {
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 

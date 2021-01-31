@@ -38,9 +38,7 @@ public class TestConstants {
     private static final String PHARMACY_ABOUT = "We sell drugs, but legal.";
     private static final Map<Dermatologist, Employment> PHARMACY_DERMATOLOGISTS = new HashMap<>();
     private static final List<Pharmacist> PHARMACY_PHARMACISTS = new ArrayList<>();
-    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE = new HashMap<>() {{
-        put(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT);
-    }};
+    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE = Map.of(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT);
     private static final Map<Exam, Double> PHARMACY_EXAM_PRICE_LIST = new HashMap<>();
     private static final double PHARMACY_RATING = 3.6;
 

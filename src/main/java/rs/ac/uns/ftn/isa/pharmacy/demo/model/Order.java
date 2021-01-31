@@ -1,14 +1,13 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @Table(name = "medicine_order")
-public class Order implements Serializable {
+public class Order {
 
     @Id
     @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 1)

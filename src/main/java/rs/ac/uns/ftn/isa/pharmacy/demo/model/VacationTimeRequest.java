@@ -1,13 +1,12 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "vacation_time_request")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class VacationTimeRequest implements Serializable {
+public abstract class VacationTimeRequest {
 
     @Id
     @SequenceGenerator(name = "vacation_time_request_sequence_generator", sequenceName = "vacation_time_request_sequence", initialValue = 1)
