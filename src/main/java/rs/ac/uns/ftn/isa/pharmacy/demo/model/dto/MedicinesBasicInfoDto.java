@@ -6,15 +6,26 @@ public class MedicinesBasicInfoDto implements Serializable {
 
     String name;
     String form;
+    Double rating;
     Long id;
 
     public MedicinesBasicInfoDto() {
     }
 
-    public MedicinesBasicInfoDto(String name, String form, Long id) {
+    public MedicinesBasicInfoDto(String name, String form, Long id, Double rating) {
         this.name = name;
         this.form = form;
         this.id = id;
+        this.rating = rating;
+    }
+
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public String getName() {

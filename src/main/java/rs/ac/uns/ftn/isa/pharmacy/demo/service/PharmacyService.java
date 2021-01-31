@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PharmacyService {
     List<Pharmacy> findAll();
+
     Pharmacy findPharmacyByPharmacyAdmin(Long pharmacyAdminId);
 
     Pharmacy save(PharmacyDto dto);

@@ -54,7 +54,7 @@ public class PriceListServiceImpl implements PriceListService {
         pharmacy.getMedicine().keySet().forEach(medicine -> {
             List<MedicinePriceListItem> prices = medicines.get(medicine).getPrices();
             PriceListItemResponseDto priceListItem = currentPriceListItem(prices);
-            MedicinesBasicInfoDto medicinesBasicInfoDto = new MedicinesBasicInfoDto(medicine.getName(), medicine.getForm().label, medicine.getId());
+            MedicinesBasicInfoDto medicinesBasicInfoDto = new MedicinesBasicInfoDto(medicine.getName(), medicine.getForm().label, medicine.getId(), medicine.getRatings());
             priceListItem.setMedicineInfo(medicinesBasicInfoDto);
             priceItems.add(priceListItem);
         });

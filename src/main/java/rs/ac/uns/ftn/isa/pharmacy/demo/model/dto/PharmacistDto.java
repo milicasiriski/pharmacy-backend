@@ -1,13 +1,15 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class PharmacistDto {
+public class PharmacistDto implements Serializable {
 
     private String name;
     private String surname;
     private Double rating;
+    private Long id;
     private List<PharmacyNameAndAddressDto> pharmacies;
 
     public PharmacistDto() {
@@ -19,6 +21,13 @@ public class PharmacistDto {
         this.surname = surname;
         this.rating = rating;
         this.pharmacies = pharmacies;
+    }
+
+    public PharmacistDto(String name, String surname, Double rating, Long id) {
+        this.name = name;
+        this.surname = surname;
+        this.rating = rating;
+        this.id = id;
     }
 
     public String getName() {
