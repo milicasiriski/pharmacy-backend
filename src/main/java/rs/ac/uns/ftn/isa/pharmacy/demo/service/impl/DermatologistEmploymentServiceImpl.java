@@ -53,11 +53,11 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
                 .filter(d -> d.getId().equals(dermatologistId)).toArray()[0];
     }
 
-    public PharmacyAdmin getPharmacyAdmin() {
+    private PharmacyAdmin getPharmacyAdmin() {
         return (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public Map<Dermatologist, Employment> getDermatologistsByPharmacy(PharmacyAdmin pharmacyAdmin) {
+    private Map<Dermatologist, Employment> getDermatologistsByPharmacy(PharmacyAdmin pharmacyAdmin) {
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
         return pharmacy.getDermatologists();
     }

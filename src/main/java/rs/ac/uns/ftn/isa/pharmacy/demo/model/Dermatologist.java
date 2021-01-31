@@ -13,7 +13,7 @@ public class Dermatologist extends User implements Serializable {
 
     private transient final String administrationRole = "ROLE_DERMATOLOGIST";
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "dermatologist_employment_mapping",
             joinColumns = {@JoinColumn(name = "dermatologist_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "dermatologist_employment_id", referencedColumnName = "id")})
