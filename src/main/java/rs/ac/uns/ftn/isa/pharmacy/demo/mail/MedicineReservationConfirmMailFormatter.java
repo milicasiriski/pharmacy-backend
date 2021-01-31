@@ -5,7 +5,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
 import java.text.SimpleDateFormat;
 
 public class MedicineReservationConfirmMailFormatter implements MailFormatter<MedicineReservationEmailParams> {
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public String getText(MedicineReservationEmailParams params) {
