@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
@@ -12,6 +14,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
@@ -21,12 +24,14 @@ public class ExamServiceImpl implements ExamService {
     private final DermatologistEmploymentService dermatologistEmploymentService;
     private final PharmacyRepository pharmacyRepository;
     private final ExamRepository examRepository;
+    private final MailService mailService;
 
     @Autowired
-    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository) {
+    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService mailService) {
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -44,11 +49,14 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException {
+    public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException, MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);
             exam.setPatient(patient);
             examRepository.save(exam);
+
+            // TODO: send confirmation email
+            mailService.sendMail(patient.getEmail(), exam.getTimeInterval(), new ExamConfirmationMailFormatter());
         } else {
             throw new ExamAlreadyScheduledException();
         }

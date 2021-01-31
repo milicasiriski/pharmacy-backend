@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
@@ -36,14 +37,19 @@ public class PatientExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PutMapping("/")
-    public ResponseEntity<String> scheduleDermatologistExam(@RequestBody Long examId) {
+    public ResponseEntity<String> scheduleDermatologistExam(@RequestBody String examId) {
         try {
-            examService.scheduleDermatologistExam(examId, getSignedInUser());
+            long id = Long.parseLong(examId);
+            examService.scheduleDermatologistExam(id, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
         } catch (ExamAlreadyScheduledException e) {
             return new ResponseEntity<>("Sorry, the exam is no longer available.", HttpStatus.BAD_REQUEST);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("The confirmation email cannot be sent, please try again!", HttpStatus.BAD_REQUEST);
         }
     }
 

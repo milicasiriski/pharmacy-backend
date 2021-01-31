@@ -4,10 +4,12 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 
+import javax.mail.MessagingException;
+
 public interface ExamService {
     void createExam(PharmacyAdminExamDto pharmacyAdminExamDto);
 
-    void scheduleDermatologistExam(long examId, Patient patient);
+    void scheduleDermatologistExam(long examId, Patient patient) throws MessagingException;
 
     boolean isExamAvailable(long examId);
 
