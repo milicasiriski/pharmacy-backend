@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class MedicineDto implements Serializable {
 
+    private long id;
     private String uuid;
     private String name;
     private String description;
@@ -22,7 +23,8 @@ public class MedicineDto implements Serializable {
     private List<MedicineNameUuidDto> alternatives;
     private int points = 0;
 
-    public MedicineDto(String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points) {
+    public MedicineDto(long id, String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points) {
+        this.id = id;
         this.uuid = uuid;
         this.name = name;
         this.description = description;
@@ -38,6 +40,14 @@ public class MedicineDto implements Serializable {
     }
 
     public MedicineDto() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUuid() {
@@ -134,30 +144,6 @@ public class MedicineDto implements Serializable {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MedicineDto that = (MedicineDto) o;
-        return prescribed == that.prescribed &&
-                points == that.points &&
-                Objects.equals(uuid, that.uuid) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(manufacturer, that.manufacturer) &&
-                Objects.equals(composition, that.composition) &&
-                form == that.form &&
-                type == that.type &&
-                Objects.equals(recommendedDose, that.recommendedDose) &&
-                Objects.equals(sideEffects, that.sideEffects) &&
-                Objects.equals(alternatives, that.alternatives);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, name, description, manufacturer, composition, form, type, prescribed, recommendedDose, sideEffects, alternatives, points);
     }
 
     @Override
