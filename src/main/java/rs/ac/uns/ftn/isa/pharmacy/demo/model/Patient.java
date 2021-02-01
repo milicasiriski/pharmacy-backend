@@ -81,9 +81,13 @@ public class Patient extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getActivationCode() { return activationCode; }
+    public String getActivationCode() {
+        return activationCode;
+    }
 
-    public void setActivationCode(String activationCode) { this.activationCode = activationCode; }
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
 
     public int getPenaltyPoints() {
         return penaltyPoints;

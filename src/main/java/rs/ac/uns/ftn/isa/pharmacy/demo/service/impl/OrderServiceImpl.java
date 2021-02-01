@@ -68,10 +68,10 @@ public class OrderServiceImpl implements OrderService {
             Set<Offer> offers = supplier.getOffers();
             Set<Order> offeredOrders = new HashSet<>();
             offers.forEach(offer -> {
-                    offeredOrders.add(offer.getOrder());
+                offeredOrders.add(offer.getOrder());
             });
             orderRepository.findAll().forEach(order -> {
-                if (!offeredOrders.contains(order)){
+                if (!offeredOrders.contains(order)) {
                     orders.add(order);
                 }
             });
