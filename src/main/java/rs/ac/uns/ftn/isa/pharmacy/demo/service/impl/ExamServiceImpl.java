@@ -8,6 +8,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
@@ -80,6 +81,11 @@ public class ExamServiceImpl implements ExamService {
                 .filter(it -> !it.isScheduled()).forEach(exam -> result.add(new ExamAndDermatologistDto(exam, key))));
         sortExams(result, sortType);
         return result;
+    }
+
+    @Override
+    public Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient) {
+        return examRepository.getExamDetails(patient.getId());
     }
 
     private void sortExams(List<ExamAndDermatologistDto> exams, ExamSortType sortType) {
