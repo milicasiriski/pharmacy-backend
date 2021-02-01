@@ -1,8 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PharmacyNameAndAddressDto {
+public class PharmacyNameAndAddressDto implements Serializable {
 
     private String pharmacyName;
     private String pharmacyAddress;
