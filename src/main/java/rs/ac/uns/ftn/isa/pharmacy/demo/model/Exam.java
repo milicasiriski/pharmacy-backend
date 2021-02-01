@@ -1,10 +1,12 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @SqlResultSetMapping(
         name = "ExamDetailsMapping",
@@ -90,6 +92,18 @@ public class Exam {
 
     public boolean isScheduled() {
         return getPatient() != null;
+    }
+
+    public boolean isCancellable() {
+        Calendar now = Calendar.getInstance();
+        long differenceInMilliseconds = timeInterval.getStart().getTime().getTime() - now.getTime().getTime();
+        long differenceInHours = TimeUnit.HOURS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+
+        return differenceInHours >= Constants.DERMATOLOGIST_EXAM_CANCELLATION_HOURS;
+    }
+
+    public void cancel() {
+        this.patient = null;
     }
 
     @Override
