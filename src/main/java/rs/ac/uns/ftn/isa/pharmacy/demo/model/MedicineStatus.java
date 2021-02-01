@@ -9,7 +9,7 @@ import java.util.Objects;
 public class MedicineStatus {
 
     @Id
-    @SequenceGenerator(name = "medicine_status_sequence_generator", sequenceName = "medicine_status_sequence", initialValue = 1)
+    @SequenceGenerator(name = "medicine_status_sequence_generator", sequenceName = "medicine_status_sequence", initialValue = 10)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_status_sequence_generator")
     private Long id;
 

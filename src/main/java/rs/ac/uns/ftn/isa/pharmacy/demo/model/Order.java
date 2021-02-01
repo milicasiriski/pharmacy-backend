@@ -14,7 +14,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @CollectionTable(name = "order_medicine_mapping", joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")
     @Column(name = "order_medicine_amount")
