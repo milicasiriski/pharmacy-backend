@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Objects;
 
