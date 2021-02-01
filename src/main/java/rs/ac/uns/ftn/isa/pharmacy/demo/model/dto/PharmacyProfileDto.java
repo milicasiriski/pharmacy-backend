@@ -5,10 +5,10 @@ import java.util.List;
 
 public class PharmacyProfileDto implements Serializable {
 
-    PharmacyDto pharmacy;
-    List<DermatologistDto> dermatologists;
-    List<PharmacistDto> pharmacists;
-    List<MedicinesBasicInfoDto> medicines;
+    private PharmacyDto pharmacy;
+    private List<DermatologistDto> dermatologists;
+    private List<PharmacistDto> pharmacists;
+    private List<MedicinesBasicInfoDto> medicines;
 
     public PharmacyProfileDto() {
 

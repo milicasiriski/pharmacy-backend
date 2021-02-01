@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.PharmacyServiceImpl;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -17,10 +17,10 @@ import java.util.List;
 @RequestMapping(value = "/pharmacy", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PharmacyController {
 
-    private final PharmacyServiceImpl pharmacyService;
+    private final PharmacyService pharmacyService;
 
     @Autowired
-    public PharmacyController(PharmacyServiceImpl pharmacyService) {
+    public PharmacyController(PharmacyService pharmacyService) {
         this.pharmacyService = pharmacyService;
     }
 

@@ -19,7 +19,6 @@ public class MedicinesBasicInfoDto implements Serializable {
         this.rating = rating;
     }
 
-
     public Double getRating() {
         return rating;
     }
