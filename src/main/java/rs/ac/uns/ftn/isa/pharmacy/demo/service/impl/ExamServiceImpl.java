@@ -25,10 +25,10 @@ public class ExamServiceImpl implements ExamService {
     private final DermatologistEmploymentService dermatologistEmploymentService;
     private final PharmacyRepository pharmacyRepository;
     private final ExamRepository examRepository;
-    private final MailService mailService;
+    private final MailService<TimeInterval> mailService;
 
     @Autowired
-    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService mailService) {
+    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService<TimeInterval> mailService) {
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
@@ -56,7 +56,6 @@ public class ExamServiceImpl implements ExamService {
             exam.setPatient(patient);
             examRepository.save(exam);
 
-            // TODO: send confirmation email
             mailService.sendMail(patient.getEmail(), exam.getTimeInterval(), new ExamConfirmationMailFormatter());
         } else {
             throw new ExamAlreadyScheduledException();
@@ -77,11 +76,8 @@ public class ExamServiceImpl implements ExamService {
         Map<Dermatologist, Employment> map = pharmacy.getDermatologists();
         Set<Dermatologist> dermatologists = map.keySet();
 
-        dermatologists.forEach(key -> {
-            map.get(key).getExams().stream().filter(it -> !it.isScheduled()).forEach(exam -> {
-                result.add(new ExamAndDermatologistDto(exam, key));
-            });
-        });
+        dermatologists.forEach(key -> map.get(key).getExams().stream()
+                .filter(it -> !it.isScheduled()).forEach(exam -> result.add(new ExamAndDermatologistDto(exam, key))));
         sortExams(result, sortType);
         return result;
     }
