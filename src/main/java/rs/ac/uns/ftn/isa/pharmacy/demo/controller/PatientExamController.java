@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPatientDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
@@ -72,6 +73,22 @@ public class PatientExamController {
             return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
         } catch (MessagingException e) {
             return new ResponseEntity<>("The confirmation email cannot be sent, please try again!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PutMapping("/cancel/")
+    public ResponseEntity<String> cancelDermatologistExam(@RequestBody String examId) {
+        try {
+            long id = Long.parseLong(examId);
+            examService.cancelDermatologistExam(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("The exam you've tried to cancel does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (ExamCannotBeCancelledException e) {
+            return new ResponseEntity<>("Sorry, the exam can no longer be cancelled.", HttpStatus.BAD_REQUEST);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
         }
     }
 

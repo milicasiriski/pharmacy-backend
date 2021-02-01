@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
@@ -86,6 +87,16 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient) {
         return examRepository.getExamDetails(patient.getId());
+    }
+
+    @Override
+    public void cancelDermatologistExam(long examId) throws EntityNotFoundException, ExamCannotBeCancelledException {
+        Exam exam = getExamById(examId);
+        if (!exam.isCancellable()) {
+            throw new ExamCannotBeCancelledException();
+        }
+        exam.cancel();
+        examRepository.save(exam);
     }
 
     private void sortExams(List<ExamAndDermatologistDto> exams, ExamSortType sortType) {
