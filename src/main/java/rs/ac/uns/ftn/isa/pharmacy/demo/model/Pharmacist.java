@@ -43,6 +43,11 @@ public class Pharmacist extends User {
     }
 
     @Override
+    public String getAdministrationRole() {
+        return administrationRole;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), administrationRole, pharmacies);
     }

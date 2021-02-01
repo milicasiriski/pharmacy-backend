@@ -44,6 +44,11 @@ public class Patient extends User {
         this.penaltyPoints = penaltyPoints;
     }
 
+    @Override
+    public String getAdministrationRole() {
+        return administrationRole;
+    }
+
     public String getAddress() {
         return address;
     }

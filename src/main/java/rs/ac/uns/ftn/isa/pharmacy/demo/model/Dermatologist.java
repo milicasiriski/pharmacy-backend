@@ -34,6 +34,11 @@ public class Dermatologist extends User {
         this.rating = rating;
     }
 
+    @Override
+    public String getAdministrationRole() {
+        return administrationRole;
+    }
+
     public Map<Pharmacy, Employment> getPharmacies() {
         return pharmacies;
     }
