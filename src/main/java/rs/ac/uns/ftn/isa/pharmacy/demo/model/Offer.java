@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.OfferStatus;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;

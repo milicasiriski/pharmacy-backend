@@ -18,12 +18,12 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    public ResponseEntity<String> saveOffer(OfferDto OfferDto){
+    public ResponseEntity<String> saveOffer(OfferDto OfferDto) {
         try {
             this.offerService.addNewOffer(OfferDto);
             return new ResponseEntity<>("Offer saved successfully!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Sorry, there has been a mistake on server.",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Sorry, there has been a mistake on server.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

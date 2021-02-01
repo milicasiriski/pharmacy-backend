@@ -50,7 +50,7 @@ public class LogInServiceImpl implements LogInService {
             throw new UserAlreadyEnabled();
         }
 
-        if(!passwordEncoder.matches(authenticationRequest.getOldPassword(),user.getPassword())){
+        if (!passwordEncoder.matches(authenticationRequest.getOldPassword(), user.getPassword())) {
             System.out.println(user.getPassword());
             System.out.println(authenticationRequest.getOldPassword());
             throw new BadPasswordException();
