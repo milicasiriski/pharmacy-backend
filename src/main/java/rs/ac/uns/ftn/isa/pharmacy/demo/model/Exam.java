@@ -1,8 +1,32 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamDetails;
+
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Objects;
 
+@SqlResultSetMapping(
+        name = "ExamDetailsMapping",
+        classes = {
+                @ConstructorResult(
+                        targetClass = ExamDetails.class,
+                        columns = {
+                                @ColumnResult(name = "id", type = Long.class),
+                                @ColumnResult(name = "price", type = Double.class),
+                                @ColumnResult(name = "end_time", type = Calendar.class),
+                                @ColumnResult(name = "start_time", type = Calendar.class),
+                                @ColumnResult(name = "dermatologist_name", type = String.class),
+                                @ColumnResult(name = "dermatologist_surname", type = String.class),
+                                @ColumnResult(name = "pharmacy_name", type = String.class)
+                        }
+                )
+        }
+)
+@NamedNativeQuery(name = "Exam.getExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS dermatologist_name, pu.surname AS dermatologist_surname, ph.name AS pharmacy_name\n" +
+        "\tFROM public.exam AS e, public.dermatologist_employment_mapping AS dem, public.pharmacy as ph, public.pharmacy_user as pu\n" +
+        "\tWHERE employment_id = dermatologist_employment_id AND dem.pharmacy_id = ph.id AND dem.dermatologist_id = pu.id\n" +
+        "\tAND e.patient_id = :patientId", resultSetMapping = "ExamDetailsMapping")
 @Entity
 @Table(name = "exam")
 @Inheritance(strategy = InheritanceType.JOINED)
