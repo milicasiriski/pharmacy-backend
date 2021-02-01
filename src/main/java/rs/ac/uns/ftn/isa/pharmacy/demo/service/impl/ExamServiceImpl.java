@@ -8,7 +8,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamDetails;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;

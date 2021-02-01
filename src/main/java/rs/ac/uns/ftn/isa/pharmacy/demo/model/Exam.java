@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamDetails;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 
 import javax.persistence.*;
 import java.util.Calendar;

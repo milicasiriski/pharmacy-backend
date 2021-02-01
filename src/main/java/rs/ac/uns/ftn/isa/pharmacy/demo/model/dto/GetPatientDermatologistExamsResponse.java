@@ -1,27 +1,43 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import java.util.Calendar;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 
-public class ExamDetails {
+import java.io.Serializable;
+import java.util.Date;
+
+public class GetPatientDermatologistExamsResponse implements Serializable {
     private Long id;
-    private Calendar examStart;
-    private Calendar examEnd;
+    private Date examStart;
+    private Date examEnd;
     private double price;
     private String dermatologistName;
     private String dermatologistSurname;
     private String pharmacyName;
+    private boolean cancellable;
 
-    public ExamDetails() {
+    public GetPatientDermatologistExamsResponse() {
     }
 
-    public ExamDetails(Long id, double price, Calendar examStart, Calendar examEnd, String dermatologistName, String dermatologistSurname, String pharmacyName) {
+    public GetPatientDermatologistExamsResponse(Long id, Date examStart, Date examEnd, double price, String dermatologistName, String dermatologistSurname, String pharmacyName, boolean cancellable) {
         this.id = id;
-        this.price = price;
         this.examStart = examStart;
         this.examEnd = examEnd;
+        this.price = price;
         this.dermatologistName = dermatologistName;
         this.dermatologistSurname = dermatologistSurname;
         this.pharmacyName = pharmacyName;
+        this.cancellable = cancellable;
+    }
+
+    public GetPatientDermatologistExamsResponse(ExamDetails examDetails) {
+        this.id = examDetails.getId();
+        this.examStart = examDetails.getExamStart().getTime();
+        this.examEnd = examDetails.getExamEnd().getTime();
+        this.price = examDetails.getPrice();
+        this.dermatologistName = examDetails.getDermatologistName();
+        this.dermatologistSurname = examDetails.getDermatologistSurname();
+        this.pharmacyName = examDetails.getPharmacyName();
+        this.cancellable = examDetails.isExamCancellable();
     }
 
     public Long getId() {
@@ -32,19 +48,19 @@ public class ExamDetails {
         this.id = id;
     }
 
-    public Calendar getExamStart() {
+    public Date getExamStart() {
         return examStart;
     }
 
-    public void setExamStart(Calendar examStart) {
+    public void setExamStart(Date examStart) {
         this.examStart = examStart;
     }
 
-    public Calendar getExamEnd() {
+    public Date getExamEnd() {
         return examEnd;
     }
 
-    public void setExamEnd(Calendar examEnd) {
+    public void setExamEnd(Date examEnd) {
         this.examEnd = examEnd;
     }
 
@@ -80,15 +96,11 @@ public class ExamDetails {
         this.pharmacyName = pharmacyName;
     }
 
-    @Override
-    public String toString() {
-        return "ExamDetails{" +
-                "examStart=" + examStart +
-                ", examEnd=" + examEnd +
-                ", price=" + price +
-                ", dermatologistName='" + dermatologistName + '\'' +
-                ", dermatologistSurname='" + dermatologistSurname + '\'' +
-                ", pharmacyName='" + pharmacyName + '\'' +
-                '}';
+    public boolean isCancellable() {
+        return cancellable;
+    }
+
+    public void setCancellable(boolean cancellable) {
+        this.cancellable = cancellable;
     }
 }
