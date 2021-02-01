@@ -25,7 +25,6 @@ public interface PharmacistConverter {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
 
         pharmacies.forEach(pharmacy -> {
-            System.out.println(pharmacy.getAddress().getStreet());
             PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });

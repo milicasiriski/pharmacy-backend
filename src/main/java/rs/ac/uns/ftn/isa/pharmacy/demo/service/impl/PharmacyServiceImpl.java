@@ -38,6 +38,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         return pharmacyRepository.findPharmacyByPharmacyAdmin(pharmacyAdminId);
     }
 
+    @Override
     public List<PharmacyNameAndAddressDto> findPharmaciesBasicInfo() {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
 
@@ -48,6 +49,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         return dtoPharmacies;
     }
 
+    @Override
     public PharmacyProfileDto findPharmacyById(Long pharmacyId) throws EntityNotFoundException {
         Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
 
@@ -65,7 +67,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         return new PharmacyProfileDto(pharmacyDto, dermatologists, pharamcists, medicines);
     }
 
-    public List<MedicinesBasicInfoDto> findMedicines(Pharmacy pharmacy) {
+    private List<MedicinesBasicInfoDto> findMedicines(Pharmacy pharmacy) {
         List<MedicinesBasicInfoDto> medicines = new ArrayList<>();
 
         pharmacy.getMedicine().keySet().forEach(medicine -> {
@@ -75,7 +77,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         return medicines;
     }
 
-    public List<PharmacistDto> findPharmacists(Pharmacy pharmacy) {
+    private List<PharmacistDto> findPharmacists(Pharmacy pharmacy) {
         List<PharmacistDto> pharamcists = new ArrayList<>();
 
         pharmacy.getPharmacists().forEach(pharmacist -> {

@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-public class AddressDto {
+import java.io.Serializable;
+
+public class AddressDto implements Serializable {
 
     private String city;
     private String country;
