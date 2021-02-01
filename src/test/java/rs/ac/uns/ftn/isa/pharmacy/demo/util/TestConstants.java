@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.util;
 
+import org.checkerframework.checker.units.qual.A;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
@@ -34,7 +35,7 @@ public class TestConstants {
 
     private static final long PHARMACY_ID = 1L;
     private static final String PHARMACY_NAME = "Pharmacy";
-    private static final String PHARMACY_ADDRESS = "Some street 123";
+    private static final Address PHARMACY_ADDRESS = new Address();
     private static final String PHARMACY_ABOUT = "We sell drugs, but legal.";
     private static final Map<Dermatologist, Employment> PHARMACY_DERMATOLOGISTS = new HashMap<>();
     private static final List<Pharmacist> PHARMACY_PHARMACISTS = new ArrayList<>();
