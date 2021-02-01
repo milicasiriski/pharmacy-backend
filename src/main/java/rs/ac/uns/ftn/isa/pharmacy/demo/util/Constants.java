@@ -5,4 +5,5 @@ public class Constants {
     }
 
     public static final int MEDICINE_RESERVATION_CANCELLATION_HOURS = 24;
+    public static final int DERMATOLOGIST_EXAM_CANCELLATION_HOURS = 24;
 }

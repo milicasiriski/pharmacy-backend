@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamDetails;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 
