@@ -23,9 +23,10 @@ public interface PharmacistConverter {
 
     private List<PharmacyNameAndAddressDto> extractPharmacyInfo(List<Pharmacy> pharmacies) {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-        // TODO: Give real address to constructor
+
         pharmacies.forEach(pharmacy -> {
-            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), "");
+            System.out.println(pharmacy.getAddress().getStreet());
+            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });
         return dtoPharmacies;

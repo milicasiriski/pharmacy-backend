@@ -23,9 +23,9 @@ public interface DermatologistConverter {
 
     private List<PharmacyNameAndAddressDto> extractPharmacyInfo(Iterable<Pharmacy> pharmacies) {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
-        // TODO: Give real address to constructor
+
         pharmacies.forEach(pharmacy -> {
-            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), "");
+            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });
         return dtoPharmacies;

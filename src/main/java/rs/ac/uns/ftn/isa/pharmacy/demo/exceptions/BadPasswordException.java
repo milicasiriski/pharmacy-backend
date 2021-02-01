@@ -1,4 +1,4 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.exceptions;
 
-public class BadPasswordException extends RuntimeException{
+public class BadPasswordException extends RuntimeException {
 }
