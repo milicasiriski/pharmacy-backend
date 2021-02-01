@@ -3,16 +3,17 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Objects;
 
 @Embeddable
 public class TimeInterval implements Serializable {
 
-    @Column(name="start_time")
+    @Column(name = "start_time")
     private Calendar start;
 
-    @Column(name="end_time")
+    @Column(name = "end_time")
     private Calendar end;
 
     public TimeInterval() {
@@ -60,5 +61,15 @@ public class TimeInterval implements Serializable {
                 "start=" + start +
                 ", end=" + end +
                 '}';
+    }
+
+    public boolean isOverlapping(TimeInterval other) {
+        boolean otherStartsInInterval = !other.start.before(this.start) && other.start.before(this.end);
+        boolean otherEndsInInterval = !other.end.after(this.end) && other.end.after(this.start);
+
+        boolean startsInOtherInterval = !this.start.before(other.start) && this.start.before(other.end);
+        boolean endsInOtherInterval = !this.end.after(other.end) && this.end.after(other.start);
+
+        return otherStartsInInterval || otherEndsInInterval || startsInOtherInterval || endsInOtherInterval;
     }
 }
