@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadPasswordException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.UserAlreadyEnabled;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Supplier;
@@ -47,6 +48,12 @@ public class LogInServiceImpl implements LogInService {
         User user = userRepository.findByEmail(authenticationRequest.getEmail());
         if (user.isEnabled()) {
             throw new UserAlreadyEnabled();
+        }
+
+        if(!passwordEncoder.matches(authenticationRequest.getOldPassword(),user.getPassword())){
+            System.out.println(user.getPassword());
+            System.out.println(authenticationRequest.getOldPassword());
+            throw new BadPasswordException();
         }
         if (isValidType(user)) {
             user.Enable();

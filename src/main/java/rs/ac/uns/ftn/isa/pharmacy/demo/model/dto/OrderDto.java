@@ -8,14 +8,16 @@ public class OrderDto implements Serializable {
 
     private HashMap<Long, Integer> orderItems;
     private Date deadline;
+    private Long id;
 
     public OrderDto() {
 
     }
 
-    public OrderDto(HashMap<Long, Integer> orderItems, Date deadline) {
+    public OrderDto(HashMap<Long, Integer> orderItems, Date deadline, Long id) {
         this.orderItems = orderItems;
         this.deadline = deadline;
+        this.id = id;
     }
 
     public HashMap<Long, Integer> getOrderItems() {
@@ -32,5 +34,22 @@ public class OrderDto implements Serializable {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "orderItems=" + orderItems +
+                ", deadline=" + deadline +
+                ", id=" + id +
+                '}';
     }
 }

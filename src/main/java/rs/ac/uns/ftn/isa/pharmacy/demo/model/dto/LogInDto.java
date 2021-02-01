@@ -6,10 +6,12 @@ public class LogInDto {
 
     private String email;
     private String password;
+    private String oldPassword;
 
-    public LogInDto(String email, String password) {
+    public LogInDto(String email, String password, String oldPassword) {
         this.email = email;
         this.password = password;
+        this.oldPassword = oldPassword;
     }
 
     public LogInDto() {
@@ -31,18 +33,12 @@ public class LogInDto {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LogInDto logInDto = (LogInDto) o;
-        return Objects.equals(email, logInDto.email) &&
-                Objects.equals(password, logInDto.password);
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password);
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     @Override
@@ -50,6 +46,22 @@ public class LogInDto {
         return "LogInDto{" +
                 "email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", oldPassword='" + oldPassword + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LogInDto logInDto = (LogInDto) o;
+        return Objects.equals(email, logInDto.email) &&
+                Objects.equals(password, logInDto.password) &&
+                Objects.equals(oldPassword, logInDto.oldPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password, oldPassword);
     }
 }

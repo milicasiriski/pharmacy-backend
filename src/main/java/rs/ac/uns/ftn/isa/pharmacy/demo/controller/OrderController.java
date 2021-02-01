@@ -39,8 +39,14 @@ public class OrderController implements OrderConverter {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<OrderResponseDto>> getOrders() {
-        List<Order> orders = orderService.getOrders();
-        return ResponseEntity.ok(createResponse(orders));
+    public ResponseEntity<List<OrderDto>> getOrders() {
+        List<OrderDto> orders = orderService.getOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/notOffered")
+    public ResponseEntity<List<OrderDto>> getNotOfferedOrders() {
+        List<OrderDto> orders = orderService.getNotOfferedOrders();
+        return ResponseEntity.ok(orders);
     }
 }

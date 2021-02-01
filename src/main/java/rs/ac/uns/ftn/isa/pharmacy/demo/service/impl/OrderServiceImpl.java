@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
@@ -12,10 +13,10 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
 
+import java.util.*;
 import javax.persistence.EntityNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -41,8 +42,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrders() {
-        return orderRepository.findAll();
+    public List<OrderDto> getOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return convertToOrdersDto(orders);
+    }
+
+    private List<OrderDto> convertToOrdersDto(List<Order> orders) {
+        List<OrderDto> ordersDto = new ArrayList<>();
+        for (Order order : orders) {
+            HashMap<Long, Integer> medicineAmount = new HashMap<>();
+            for (Medicine medicine : order.getMedicineAmount().keySet()) {
+                medicineAmount.put(medicine.getId(), order.getMedicineAmount().get(medicine));
+            }
+            ordersDto.add(new OrderDto(medicineAmount, order.getDeadline().getTime(), order.getId()));
+        }
+        return ordersDto;
+    }
+
+    @Override
+    public List<OrderDto> getNotOfferedOrders() {
+        List<Order> orders = new LinkedList<>();
+        Supplier supplier;
+        try {
+            supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Set<Offer> offers = supplier.getOffers();
+            Set<Order> offeredOrders = new HashSet<>();
+            offers.forEach(offer -> {
+                    offeredOrders.add(offer.getOrder());
+            });
+            orderRepository.findAll().forEach(order -> {
+                if (!offeredOrders.contains(order)){
+                    orders.add(order);
+                }
+            });
+            return convertToOrdersDto(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BadUserInformationException();
+        }
     }
 
     @Override
