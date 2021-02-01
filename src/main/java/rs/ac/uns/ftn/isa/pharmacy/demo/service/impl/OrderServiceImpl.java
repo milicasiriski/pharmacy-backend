@@ -3,34 +3,37 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Order;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderResponseDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.EntityNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final MedicineRepository medicineRepository;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, MedicineRepository medicineRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository) {
         this.orderRepository = orderRepository;
         this.medicineRepository = medicineRepository;
+        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override
     public void save(OrderDto orderDto) {
-        HashMap<Medicine, Integer> medicineAmount = convertMedicineOrderDtoToMap(orderDto);
+        HashMap<Medicine, Integer> medicineAmount = convertMedicineOrderDtoToMedicineOrder(orderDto);
         Calendar deadline = Calendar.getInstance();
         deadline.setTime(orderDto.getDeadline());
         Order order = new Order(medicineAmount, deadline, ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
@@ -42,24 +45,77 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    private HashMap<Medicine, Integer> convertMedicineOrderDtoToMap(OrderDto orderDto) {
-        HashMap<String, Integer> medicineAmount = orderDto.getOrderItems();
-        HashMap<Medicine, Integer> newMedicineAmount = new HashMap<>();
+    @Override
+    public List<OrderResponseDto> getOrdersByPharmacy() {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long pharmacyId = pharmacyAdmin.getPharmacy().getId();
+        return convertOrdersToOrderResponse(orderRepository.getOrdersByPharmacy(pharmacyId));
+    }
 
-        for (Map.Entry<String, Integer> medicineOrder : medicineAmount.entrySet()) {
-            Medicine medicine = checkIfMedicineExists(medicineOrder);
-            newMedicineAmount.put(medicine, medicineOrder.getValue());
-        }
+    private List<OrderResponseDto> convertOrdersToOrderResponse(List<Order> orders) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<OrderResponseDto> ordersDto = new ArrayList<>();
+        orders.forEach(order -> {
+            List<MedicineAmountDto> medicineAmounts = new ArrayList<>();
+            order.getMedicineAmount().forEach((medicine, amount) -> {
+                MedicineAmountDto medicineAmount = new MedicineAmountDto(medicine.getName(), amount);
+                medicineAmounts.add(medicineAmount);
+            });
+
+            String strDate = dateFormat.format(order.getDeadline().getTime());
+            OrderResponseDto orderResponseDto = new OrderResponseDto(strDate, medicineAmounts,
+                    ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+            ordersDto.add(orderResponseDto);
+        });
+        return ordersDto;
+    }
+
+    private HashMap<Medicine, Integer> convertMedicineOrderDtoToMedicineOrder(OrderDto orderDto) {
+        HashMap<Long, Integer> medicineAmount = orderDto.getOrderItems();
+        HashMap<Medicine, Integer> newMedicineAmount = new HashMap<>();
+        List<Medicine> medicines = new ArrayList<>();
+
+        medicineAmount.keySet().forEach(medicineId -> {
+            Medicine medicine = findMedicineById(medicineId);
+            newMedicineAmount.put(medicine, medicineAmount.get(medicineId));
+            medicines.add(medicine);
+        });
+
+        addMedicineIfDoesntExist(medicines);
         return newMedicineAmount;
     }
 
-    private Medicine checkIfMedicineExists(Map.Entry<String, Integer> medicineOrder) {
-        Medicine medicine = medicineRepository.findByName(medicineOrder.getKey());
+    private void addMedicineIfDoesntExist(List<Medicine> medicines) {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long pharmacyId = pharmacyAdmin.getPharmacy().getId();
+        Pharmacy pharmacy = findPharmacyById(pharmacyId);
+        Map<Medicine, MedicineStatus> medicinesMap = pharmacy.getMedicine();
 
+        medicines.forEach(medicine -> {
+            if (!medicinesMap.containsKey(medicine)) {
+                MedicineStatus medicineStatus = new MedicineStatus(0, new ArrayList<>());
+                medicinesMap.put(medicine, medicineStatus);
+            }
+        });
+
+        pharmacyRepository.save(pharmacy);
+    }
+
+    private Medicine findMedicineById(Long medicineId) throws EntityNotFoundException {
+        Medicine medicine = medicineRepository.findById(medicineId).orElse(null);
         if (medicine == null) {
-            medicine = new Medicine(medicineOrder.getKey());
-            medicineRepository.save(medicine);
+            throw new EntityNotFoundException();
+        } else {
+            return medicine;
         }
-        return medicine;
+    }
+
+    private Pharmacy findPharmacyById(Long pharmacyId) throws EntityNotFoundException {
+        Pharmacy pharmacy = pharmacyRepository.findById(pharmacyId).orElse(null);
+        if (pharmacy == null) {
+            throw new EntityNotFoundException();
+        } else {
+            return pharmacy;
+        }
     }
 }

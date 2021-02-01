@@ -32,6 +32,12 @@ public class OrderController implements OrderConverter {
         orderService.save(orderDto);
     }
 
+    @GetMapping("/getOrdersByPharmacy")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<List<OrderResponseDto>> getOrdersByPharmacy() {
+       return ResponseEntity.ok(orderService.getOrdersByPharmacy());
+    }
+
     @GetMapping("/")
     public ResponseEntity<List<OrderResponseDto>> getOrders() {
         List<Order> orders = orderService.getOrders();

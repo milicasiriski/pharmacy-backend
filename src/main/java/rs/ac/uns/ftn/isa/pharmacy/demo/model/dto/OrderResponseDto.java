@@ -1,20 +1,21 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.util.List;
-import java.util.Objects;
 
 public class OrderResponseDto {
 
     private String deadlineString;
     private List<MedicineAmountDto> medicineAmount;
+    private Long adminId;
 
     public OrderResponseDto() {
 
     }
 
-    public OrderResponseDto(String deadlineString, List<MedicineAmountDto> medicineAmount) {
+    public OrderResponseDto(String deadlineString, List<MedicineAmountDto> medicineAmount, Long adminId) {
         this.deadlineString = deadlineString;
         this.medicineAmount = medicineAmount;
+        this.adminId = adminId;
     }
 
     public String getDeadlineString() {
@@ -33,25 +34,11 @@ public class OrderResponseDto {
         this.medicineAmount = medicineAmount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderResponseDto that = (OrderResponseDto) o;
-        return Objects.equals(deadlineString, that.deadlineString) &&
-                Objects.equals(medicineAmount, that.medicineAmount);
+    public Long getAdminId() {
+        return adminId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(deadlineString, medicineAmount);
-    }
-
-    @Override
-    public String toString() {
-        return "OrderResponseDto{" +
-                "deadlineString='" + deadlineString + '\'' +
-                ", medicineAmount=" + medicineAmount +
-                '}';
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 }
