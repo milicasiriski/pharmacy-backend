@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -69,17 +70,40 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Iterable<ExamAndDermatologistDto> getAvailableDermatologistExamsForPharmacy(long pharmacyId) {
+    public Iterable<ExamAndDermatologistDto> getAvailableDermatologistExamsForPharmacy(long pharmacyId, ExamSortType sortType) {
         Pharmacy pharmacy = getPharmacyById(pharmacyId);
         List<ExamAndDermatologistDto> result = new ArrayList<>();
 
-        Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
-        dermatologists.keySet().forEach(key -> {
-            dermatologists.get(key).getExams().stream().filter(it -> !it.isScheduled()).forEach(exam -> {
+        Map<Dermatologist, Employment> map = pharmacy.getDermatologists();
+        Set<Dermatologist> dermatologists = map.keySet();
+
+        dermatologists.forEach(key -> {
+            map.get(key).getExams().stream().filter(it -> !it.isScheduled()).forEach(exam -> {
                 result.add(new ExamAndDermatologistDto(exam, key));
             });
         });
+        sortExams(result, sortType);
         return result;
+    }
+
+    private void sortExams(List<ExamAndDermatologistDto> exams, ExamSortType sortType) {
+        switch (sortType) {
+            case PRICE_ASC:
+                exams.sort(Comparator.comparingDouble(exam -> exam.getExam().getPrice()));
+                break;
+            case PRICE_DESC:
+                Comparator<ExamAndDermatologistDto> comparatorPrice = Comparator.comparingDouble(e -> e.getExam().getPrice());
+                exams.sort(comparatorPrice.reversed());
+                break;
+            case RATING_ASC:
+                exams.sort(Comparator.comparingDouble(exam -> exam.getDermatologist().getRating()));
+                break;
+            case RATING_DESC:
+                Comparator<ExamAndDermatologistDto> comparatorRating = Comparator.comparingDouble(e -> e.getDermatologist().getRating());
+                exams.sort(comparatorRating.reversed());
+                break;
+            default:
+        }
     }
 
     private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {

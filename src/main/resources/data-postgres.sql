@@ -89,11 +89,12 @@ INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('3', '4
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('4', '5');
 
 INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
+INSERT INTO employment(id, duration, price) VALUES ('2', '20', '30');
 
 INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('1', '20', '2021-01-30 15:00:00', '2021-01-30 14:40:00', '1');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('2', '20', '2021-01-30 14:40:00', '2021-01-30 14:20:00', '1');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('3', '20', '2021-01-30 11:40:00', '2021-01-30 11:20:00', '1');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('4', '20', '2021-01-30 10:40:00', '2021-01-30 10:20:00', '1');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('2', '40', '2021-01-30 14:40:00', '2021-01-30 14:20:00', '2');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('3', '10', '2021-01-30 11:40:00', '2021-01-30 11:20:00', '1');
+INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('4', '30', '2021-01-30 10:40:00', '2021-01-30 10:20:00', '2');
 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');
@@ -102,6 +103,7 @@ INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '4');
 
 INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '1', '4');
+INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '2', '5');
 
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');

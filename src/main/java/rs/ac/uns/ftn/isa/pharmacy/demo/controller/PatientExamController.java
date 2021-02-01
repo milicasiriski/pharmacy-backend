@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -30,7 +31,16 @@ public class PatientExamController {
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
-        examService.getAvailableDermatologistExamsForPharmacy(pharmacyId).forEach(it ->
+        examService.getAvailableDermatologistExamsForPharmacy(pharmacyId, ExamSortType.NONE).forEach(it ->
+                response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/{pharmacyId}/{sort}")
+    public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId, @PathVariable("sort") ExamSortType sort) {
+        ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
+        examService.getAvailableDermatologistExamsForPharmacy(pharmacyId, sort).forEach(it ->
                 response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

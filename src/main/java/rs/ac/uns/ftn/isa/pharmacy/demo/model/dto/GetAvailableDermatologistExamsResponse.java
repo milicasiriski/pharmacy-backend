@@ -16,6 +16,7 @@ public class GetAvailableDermatologistExamsResponse implements Serializable {
     private String dermatologistName;
     private String dermatologistSurname;
     private double dermatologistRating;
+    private double price;
 
     public GetAvailableDermatologistExamsResponse() {
 
@@ -30,6 +31,7 @@ public class GetAvailableDermatologistExamsResponse implements Serializable {
         this.dermatologistName = dermatologist.getName();
         this.dermatologistSurname = dermatologist.getSurname();
         this.dermatologistRating = dermatologist.getRating();
+        this.price = exam.getPrice();
     }
 
     public Long getExamId() {
@@ -86,5 +88,13 @@ public class GetAvailableDermatologistExamsResponse implements Serializable {
 
     public void setDermatologistRating(double dermatologistRating) {
         this.dermatologistRating = dermatologistRating;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
