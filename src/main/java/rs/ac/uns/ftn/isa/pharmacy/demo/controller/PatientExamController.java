@@ -36,7 +36,7 @@ public class PatientExamController {
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
@@ -45,7 +45,7 @@ public class PatientExamController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/{pharmacyId}/{sort}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId, @PathVariable("sort") ExamSortType sort) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
