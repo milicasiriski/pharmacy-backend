@@ -158,6 +158,42 @@ class TimeIntervalTest {
         assertFalse(result);
     }
 
+    @Test
+    void testContainsTime_IsInInterval_ReturnsTrue() {
+        // GIVEN
+        Calendar time = getDateTime(2021, 2, 5, 11, 0);
+
+        // WHEN
+        boolean result = subject.containsTime(time);
+
+        // THEN
+        assertTrue(result);
+    }
+
+    @Test
+    void testContainsTime_IsBeforeInterval_ReturnsFalse() {
+        // GIVEN
+        Calendar time = getDateTime(2021, 2, 5, 10, 0);
+
+        // WHEN
+        boolean result = subject.containsTime(time);
+
+        // THEN
+        assertFalse(result);
+    }
+
+    @Test
+    void testContainsTime_IsAfterInterval_ReturnsFalse() {
+        // GIVEN
+        Calendar time = getDateTime(2021, 2, 5, 12, 0);
+
+        // WHEN
+        boolean result = subject.containsTime(time);
+
+        // THEN
+        assertFalse(result);
+    }
+
     private Calendar getDateTime(int year, int month, int day, int hour, int minute) {
         Calendar date = Calendar.getInstance();
         date.set(Calendar.YEAR, year);
