@@ -98,11 +98,11 @@ INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id)
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (1, 100, 10, 0, 1, 13);
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (2, 100, 20, 0, 2, 13);
 
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '7');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '7');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '8');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '8');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('3', '8');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '8');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('5', '9');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('6', '9');
 
 INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (1, false, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', 'Waiting for response');
@@ -112,8 +112,9 @@ INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_
 
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
-INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('3', '4');
-INSERT INTO vacation_request_dermatologist(id, dermatologist_id) VALUES ('4', '5');
+
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('3', '4', '4');
+INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('4', '4', '4');
 
 INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
 INSERT INTO employment(id, duration, price) VALUES ('2', '20', '30');

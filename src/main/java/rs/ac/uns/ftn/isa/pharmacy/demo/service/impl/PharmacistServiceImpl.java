@@ -1,8 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistService;
 
@@ -25,6 +28,11 @@ public class PharmacistServiceImpl implements PharmacistService {
 
     @Override
     public List<Pharmacist> getAllPharmacists() {
-        return pharmacistRepository.getAllPharmacists();
+        if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")) {
+            PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return getPharmacistsByPharmacy(pharmacyAdmin.getPharmacy().getName());
+        } else {
+            return pharmacistRepository.getAllPharmacists();
+        }
     }
 }
