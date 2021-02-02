@@ -22,7 +22,7 @@ public class Offer implements Serializable {
     @Column(name = "price")
     private Long price;
 
-    @Column(name = "delivery-date")
+    @Column(name = "delivery_date")
     private Long shippingDays;
 
     @Column(name = "status")
@@ -33,6 +33,10 @@ public class Offer implements Serializable {
         this.price = price;
         this.shippingDays = shippingDays;
         this.status = status;
+    }
+
+    public Offer() {
+
     }
 
     public Long getId() {

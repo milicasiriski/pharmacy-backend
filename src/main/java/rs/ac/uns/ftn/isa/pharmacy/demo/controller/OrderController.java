@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.dtoconverters.OrderConverter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderForOfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderResponseDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
 
@@ -34,18 +35,19 @@ public class OrderController implements OrderConverter {
     @GetMapping("/getOrdersByPharmacy")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<List<OrderResponseDto>> getOrdersByPharmacy() {
-       return ResponseEntity.ok(orderService.getOrdersByPharmacy());
+        return ResponseEntity.ok(orderService.getOrdersByPharmacy());
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<OrderDto>> getOrders() {
-        List<OrderDto> orders = orderService.getOrders();
+    public ResponseEntity<List<OrderForOfferDto>> getOrders() {
+        List<OrderForOfferDto> orders = orderService.getOrders();
         return ResponseEntity.ok(orders);
     }
 
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')")
     @GetMapping("/notOffered")
-    public ResponseEntity<List<OrderDto>> getNotOfferedOrders() {
-        List<OrderDto> orders = orderService.getNotOfferedOrders();
+    public ResponseEntity<List<OrderForOfferDto>> getNotOfferedOrders() {
+        List<OrderForOfferDto> orders = orderService.getNotOfferedOrders();
         return ResponseEntity.ok(orders);
     }
 }

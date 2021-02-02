@@ -33,11 +33,9 @@ public class UserController {
         User user = (User) this.userDetailsService.loadUserByUsername(username);
         String userType = user.getClass().getSimpleName();
         if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshToken = tokenUtils.generateRefreshToken(username);
-            String accessToken = tokenUtils.generateToken(username);
-            int accessTokenExpiresIn = tokenUtils.getAccessTokenExpiresIn();
-            int refreshTokenExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
-            return ResponseEntity.ok(new UserTokenState(userType, accessToken, refreshToken, accessTokenExpiresIn, refreshTokenExpiresIn));
+            String refreshedToken = tokenUtils.refreshToken(token);
+            int expiresIn = tokenUtils.getExpiredIn();
+            return ResponseEntity.ok(new UserTokenState(userType, refreshedToken, expiresIn));
         } else {
             UserTokenState userTokenState = new UserTokenState();
             return ResponseEntity.badRequest().body(userTokenState);

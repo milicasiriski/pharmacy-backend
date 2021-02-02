@@ -41,6 +41,12 @@ public class MedicineDto implements Serializable {
     public MedicineDto() {
     }
 
+    public MedicineDto(String uuid, String name, MedicineForm form) {
+        this.uuid = uuid;
+        this.name = name;
+        this.form = form;
+    }
+
     public long getId() {
         return id;
     }
@@ -147,19 +153,19 @@ public class MedicineDto implements Serializable {
 
     @Override
     public String toString() {
-        return "MedicineDto{" +
-                "uuid='" + uuid + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", composition='" + composition + '\'' +
-                ", form=" + form +
-                ", type=" + type +
-                ", prescribed=" + prescribed +
-                ", recommendedDose='" + recommendedDose + '\'' +
-                ", sideEffects='" + sideEffects + '\'' +
-                ", alternatives=" + alternatives +
-                ", points=" + points +
+        return "{" +
+                "\"uuid\":\"" + uuid + '\"' +
+                ", \"name\":\"" + name + '\"' +
+                ", \"description\":\"" + description + '\"' +
+                ", \"manufacturer\":\"" + manufacturer + '\"' +
+                ", \"composition\":\"" + composition + '\"' +
+                ", \"form\":\"" + form + '\"' +
+                ", \"type\":\"" + type + '\"' +
+                ", \"prescribed\":" + prescribed +
+                ", \"recommendedDose\":\"" + recommendedDose + '\"' +
+                ", \"sideEffects:\":\"" + sideEffects + '\"' +
+                ", \"alternatives\":" + alternatives +
+                ", \"points:\":" + points +
                 '}';
     }
 }
