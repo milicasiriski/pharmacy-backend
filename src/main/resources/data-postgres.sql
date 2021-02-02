@@ -63,9 +63,9 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating) VALUES ('5', 'DERMATOLOGIST', 'pharmacyisa6+pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Pera', 'Peric', '4.8');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating) VALUES ('6', 'DERMATOLOGIST', 'pharmacyisa6+mika@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Mika', 'Mikic', '3.9');
 
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('7', 'PHARMACIST', 'pharmacyisa6+savo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Savo', 'Oroz');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('8', 'PHARMACIST', 'pharmacyisa6+dujo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Dujo', 'Damjanovic');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname) VALUES ('9', 'PHARMACIST', 'pharmacyisa6+marko@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Marko', 'Markovic');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, pharmacy_id) VALUES ('7', 'PHARMACIST', 'pharmacyisa6+savo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Savo', 'Oroz', '1');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, pharmacy_id) VALUES ('8', 'PHARMACIST', 'pharmacyisa6+dujo@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Dujo', 'Damjanovic', '4');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, pharmacy_id) VALUES ('9', 'PHARMACIST', 'pharmacyisa6+marko@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Marko', 'Markovic', '5');
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('10', 'PHARMACY_ADMIN', 'pharmacyisa6+admin1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 4);
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('11', 'PHARMACY_ADMIN', 'pharmacyisa6+admin2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 5);
@@ -98,12 +98,19 @@ INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id)
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (1, 100, 10, 0, 1, 13);
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (2, 100, 20, 0, 2, 13);
 
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '8');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '8');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('3', '8');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
-INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('6', '9');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '0');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '1');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 12:00:00', '1970-01-01 8:00:00', '2');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '3');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '4');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('8', '1970-01-01 20:00:00', '1970-01-01 14:00:00', '0');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('8', '1970-01-01 20:00:00', '1970-01-01 16:00:00', '1');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('8', '1970-01-01 20:00:00', '1970-01-01 16:00:00', '2');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('8', '1970-01-01 20:00:00', '1970-01-01 16:00:00', '3');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('8', '1970-01-01 20:00:00', '1970-01-01 14:00:00', '4');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('9', '1970-01-01 18:00:00', '1970-01-01 14:00:00', '0');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('9', '1970-01-01 18:00:00', '1970-01-01 14:00:00', '2');
+INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('9', '1970-01-01 18:00:00', '1970-01-01 14:00:00', '4');
 
 INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (1, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', '2');
 INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (2, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', '2');

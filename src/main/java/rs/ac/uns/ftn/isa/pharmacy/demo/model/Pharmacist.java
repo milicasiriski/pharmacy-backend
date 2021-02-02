@@ -1,9 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import java.util.List;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
+
+import javax.persistence.*;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -12,24 +12,40 @@ public class Pharmacist extends User {
 
     private transient final String administrationRole = "ROLE_PHARMACIST";
 
-    @ManyToMany(mappedBy = "pharmacists")
-    private List<Pharmacy> pharmacies;
+    @ManyToOne
+    @JoinColumn(name = "pharmacy_id")
+    private Pharmacy pharmacy;
+
+    @ElementCollection
+    @CollectionTable(name = "pharmacist_shift",
+            joinColumns = {@JoinColumn(name = "pharmacist_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "day_of_week")
+    private Map<DaysOfWeek, TimeInterval> shifts;
 
     public Pharmacist() {
         super();
     }
 
-    public Pharmacist(String email, String password, String name, String surname, List<Pharmacy> pharmacies) {
+    public Pharmacist(String email, String password, String name, String surname, Pharmacy pharmacy, Map<DaysOfWeek, TimeInterval> shifts) {
         super(email, password, name, surname);
-        this.pharmacies = pharmacies;
+        this.pharmacy = pharmacy;
+        this.shifts = shifts;
     }
 
-    public List<Pharmacy> getPharmacies() {
-        return pharmacies;
+    public Pharmacy getPharmacy() {
+        return pharmacy;
     }
 
-    public void setPharmacies(List<Pharmacy> pharmacies) {
-        this.pharmacies = pharmacies;
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
+    public Map<DaysOfWeek, TimeInterval> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(Map<DaysOfWeek, TimeInterval> shifts) {
+        this.shifts = shifts;
     }
 
     @Override
@@ -39,7 +55,7 @@ public class Pharmacist extends User {
         if (!super.equals(o)) return false;
         Pharmacist that = (Pharmacist) o;
         return Objects.equals(administrationRole, that.administrationRole) &&
-                Objects.equals(pharmacies, that.pharmacies);
+                Objects.equals(pharmacy, that.pharmacy);
     }
 
     @Override
@@ -49,14 +65,14 @@ public class Pharmacist extends User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), administrationRole, pharmacies);
+        return Objects.hash(super.hashCode(), administrationRole, pharmacy);
     }
 
     @Override
     public String toString() {
         return "Pharmacist{" +
                 "administrationRole='" + administrationRole + '\'' +
-                ", pharmacies=" + pharmacies +
+                ", pharmacies=" + pharmacy +
                 ", id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

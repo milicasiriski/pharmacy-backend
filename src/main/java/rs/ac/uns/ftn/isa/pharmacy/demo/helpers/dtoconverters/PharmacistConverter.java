@@ -13,7 +13,7 @@ public interface PharmacistConverter {
     default List<PharmacistDto> createResponse(List<Pharmacist> pharmacists) {
         List<PharmacistDto> pharmacistsDto = new ArrayList<>();
         pharmacists.forEach(pharmacist -> {
-                    List<Pharmacy> pharmacies = pharmacist.getPharmacies();
+                    List<Pharmacy> pharmacies = List.of(pharmacist.getPharmacy());// TODO: refactor to a field
                     PharmacistDto pharmacistDto = new PharmacistDto(pharmacist.getName(), pharmacist.getSurname(), 4.75, extractPharmacyInfo(pharmacies));
                     pharmacistsDto.add(pharmacistDto);
                 }
