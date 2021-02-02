@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.VacationTimeResponseMailFormatter;
@@ -38,7 +39,7 @@ public class VacationServiceImpl implements VacationService {
     }
 
     public Iterable<VacationTimeRequestDermatologist> getAllDermatologistsVacation() {
-        return dermatologistVacationRepository.findAll();
+        return dermatologistVacationRepository.findVacationsByPharmacyId(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPharmacy().getId());
     }
 
     @Override

@@ -34,6 +34,7 @@ public class DermatologistsController implements DermatologistConverter {
         return ResponseEntity.ok(dermatologistsDto);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT','ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     @GetMapping(value = "/getAllDermatologists")
     public ResponseEntity<List<DermatologistDto>> getAllDermatologists() {
         List<Dermatologist> dermatologists = dermatologistService.getAllDermatologists();

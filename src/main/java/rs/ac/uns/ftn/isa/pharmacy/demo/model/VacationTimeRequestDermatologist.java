@@ -11,6 +11,10 @@ public class VacationTimeRequestDermatologist extends VacationTimeRequest {
     @JoinColumn(name = "dermatologist_id")
     private Dermatologist dermatologist;
 
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "pharmacy_id")
+    private Pharmacy pharmacy;
+
     public VacationTimeRequestDermatologist() {
 
     }

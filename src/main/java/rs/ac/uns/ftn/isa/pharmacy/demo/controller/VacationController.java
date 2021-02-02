@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,18 +27,21 @@ public class VacationController implements VacationConverter {
         this.vacationService = vacationService;
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacistVacation")
     public ResponseEntity<Iterable<VacationDto>> getPharmacistsVacation() {
         Iterable<VacationTimeRequestPharmacist> vacationTimeRequestPharmacists = vacationService.getAllPharmacistsVacation();
         return ResponseEntity.ok(createResponseForPharmacist(vacationTimeRequestPharmacists));
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/dermatologistVacation")
     public ResponseEntity<Iterable<VacationDto>> getDermatologistsVacation() {
         Iterable<VacationTimeRequestDermatologist> vacationTimeRequestDermatologists = vacationService.getAllDermatologistsVacation();
         return ResponseEntity.ok(createResponseForDermatologist(vacationTimeRequestDermatologists));
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/pharmacistVacation")
     public ResponseEntity<Void> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) {
         try {
@@ -48,6 +52,7 @@ public class VacationController implements VacationConverter {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/dermatologistVacation")
     public ResponseEntity<Void> sendVacationResponseDermatologist(@RequestBody VacationDto vacationDto) {
         try {

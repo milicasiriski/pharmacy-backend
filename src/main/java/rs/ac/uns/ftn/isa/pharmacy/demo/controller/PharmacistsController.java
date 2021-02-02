@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class PharmacistsController implements PharmacistConverter {
         return ResponseEntity.ok(createResponse(pharmacists));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT','ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     @GetMapping(value = "/getAllPharmacists")
     public ResponseEntity<List<PharmacistDto>> getAllPharmacists() {
         return ResponseEntity.ok(createResponse(pharmacistService.getAllPharmacists()));
