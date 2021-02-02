@@ -28,7 +28,7 @@ public class Pharmacy {
     @MapKeyJoinColumn(name = "dermatologist_id")
     private Map<Dermatologist, Employment> dermatologists;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "pharmacy_pharmacists",
             joinColumns = {@JoinColumn(name = "pharmacy_id")},
