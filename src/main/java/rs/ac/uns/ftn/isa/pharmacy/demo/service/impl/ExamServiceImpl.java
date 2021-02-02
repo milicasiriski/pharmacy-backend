@@ -99,6 +99,18 @@ public class ExamServiceImpl implements ExamService {
         examRepository.save(exam);
     }
 
+    @Override
+    public void deleteExam(long examId) throws EntityNotFoundException {
+
+        Exam exam = examRepository.findById(examId).orElse(null);
+
+        if (exam == null) {
+            throw new EntityNotFoundException();
+        } else {
+            examRepository.delete(exam);
+        }
+    }
+
     private void sortExams(List<ExamAndDermatologistDto> exams, ExamSortType sortType) {
         switch (sortType) {
             case PRICE_ASC:
