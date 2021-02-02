@@ -23,7 +23,7 @@ public class PharmacistServiceImpl implements PharmacistService {
 
     @Override
     public List<Pharmacist> getPharmacistsByPharmacy(String pharmacyName) {
-        return pharmacistRepository.getPharmacistByPharmacy(pharmacyName);
+        return pharmacistRepository.getByPharmacyName(pharmacyName);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PharmacistServiceImpl implements PharmacistService {
             PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             return getPharmacistsByPharmacy(pharmacyAdmin.getPharmacy().getName());
         } else {
-            return pharmacistRepository.getAllPharmacists();
+            return pharmacistRepository.getAll();
         }
     }
 }
