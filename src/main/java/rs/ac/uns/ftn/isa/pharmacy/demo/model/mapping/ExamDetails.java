@@ -2,10 +2,11 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class ExamDetails {
+public class ExamDetails implements Serializable {
     private Long id;
     private Calendar examStart;
     private Calendar examEnd;
@@ -13,6 +14,7 @@ public class ExamDetails {
     private String dermatologistName;
     private String dermatologistSurname;
     private String pharmacyName;
+    private boolean cancellable;
 
     public ExamDetails() {
     }
@@ -25,6 +27,7 @@ public class ExamDetails {
         this.dermatologistName = dermatologistName;
         this.dermatologistSurname = dermatologistSurname;
         this.pharmacyName = pharmacyName;
+        this.cancellable = isExamCancellable();
     }
 
     public Long getId() {
@@ -83,12 +86,20 @@ public class ExamDetails {
         this.pharmacyName = pharmacyName;
     }
 
-    public boolean isExamCancellable() {
+    private boolean isExamCancellable() {
         Calendar now = Calendar.getInstance();
         long differenceInMilliseconds = examStart.getTime().getTime() - now.getTime().getTime();
         long differenceInHours = TimeUnit.HOURS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
 
         return differenceInHours >= Constants.DERMATOLOGIST_EXAM_CANCELLATION_HOURS;
+    }
+
+    public boolean isCancellable() {
+        return cancellable;
+    }
+
+    public void setCancellable(boolean cancellable) {
+        this.cancellable = cancellable;
     }
 
     @Override

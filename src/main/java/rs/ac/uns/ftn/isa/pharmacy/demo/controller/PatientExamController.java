@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPatientDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
@@ -19,7 +18,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/patient-exam", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,11 +31,9 @@ public class PatientExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/")
-    public ResponseEntity<Iterable<GetPatientDermatologistExamsResponse>> getDermatologistExamsForPatient() {
+    public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamsForPatient() {
         Iterable<ExamDetails> exams = examService.getDermatologistExamsForPatient(getSignedInUser());
-        List<GetPatientDermatologistExamsResponse> response = new ArrayList<>();
-        exams.forEach(examDetails -> response.add(new GetPatientDermatologistExamsResponse(examDetails)));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
