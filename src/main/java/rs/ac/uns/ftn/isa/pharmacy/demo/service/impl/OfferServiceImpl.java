@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OrderException;
@@ -10,16 +11,16 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Offer;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Order;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Supplier;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.OfferStatus;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OfferRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OfferServiceImpl implements OfferService {
@@ -27,42 +28,69 @@ public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final MedicineRepository medicineRepository;
 
     @Autowired
-    public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository) {
+    public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository, MedicineRepository medicineRepository) {
         this.offerRepository = offerRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.medicineRepository = medicineRepository;
     }
 
     @Override
-    public Offer addNewOffer(OfferDto dto) {
+    public Offer addNewOffer(OfferDto dto) throws NoMedicineFoundException, OrderException {
         Supplier supplier;
         try {
+            if (dto.getShippingDays() < 1 || dto.getPrice() < 1) {
+                throw new BadRequestException();
+            }
             supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Offer offer = dtoToOffer(dto);
             offer.setStatus(OfferStatus.WAITING);
             Order order = offer.getOrder();
-            supplier.setMedicineAmount(refreshMedicineAmount(order.getMedicineAmount(), supplier.getMedicineAmount()));
+            Map<Medicine, Integer> map = getMedicineAmount(supplier.getId());
+            map.putAll(refreshMedicineAmount(order.getMedicineAmount(), supplier.getId()));
+            supplier.setMedicineAmount(map);
             offer = offerRepository.save(offer);
-            supplier.getOffers().add(offer);
+            Set<Offer> suppliersOffers = new HashSet<>((Collection) offerRepository.findBySupplierId(supplier.getId()));
+            suppliersOffers.add(offer);
+            supplier.setOffers(suppliersOffers);
             userRepository.save(supplier);
             return offer;
-        } catch (NoMedicineFoundException noMedicineFoundException) {
+        } catch (NoMedicineFoundException | OrderException noMedicineFoundException) {
+            noMedicineFoundException.printStackTrace();
             throw noMedicineFoundException;
-        } catch (OrderException orderException) {
-            throw orderException;
         } catch (Exception e) {
             throw new BadUserInformationException();
         }
-
     }
 
-    private Map<Medicine, Integer> refreshMedicineAmount(Map<Medicine, Integer> orderMedicineAmount, Map<Medicine, Integer> supplierMedicineAmount) throws NoMedicineFoundException {
+    @Override
+    public List<MedicineAmountDto> getMedicinesAmount() throws BadUserInformationException {
+        Supplier supplier;
+        try {
+            List<MedicineAmountDto> medicinesAmountDto = new ArrayList<>();
+            supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Map<Medicine, Integer> map = getMedicineAmount(supplier.getId());
+            map.keySet().forEach(medicine ->
+                    medicinesAmountDto.add(new MedicineAmountDto(medicine.getName(), medicine.getUuid(), map.get(medicine))));
+            return medicinesAmountDto;
+        } catch (Exception e) {
+            throw new BadUserInformationException();
+        }
+    }
+
+    private Map<Medicine, Integer> refreshMedicineAmount(Map<Medicine, Integer> orderMedicineAmount, Long supplierId) throws NoMedicineFoundException {
         Map<Medicine, Integer> newSuppliersMedicineAmount = new HashMap<>();
         for (Medicine m : orderMedicineAmount.keySet()) {
-            if (orderMedicineAmount.get(m) > supplierMedicineAmount.get(m)) {
-                newSuppliersMedicineAmount.put(m, orderMedicineAmount.get(m) - supplierMedicineAmount.get(m));
+            int orderAmount = orderMedicineAmount.get(m);
+            Integer supplierAmount = offerRepository.findMedicineAmountBySupplierId(supplierId, m.getId());
+            if (supplierAmount == null) {
+                throw new NoMedicineFoundException();
+            }
+            if (orderAmount <= supplierAmount) {
+                newSuppliersMedicineAmount.put(m, orderAmount - supplierAmount);
             } else {
                 throw new NoMedicineFoundException();
             }
@@ -71,10 +99,24 @@ public class OfferServiceImpl implements OfferService {
     }
 
     private Offer dtoToOffer(OfferDto dto) {
-        Optional<Order> order = orderRepository.findById(dto.getOrder().getId());
+        Optional<Order> order = orderRepository.findById(dto.getOrderId());
         if (order.isEmpty()) {
             throw new OrderException();
         }
         return new Offer(order.get(), dto.getPrice(), dto.getShippingDays(), dto.getStatus());
+    }
+
+    private Map<Medicine, Integer> getMedicineAmount(Long supplierId) {
+        List<Long> ids = offerRepository.findAllMedicineIdsBySupplierId(supplierId);
+        Map<Medicine, Integer> map = new HashMap<>();
+        ids.forEach(id -> {
+            Optional<Medicine> m = medicineRepository.findById(id);
+            if (m.isPresent()) {
+                map.put(m.get(), offerRepository.findMedicineAmountBySupplierId(supplierId, id));
+            } else {
+                throw new BadRequestException();
+            }
+        });
+        return map;
     }
 }

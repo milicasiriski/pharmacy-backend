@@ -5,10 +5,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OrderResponseDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OfferRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OrderService;
@@ -24,12 +23,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final MedicineRepository medicineRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final OfferRepository offerRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository, OfferRepository offerRepository) {
         this.orderRepository = orderRepository;
         this.medicineRepository = medicineRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.offerRepository = offerRepository;
     }
 
     @Override
@@ -42,30 +43,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getOrders() {
+    public List<OrderForOfferDto> getOrders() {
         List<Order> orders = orderRepository.findAll();
         return convertToOrdersDto(orders);
     }
 
-    private List<OrderDto> convertToOrdersDto(List<Order> orders) {
-        List<OrderDto> ordersDto = new ArrayList<>();
+    private List<OrderForOfferDto> convertToOrdersDto(List<Order> orders) {
+        List<OrderForOfferDto> ordersDto = new ArrayList<>();
         for (Order order : orders) {
-            HashMap<Long, Integer> medicineAmount = new HashMap<>();
+            HashMap<MedicineDto, Integer> medicineAmount = new HashMap<>();
             for (Medicine medicine : order.getMedicineAmount().keySet()) {
-                medicineAmount.put(medicine.getId(), order.getMedicineAmount().get(medicine));
+                MedicineDto medicineDto = new MedicineDto(medicine.getUuid(), medicine.getName(), medicine.getForm());
+                medicineAmount.put(medicineDto, order.getMedicineAmount().get(medicine));
             }
-            ordersDto.add(new OrderDto(medicineAmount, order.getDeadline().getTime(), order.getId()));
+            ordersDto.add(new OrderForOfferDto(medicineAmount, order.getDeadline().getTime(), order.getId()));
         }
         return ordersDto;
     }
 
     @Override
-    public List<OrderDto> getNotOfferedOrders() {
-        List<Order> orders = new LinkedList<>();
-        Supplier supplier;
+    public List<OrderForOfferDto> getNotOfferedOrders() {
+        List<Order> orders = new ArrayList<>();
+        User user;
         try {
-            supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Set<Offer> offers = supplier.getOffers();
+            Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = (User) o;
+            Supplier supplier = (Supplier) user;
+            Iterable<Offer> offers = offerRepository.findBySupplierId(supplier.getId());
             Set<Order> offeredOrders = new HashSet<>();
             offers.forEach(offer -> {
                 offeredOrders.add(offer.getOrder());

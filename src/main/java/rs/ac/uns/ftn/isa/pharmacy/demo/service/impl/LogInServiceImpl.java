@@ -79,9 +79,7 @@ public class LogInServiceImpl implements LogInService {
         String username = user.getUsername();
         String userType = user.getClass().getSimpleName();
         String accessToken = tokenUtils.generateToken(username);
-        int accessExpiresIn = tokenUtils.getAccessTokenExpiresIn();
-        String refreshToken = tokenUtils.generateRefreshToken(username);
-        int refreshExpiresIn = tokenUtils.getRefreshTokenExpiresIn();
-        return new UserTokenState(userType, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn);
+        int accessExpiresIn = tokenUtils.getExpiredIn();
+        return new UserTokenState(userType, accessToken, accessExpiresIn);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Order {
 
     @Id
-    @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 1)
+    @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 10)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 

@@ -5,6 +5,7 @@ import java.util.Objects;
 public class MedicineAmountDto {
     private String medicineName;
     private int medicineAmount;
+    private String uuid;
 
     public MedicineAmountDto(String medicineName, int medicineAmount) {
         this.medicineName = medicineName;
@@ -13,6 +14,20 @@ public class MedicineAmountDto {
 
     public MedicineAmountDto() {
 
+    }
+
+    public MedicineAmountDto(String medicineName, String uuid, int medicineAmount) {
+        this.medicineName = medicineName;
+        this.medicineAmount = medicineAmount;
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getMedicineName() {
@@ -31,17 +46,4 @@ public class MedicineAmountDto {
         this.medicineAmount = medicineAmount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MedicineAmountDto that = (MedicineAmountDto) o;
-        return medicineAmount == that.medicineAmount &&
-                medicineName.equals(that.medicineName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(medicineName, medicineAmount);
-    }
 }

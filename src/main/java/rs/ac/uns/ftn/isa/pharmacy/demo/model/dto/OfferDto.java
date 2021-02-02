@@ -6,13 +6,13 @@ public class OfferDto {
 
     private Long shippingDays;
     private Long price;
-    private OrderDto order;
+    private Long orderId;
     private OfferStatus status;
 
-    public OfferDto(Long shippingDays, Long price, OrderDto order, OfferStatus status) {
+    public OfferDto(Long shippingDays, Long price, Long orderId, OfferStatus status) {
         this.shippingDays = shippingDays;
         this.price = price;
-        this.order = order;
+        this.orderId = orderId;
         this.status = status;
     }
 
@@ -35,12 +35,12 @@ public class OfferDto {
         this.price = price;
     }
 
-    public OrderDto getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(OrderDto order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public OfferStatus getStatus() {
@@ -56,7 +56,7 @@ public class OfferDto {
         return "OfferDto{" +
                 "shippingDays=" + shippingDays +
                 ", price=" + price +
-                ", orderId=" + order +
+                ", orderId=" + orderId +
                 ", status=" + status +
                 '}';
     }
