@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsNotInShiftIntervalException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
@@ -29,8 +30,12 @@ public class ExamController {
         try {
             examService.createExam(pharmacyAdminExamDto);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         } catch (ExamIntervalIsOverlapping e) {
             return new ResponseEntity<>("Dermatologists is already scheduled for chosen date!", HttpStatus.BAD_REQUEST);
+        } catch (ExamIntervalIsNotInShiftIntervalException e) {
+            return new ResponseEntity<>("Dermatologists is not available at that time!", HttpStatus.BAD_REQUEST);
         }
     }
 

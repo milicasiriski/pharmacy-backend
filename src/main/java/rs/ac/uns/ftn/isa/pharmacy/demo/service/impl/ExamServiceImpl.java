@@ -45,7 +45,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException {
+    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException, NullPointerException {
         Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(pharmacyAdminExamDto.getDermatologistId());
 
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder
