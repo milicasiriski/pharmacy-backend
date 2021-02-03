@@ -10,4 +10,8 @@ public interface OfferService {
     Offer addNewOffer(OfferDto dto);
 
     List<MedicineAmountDto> getMedicinesAmount();
+
+    List<OfferDto> getAllOffers();
+
+    Offer updateOffer(OfferDto offerDto);
 }

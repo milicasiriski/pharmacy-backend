@@ -59,7 +59,6 @@ public class OfferServiceImpl implements OfferService {
             userRepository.save(supplier);
             return offer;
         } catch (NoMedicineFoundException | OrderException noMedicineFoundException) {
-            noMedicineFoundException.printStackTrace();
             throw noMedicineFoundException;
         } catch (Exception e) {
             throw new BadUserInformationException();
@@ -79,6 +78,36 @@ public class OfferServiceImpl implements OfferService {
         } catch (Exception e) {
             throw new BadUserInformationException();
         }
+    }
+
+    @Override
+    public List<OfferDto> getAllOffers() {
+        Supplier supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Iterable<Offer> offers = offerRepository.findBySupplierId(supplier.getId());
+        List<OfferDto> offerDtos = new ArrayList<>();
+        offers.forEach(offer -> offerDtos.add(new OfferDto(offer.getShippingDays(), offer.getPrice(), offer.getOrder().getId(), offer.getStatus(), offer.getId(), offer.getOrder().getDeadline().getTime())));
+        return offerDtos;
+    }
+
+    @Override
+    public Offer updateOffer(OfferDto offerDto) {
+        Optional<Offer> o = offerRepository.findById(offerDto.getOfferId());
+        if (o.isEmpty()) {
+            throw new BadRequestException();
+        } else {
+            Offer offer = o.get();
+            if (canUpdate(offer)) {
+                offer.setPrice(offerDto.getPrice());
+                offer.setShippingDays(offerDto.getShippingDays());
+                return offerRepository.save(offer);
+            } else {
+                throw new BadRequestException();
+            }
+        }
+    }
+
+    private boolean canUpdate(Offer offer) {
+        return offer.getOrder().getDeadline().getTimeInMillis() > System.currentTimeMillis() && offer.getStatus() != OfferStatus.ACCEPTED;
     }
 
     private Map<Medicine, Integer> refreshMedicineAmount(Map<Medicine, Integer> orderMedicineAmount, Long supplierId) throws NoMedicineFoundException {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OfferRepository extends CrudRepository<Offer, Long> {
 
-    @Query(value = "SELECT id, price, delivery_date, status, order_id, supplier_id FROM order_offer WHERE supplier_id=:id", nativeQuery = true)
+    @Query(value = "SELECT id, price, shipping_days, status, order_id, supplier_id FROM order_offer WHERE supplier_id=:id", nativeQuery = true)
     Iterable<Offer> findBySupplierId(@Param("id") Long id);
 
     @Query(value = "SELECT medicine_amount FROM public.supplier_medicine_mapping" +

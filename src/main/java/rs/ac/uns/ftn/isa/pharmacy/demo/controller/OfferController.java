@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OrderException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
@@ -23,7 +24,7 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPPLIER')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/")
     public ResponseEntity<String> saveOffer(@RequestBody OfferDto OfferDto) {
         try {
@@ -38,14 +39,39 @@ public class OfferController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPPLIER')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
+    @PostMapping("/update")
+    public ResponseEntity<String> updateOffer(@RequestBody OfferDto OfferDto) {
+        try {
+            this.offerService.updateOffer(OfferDto);
+            return new ResponseEntity<>("Offer saved successfully!", HttpStatus.OK);
+        } catch (BadRequestException badRequestException) {
+            badRequestException.printStackTrace();
+            return new ResponseEntity<>("You cant change this offer!", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Sorry, there has been a mistake on server.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
     @GetMapping("/medicine")
     public ResponseEntity<List<MedicineAmountDto>> getSuppliersMedicine() {
         try {
             List<MedicineAmountDto> amountDtos = this.offerService.getMedicinesAmount();
             return new ResponseEntity<>(amountDtos, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
+    @GetMapping("/")
+    public ResponseEntity<List<OfferDto>> getAllOffers() {
+        try {
+            List<OfferDto> offerDtos = this.offerService.getAllOffers();
+            return new ResponseEntity<>(offerDtos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

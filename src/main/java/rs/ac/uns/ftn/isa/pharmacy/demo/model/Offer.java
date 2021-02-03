@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Offer implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "offer_sequence_generator", sequenceName = "offer_sequence", initialValue = 1)
+    @SequenceGenerator(name = "offer_sequence_generator", sequenceName = "offer_sequence", initialValue = 30)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_sequence_generator")
     private Long id;
 
@@ -22,7 +22,7 @@ public class Offer implements Serializable {
     @Column(name = "price")
     private Long price;
 
-    @Column(name = "delivery_date")
+    @Column(name = "shipping_days")
     private Long shippingDays;
 
     @Column(name = "status")
