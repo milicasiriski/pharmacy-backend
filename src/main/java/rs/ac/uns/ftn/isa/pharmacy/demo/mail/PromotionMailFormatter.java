@@ -25,7 +25,8 @@ public class PromotionMailFormatter implements MailFormatter<PromotionDto> {
                 "\t<p>\n" +
                 "\t\t" + params.getNotificationMessage() + " And it's available from " +
                 dateFormat.format(params.getFrom()) +
-                " to " + dateFormat.format(params.getTo()) +
+                " to " + dateFormat.format(params.getTo()) + ". \n" +
+                "You have a" + " " + params.getDiscount().toString() + "% " + "discount on all our services and products!" +
                 "<br><br>\n" +
                 "\t\tThank you for using our application!\n" +
                 "\t</p>\n" +

@@ -20,6 +20,9 @@ public class Promotion {
     @Column(name = "promo_message")
     String promotionNotificationMessage;
 
+    @Column(name = "discount")
+    Double discount;
+
     @ManyToOne
     @JoinColumn(name = "pharmacy_id")
     private Pharmacy pharmacy;
@@ -28,9 +31,26 @@ public class Promotion {
 
     }
 
-    public Promotion(TimeInterval periodOfValidity, String promotionNotificationMessage, Pharmacy pharmacy) {
+    public Promotion(TimeInterval periodOfValidity, String promotionNotificationMessage, Double discount, Pharmacy pharmacy) {
         this.periodOfValidity = periodOfValidity;
         this.promotionNotificationMessage = promotionNotificationMessage;
+        this.discount = discount;
+        this.pharmacy = pharmacy;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
     }
 
@@ -55,13 +75,15 @@ public class Promotion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Promotion promotion = (Promotion) o;
-        return Objects.equals(periodOfValidity, promotion.periodOfValidity) &&
+        return Objects.equals(id, promotion.id) &&
+                Objects.equals(periodOfValidity, promotion.periodOfValidity) &&
                 Objects.equals(promotionNotificationMessage, promotion.promotionNotificationMessage) &&
-                Objects.equals(id, promotion.id);
+                Objects.equals(discount, promotion.discount) &&
+                Objects.equals(pharmacy, promotion.pharmacy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(periodOfValidity, promotionNotificationMessage, id);
+        return Objects.hash(id, periodOfValidity, promotionNotificationMessage, discount, pharmacy);
     }
 }
