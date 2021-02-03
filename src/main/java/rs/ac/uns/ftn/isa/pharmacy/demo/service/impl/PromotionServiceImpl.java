@@ -43,7 +43,7 @@ public class PromotionServiceImpl implements PromotionService {
         PharmacyAdmin admin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Promotion promotion = new Promotion(getPromotionInterval(promotionDto), promotionDto.getNotificationMessage(),
-                (admin.getPharmacy()));
+                (promotionDto.getDiscount()), admin.getPharmacy());
         promotionRepository.save(promotion);
 
         // TODO: Send mail to all relevant patients.
