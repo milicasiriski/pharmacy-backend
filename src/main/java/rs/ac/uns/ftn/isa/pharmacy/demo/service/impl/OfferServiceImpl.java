@@ -112,14 +112,15 @@ public class OfferServiceImpl implements OfferService {
 
     private Map<Medicine, Integer> refreshMedicineAmount(Map<Medicine, Integer> orderMedicineAmount, Long supplierId) throws NoMedicineFoundException {
         Map<Medicine, Integer> newSuppliersMedicineAmount = new HashMap<>();
-        for (Medicine m : orderMedicineAmount.keySet()) {
-            int orderAmount = orderMedicineAmount.get(m);
-            Integer supplierAmount = offerRepository.findMedicineAmountBySupplierId(supplierId, m.getId());
+        for (Map.Entry<Medicine, Integer> m : orderMedicineAmount.entrySet()) {
+            Medicine medicine = m.getKey();
+            int orderAmount = m.getValue();
+            Integer supplierAmount = offerRepository.findMedicineAmountBySupplierId(supplierId, medicine.getId());
             if (supplierAmount == null) {
                 throw new NoMedicineFoundException();
             }
             if (orderAmount <= supplierAmount) {
-                newSuppliersMedicineAmount.put(m, orderAmount - supplierAmount);
+                newSuppliersMedicineAmount.put(medicine, supplierAmount - orderAmount);
             } else {
                 throw new NoMedicineFoundException();
             }

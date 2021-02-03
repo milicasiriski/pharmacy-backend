@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
@@ -45,6 +46,7 @@ public class PharmacyController {
     }
 
     //TODO:Vladimir, check if values are ok NOSONAR
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/register")
     public ResponseEntity<String> registerPharmacy(@RequestBody PharmacyDto dto) {
         try {

@@ -44,7 +44,7 @@ public class OrderController implements OrderConverter {
         return ResponseEntity.ok(orders);
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPPLIER')")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/notOffered")
     public ResponseEntity<List<OrderForOfferDto>> getNotOfferedOrders() {
         List<OrderForOfferDto> orders = orderService.getNotOfferedOrders();

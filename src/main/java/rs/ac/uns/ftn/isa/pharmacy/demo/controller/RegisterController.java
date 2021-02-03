@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
@@ -48,6 +49,7 @@ public class RegisterController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/user")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto credentials) {
         if (registerUserService.userExists(credentials.getEmail())) {

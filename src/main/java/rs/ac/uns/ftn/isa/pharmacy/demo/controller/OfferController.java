@@ -26,9 +26,9 @@ public class OfferController {
 
     @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/")
-    public ResponseEntity<String> saveOffer(@RequestBody OfferDto OfferDto) {
+    public ResponseEntity<String> saveOffer(@RequestBody OfferDto offerDto) {
         try {
-            this.offerService.addNewOffer(OfferDto);
+            this.offerService.addNewOffer(offerDto);
             return new ResponseEntity<>("Offer saved successfully!", HttpStatus.OK);
         } catch (NoMedicineFoundException noMedicineFoundException) {
             return new ResponseEntity<>("Sorry, you dont have enough medicine!", HttpStatus.BAD_REQUEST);
@@ -41,12 +41,11 @@ public class OfferController {
 
     @PreAuthorize("hasRole('ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/update")
-    public ResponseEntity<String> updateOffer(@RequestBody OfferDto OfferDto) {
+    public ResponseEntity<String> updateOffer(@RequestBody OfferDto offerDto) {
         try {
-            this.offerService.updateOffer(OfferDto);
-            return new ResponseEntity<>("Offer saved successfully!", HttpStatus.OK);
+            this.offerService.updateOffer(offerDto);
+            return new ResponseEntity<>("Offer updated successfully!", HttpStatus.OK);
         } catch (BadRequestException badRequestException) {
-            badRequestException.printStackTrace();
             return new ResponseEntity<>("You cant change this offer!", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Sorry, there has been a mistake on server.", HttpStatus.INTERNAL_SERVER_ERROR);

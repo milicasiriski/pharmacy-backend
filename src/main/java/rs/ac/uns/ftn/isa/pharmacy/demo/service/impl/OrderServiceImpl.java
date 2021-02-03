@@ -71,9 +71,7 @@ public class OrderServiceImpl implements OrderService {
             Supplier supplier = (Supplier) user;
             Iterable<Offer> offers = offerRepository.findBySupplierId(supplier.getId());
             Set<Order> offeredOrders = new HashSet<>();
-            offers.forEach(offer -> {
-                offeredOrders.add(offer.getOrder());
-            });
+            offers.forEach(offer -> offeredOrders.add(offer.getOrder()));
             orderRepository.findAll().forEach(order -> {
                 if (!offeredOrders.contains(order)) {
                     orders.add(order);
@@ -81,7 +79,6 @@ public class OrderServiceImpl implements OrderService {
             });
             return convertToOrdersDto(orders);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BadUserInformationException();
         }
     }
