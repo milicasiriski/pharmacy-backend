@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -23,9 +25,10 @@ public class VacationTimeRequestDermatologist extends VacationTimeRequest {
         this.dermatologist = dermatologist;
     }
 
-    public VacationTimeRequestDermatologist(TimeInterval requestedTimeForVacation, boolean isApproved, String rejectedReason, Dermatologist dermatologist) {
-        super(requestedTimeForVacation, isApproved, rejectedReason);
+    public VacationTimeRequestDermatologist(TimeInterval requestedTimeForVacation, VacationStatus status, String rejectedReason, Dermatologist dermatologist, Pharmacy pharmacy) {
+        super(requestedTimeForVacation, status, rejectedReason);
         this.dermatologist = dermatologist;
+        this.pharmacy = pharmacy;
     }
 
     public Dermatologist getDermatologist() {
@@ -36,27 +39,26 @@ public class VacationTimeRequestDermatologist extends VacationTimeRequest {
         this.dermatologist = dermatologist;
     }
 
+    public Pharmacy getPharmacy() {
+        return pharmacy;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         VacationTimeRequestDermatologist that = (VacationTimeRequestDermatologist) o;
-        return dermatologist.equals(that.dermatologist);
+        return Objects.equals(dermatologist, that.dermatologist) &&
+                Objects.equals(pharmacy, that.pharmacy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), dermatologist);
-    }
-
-    @Override
-    public String toString() {
-        return "VacationTimeRequestDermatologist{" +
-                "dermatologist=" + dermatologist +
-                ", requestedTimeForVacation=" + requestedTimeForVacation +
-                ", isApproved=" + isApproved +
-                ", rejectedReason='" + rejectedReason + '\'' +
-                '}';
+        return Objects.hash(super.hashCode(), dermatologist, pharmacy);
     }
 }

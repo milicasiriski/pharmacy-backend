@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -20,30 +22,27 @@ public abstract class VacationTimeRequest {
     })
     protected TimeInterval requestedTimeForVacation;
 
-    @Column(name = "approved")
-    protected boolean isApproved;
+    @Column(name = "status")
+    protected VacationStatus status;
 
     @Column(name = "rejected_reason")
     protected String rejectedReason;
-
-    @Column(name = "status")
-    protected String status;
 
     protected VacationTimeRequest() {
 
     }
 
-    protected VacationTimeRequest(TimeInterval requestedTimeForVacation, boolean isApproved, String rejectedReason) {
+    public VacationTimeRequest(TimeInterval requestedTimeForVacation, VacationStatus status, String rejectedReason) {
         this.requestedTimeForVacation = requestedTimeForVacation;
-        this.isApproved = isApproved;
+        this.status = status;
         this.rejectedReason = rejectedReason;
     }
 
-    public String getStatus() {
+    public VacationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VacationStatus status) {
         this.status = status;
     }
 
@@ -63,14 +62,6 @@ public abstract class VacationTimeRequest {
         this.requestedTimeForVacation = requestedTimeForVacation;
     }
 
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
-    }
-
     public String getRejectedReason() {
         return rejectedReason;
     }
@@ -84,13 +75,14 @@ public abstract class VacationTimeRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VacationTimeRequest that = (VacationTimeRequest) o;
-        return isApproved == that.isApproved &&
-                requestedTimeForVacation.equals(that.requestedTimeForVacation) &&
-                rejectedReason.equals(that.rejectedReason);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(requestedTimeForVacation, that.requestedTimeForVacation) &&
+                status == that.status &&
+                Objects.equals(rejectedReason, that.rejectedReason);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(requestedTimeForVacation, isApproved, rejectedReason);
+        return Objects.hash(id, requestedTimeForVacation, status, rejectedReason);
     }
 }

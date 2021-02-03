@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -15,13 +17,8 @@ public class VacationTimeRequestPharmacist extends VacationTimeRequest {
 
     }
 
-    public VacationTimeRequestPharmacist(Pharmacist pharmacist) {
-        this.pharmacist = pharmacist;
-    }
-
-    public VacationTimeRequestPharmacist(TimeInterval requestedTimeForVacation, boolean isApproved, String rejectedReason, Pharmacist pharmacist) {
-        super(requestedTimeForVacation, isApproved, rejectedReason);
-        this.pharmacist = pharmacist;
+    public VacationTimeRequestPharmacist(TimeInterval requestedTimeForVacation, VacationStatus status, String rejectedReason) {
+        super(requestedTimeForVacation, status, rejectedReason);
     }
 
     public Pharmacist getPharmacist() {
@@ -38,21 +35,11 @@ public class VacationTimeRequestPharmacist extends VacationTimeRequest {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         VacationTimeRequestPharmacist that = (VacationTimeRequestPharmacist) o;
-        return pharmacist.equals(that.pharmacist);
+        return Objects.equals(pharmacist, that.pharmacist);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), pharmacist);
-    }
-
-    @Override
-    public String toString() {
-        return "VacationTimeRequestPharmacist{" +
-                "pharmacist=" + pharmacist +
-                ", requestedTimeForVacation=" + requestedTimeForVacation +
-                ", isApproved=" + isApproved +
-                ", rejectedReason='" + rejectedReason + '\'' +
-                '}';
     }
 }

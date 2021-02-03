@@ -8,6 +8,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.VacationTimeResponseMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationTimeResponseEmailParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.VacationRepository;
@@ -15,7 +16,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-
 
 @Service
 public class VacationServiceImpl implements VacationService {
@@ -65,14 +65,13 @@ public class VacationServiceImpl implements VacationService {
     }
 
     private void sendVacationStatusToEmail(User user, VacationDto vacationDto) throws MessagingException {
-        VacationTimeResponseEmailParams params = new VacationTimeResponseEmailParams(vacationDto.isApproved(), vacationDto.getReason());
+        VacationTimeResponseEmailParams params = new VacationTimeResponseEmailParams(vacationDto.getStatus(), vacationDto.getReason());
         mailService.sendMail(user.getEmail(), params, new VacationTimeResponseMailFormatter());
     }
 
     private void updateVacation(VacationDto vacationDto, VacationTimeRequest vacation) {
-        vacation.setApproved(vacationDto.isApproved());
+        vacation.setStatus(VacationStatus.valueOf(vacationDto.getStatus()));
         vacation.setRejectedReason(vacationDto.getReason());
-        vacation.setStatus("Responded");
         vacationRepository.save(vacation);
     }
 }

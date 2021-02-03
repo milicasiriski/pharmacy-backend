@@ -71,4 +71,8 @@ public class TimeInterval implements Serializable {
 
         return otherStartsInInterval || otherEndsInInterval || startsInOtherInterval || endsInOtherInterval;
     }
+
+    public boolean isInside(TimeInterval other) {
+        return !this.start.before(other.start) && !this.end.after(other.end);
+    }
 }

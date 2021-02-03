@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
@@ -24,8 +25,13 @@ public class ExamController {
 
     @PostMapping("/")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
-    public void createExam(@RequestBody PharmacyAdminExamDto pharmacyAdminExamDto) {
-        examService.createExam(pharmacyAdminExamDto);
+    public ResponseEntity<String> createExam(@RequestBody PharmacyAdminExamDto pharmacyAdminExamDto) {
+        try {
+            examService.createExam(pharmacyAdminExamDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ExamIntervalIsOverlapping e) {
+            return new ResponseEntity<>("Dermatologists is already scheduled for chosen date!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
