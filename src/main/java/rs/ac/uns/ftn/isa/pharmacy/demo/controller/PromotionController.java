@@ -6,9 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PromotionDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PromotionService;
 
@@ -31,6 +29,33 @@ public class PromotionController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/subscribe/{id}")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<Boolean> subscribeOrUnsubscribe(@PathVariable String id) {
+        try {
+            Long pharmacyId = Long.valueOf(id);
+            Boolean subscribed = promotionService.subscribeOrUnsubscribe(pharmacyId);
+            return new ResponseEntity<>(subscribed, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/subscribe/{id}")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<Boolean> isSubscribed(@PathVariable String id) {
+        try {
+            Long pharmacyId = Long.valueOf(id);
+            if (promotionService.isSubscribed(pharmacyId)) {
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(false, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 }
