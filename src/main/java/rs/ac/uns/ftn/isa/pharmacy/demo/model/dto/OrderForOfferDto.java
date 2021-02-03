@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class OrderForOfferDto implements Serializable {
@@ -24,7 +23,7 @@ public class OrderForOfferDto implements Serializable {
         return orderItems;
     }
 
-    public void setOrderItems(HashMap<MedicineDto, Integer> orderItems) {
+    public void setOrderItems(Map<MedicineDto, Integer> orderItems) {
         this.orderItems = orderItems;
     }
 
