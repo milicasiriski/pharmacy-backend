@@ -49,4 +49,11 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         result.setTime(date);
         return result;
     }
+
+    private TimeInterval createTimeInterval(Date dateTime, int duration) {
+        Calendar start = getCalendarFromDate(dateTime);
+        Calendar end = getCalendarFromDate(dateTime);
+        end.add(Calendar.MINUTE, duration);
+        return new TimeInterval(start, end);
+    }
 }
