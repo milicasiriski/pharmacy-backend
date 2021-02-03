@@ -81,13 +81,13 @@ INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (2, '2021-06-
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (3, '2021-07-16 00:00:00', 11);
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (4, '2021-08-16 00:00:00', 11);
 
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 5, 1);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 6, 2);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 7, 3);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 7, 3);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 7, 4);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 8, 4);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (2, 8, 4);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 3, 1);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 2, 2);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 3, 3);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 2, 3);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 3, 4);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 2, 4);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (2, 3, 4);
 
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 8, 4);
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 5, 1);

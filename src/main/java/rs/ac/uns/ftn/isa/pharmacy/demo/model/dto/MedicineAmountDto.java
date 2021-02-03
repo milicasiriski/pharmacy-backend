@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import java.util.Objects;
 
 public class MedicineAmountDto {
     private String medicineName;

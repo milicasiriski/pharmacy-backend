@@ -25,15 +25,13 @@ public class LogInServiceImpl implements LogInService {
 
     private final TokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
-    private final UserCredentialsService userCredentialsService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserCredentialsService userCredentialsService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public LogInServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.tokenUtils = tokenUtils;
         this.authenticationManager = authenticationManager;
-        this.userCredentialsService = userCredentialsService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -51,8 +49,6 @@ public class LogInServiceImpl implements LogInService {
         }
 
         if (!passwordEncoder.matches(authenticationRequest.getOldPassword(), user.getPassword())) {
-            System.out.println(user.getPassword());
-            System.out.println(authenticationRequest.getOldPassword());
             throw new BadPasswordException();
         }
         if (isValidType(user)) {

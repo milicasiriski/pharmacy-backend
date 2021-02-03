@@ -31,7 +31,6 @@ public class LoginController {
         try {
             return new ResponseEntity<>(logInService.firstLogInPasswordChange(authenticationRequest), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
