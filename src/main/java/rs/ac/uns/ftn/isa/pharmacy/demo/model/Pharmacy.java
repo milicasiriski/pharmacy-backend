@@ -21,6 +21,12 @@ public class Pharmacy {
     @Column(name = "about")
     private String about;
 
+    @Column(name = "pharmacist_exam_price")
+    private Double pharmacistExamPrice;
+
+    @Column(name = "pharmacist_exam_duration")
+    private Integer pharmacistExamDuration;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dermatologist_employment_mapping",
             joinColumns = {@JoinColumn(name = "pharmacy_id", referencedColumnName = "id")},
@@ -79,10 +85,12 @@ public class Pharmacy {
         this.examPriceList = new HashMap<>();
     }
 
-    public Pharmacy(String name, Address address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<Patient> subscribers, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
+    public Pharmacy(String name, Address address, String about, Double pharmacistExamPrice, Integer pharmacistExamDuration, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, Double rating, List<Patient> subscribers) {
         this.name = name;
         this.address = address;
         this.about = about;
+        this.pharmacistExamPrice = pharmacistExamPrice;
+        this.pharmacistExamDuration = pharmacistExamDuration;
         this.dermatologists = dermatologists;
         this.pharmacists = pharmacists;
         this.subscribers = subscribers;
@@ -195,6 +203,22 @@ public class Pharmacy {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public Double getPharmacistExamPrice() {
+        return pharmacistExamPrice;
+    }
+
+    public void setPharmacistExamPrice(Double pharmacistExamPrice) {
+        this.pharmacistExamPrice = pharmacistExamPrice;
+    }
+
+    public Integer getPharmacistExamDuration() {
+        return pharmacistExamDuration;
+    }
+
+    public void setPharmacistExamDuration(Integer pharmacistExamDuration) {
+        this.pharmacistExamDuration = pharmacistExamDuration;
     }
 
     public List<Patient> getSubscribers() {
