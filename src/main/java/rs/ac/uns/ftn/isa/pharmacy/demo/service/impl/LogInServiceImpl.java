@@ -18,7 +18,6 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LogInService;
-import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserCredentialsService;
 
 @Service
 public class LogInServiceImpl implements LogInService {
