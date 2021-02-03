@@ -34,10 +34,10 @@ public class PromotionController {
 
     @PutMapping("/subscribe/{id}")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
-    public ResponseEntity<Boolean> subscribeOrUnsubscribe(@PathVariable String id) {
+    public ResponseEntity<Boolean> updateSubscription(@PathVariable String id) {
         try {
             Long pharmacyId = Long.valueOf(id);
-            Boolean subscribed = promotionService.subscribeOrUnsubscribe(pharmacyId);
+            Boolean subscribed = promotionService.updateSubscription(pharmacyId);
             return new ResponseEntity<>(subscribed, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
