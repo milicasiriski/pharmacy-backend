@@ -17,7 +17,7 @@ public interface VacationConverter {
         vacationTimeRequestPharmacists.forEach(vacation -> {
             String vacationInterval = formatVacationTime(vacation.getRequestedTimeForVacation());
             VacationDto vacationDto = new VacationDto(vacation.getId(), vacation.getPharmacist().getName(), vacation.getPharmacist().getSurname(),
-                    vacationInterval, "Pharmacist", vacation.isApproved(), vacation.getRejectedReason(), vacation.getStatus());
+                    vacationInterval, "Pharmacist", vacation.getRejectedReason(), vacation.getStatus().label);
             vacationDtos.add(vacationDto);
         });
         return vacationDtos;
@@ -28,7 +28,7 @@ public interface VacationConverter {
         vacationTimeRequestDermatologists.forEach(vacation -> {
             String vacationInterval = formatVacationTime(vacation.getRequestedTimeForVacation());
             VacationDto vacationDto = new VacationDto(vacation.getId(), vacation.getDermatologist().getName(), vacation.getDermatologist().getSurname(),
-                    vacationInterval, "Pharmacist", vacation.isApproved(), vacation.getRejectedReason(), vacation.getStatus());
+                    vacationInterval, "Dermatologist", vacation.getRejectedReason(), vacation.getStatus().label);
             vacationDtos.add(vacationDto);
         });
         return vacationDtos;

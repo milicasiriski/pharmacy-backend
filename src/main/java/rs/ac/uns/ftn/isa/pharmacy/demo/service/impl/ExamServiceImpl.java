@@ -5,12 +5,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsNotInShiftIntervalException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
@@ -28,9 +32,12 @@ public class ExamServiceImpl implements ExamService {
     private final PharmacyRepository pharmacyRepository;
     private final ExamRepository examRepository;
     private final MailService<TimeInterval> mailService;
+    private final DermatologistVacationRepository dermatologistVacationRepository;
 
     @Autowired
-    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService<TimeInterval> mailService) {
+    public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository,
+                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository) {
+        this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
@@ -38,15 +45,42 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) {
-        Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), generateExamTimeInterval(pharmacyAdminExamDto));
-        Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(Long.parseLong(pharmacyAdminExamDto.getDermatologistId()));
+    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException {
+        Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(pharmacyAdminExamDto.getDermatologistId());
 
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal()).getId());
+
         Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
         Employment employment = dermatologists.get(dermatologist);
 
+        Map<DaysOfWeek, TimeInterval> shifts = employment.getShifts();
+        TimeInterval examTimeInterval = generateExamTimeInterval(pharmacyAdminExamDto);
+
+        String dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(examTimeInterval.getStart().get(Calendar.DAY_OF_WEEK)).label;
+        TimeInterval shiftForDayOfWeek = shifts.get(DaysOfWeek.valueOf(dayOfWeek.toUpperCase()));
+        TimeInterval examShiftTimeInterval = getIntervalForShiftCompare(examTimeInterval, shiftForDayOfWeek);
+
+        if (!examShiftTimeInterval.isInside(shiftForDayOfWeek)) {
+            throw new ExamIntervalIsNotInShiftIntervalException();
+        }
+
+        employment.getExams().forEach(exam -> {
+            if (examTimeInterval.isOverlapping(exam.getTimeInterval())) {
+                throw new ExamIntervalIsOverlapping();
+            }
+        });
+
+        Iterable<VacationTimeRequestDermatologist> vacationTimes =
+                dermatologistVacationRepository.findApprovedVacationsByDermatologistId(pharmacyAdminExamDto.getDermatologistId());
+
+        vacationTimes.forEach(vacationTime -> {
+            if (examTimeInterval.isOverlapping(vacationTime.getRequestedTimeForVacation())) {
+                throw new ExamIntervalIsOverlapping();
+            }
+        });
+
+        Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), examTimeInterval);
         employment.getExams().add(exam);
         pharmacyRepository.save(pharmacy);
     }
@@ -111,6 +145,28 @@ public class ExamServiceImpl implements ExamService {
         }
     }
 
+    private TimeInterval getIntervalForShiftCompare(TimeInterval timeInterval, TimeInterval shiftForDayOfWeek) {
+        Calendar examStart = Calendar.getInstance();
+        examStart.set(Calendar.YEAR, shiftForDayOfWeek.getStart().get(Calendar.YEAR));
+        examStart.set(Calendar.MONTH, shiftForDayOfWeek.getStart().get(Calendar.MONTH));
+        examStart.set(Calendar.DAY_OF_MONTH, shiftForDayOfWeek.getStart().get(Calendar.DAY_OF_MONTH));
+        examStart.set(Calendar.HOUR_OF_DAY, timeInterval.getStart().get(Calendar.HOUR_OF_DAY));
+        examStart.set(Calendar.MINUTE, timeInterval.getStart().get(Calendar.MINUTE));
+        examStart.set(Calendar.SECOND, timeInterval.getStart().get(Calendar.SECOND));
+        examStart.set(Calendar.MILLISECOND, 0);
+
+        Calendar examEnd = Calendar.getInstance();
+        examEnd.set(Calendar.YEAR, shiftForDayOfWeek.getStart().get(Calendar.YEAR));
+        examEnd.set(Calendar.MONTH, shiftForDayOfWeek.getStart().get(Calendar.MONTH));
+        examEnd.set(Calendar.DAY_OF_MONTH, shiftForDayOfWeek.getStart().get(Calendar.DAY_OF_MONTH));
+        examEnd.set(Calendar.HOUR_OF_DAY, timeInterval.getEnd().get(Calendar.HOUR_OF_DAY));
+        examEnd.set(Calendar.MINUTE, timeInterval.getEnd().get(Calendar.MINUTE));
+        examEnd.set(Calendar.SECOND, timeInterval.getEnd().get(Calendar.SECOND));
+        examEnd.set(Calendar.MILLISECOND, 0);
+
+        return new TimeInterval(examStart, examEnd);
+    }
+
     private void sortExams(List<ExamAndDermatologistDto> exams, ExamSortType sortType) {
         switch (sortType) {
             case PRICE_ASC:
@@ -157,10 +213,11 @@ public class ExamServiceImpl implements ExamService {
         examEnd.set(Calendar.YEAR, examStart.get(Calendar.YEAR));
         examEnd.set(Calendar.MONTH, examStart.get(Calendar.MONTH));
         examEnd.set(Calendar.DAY_OF_MONTH, examStart.get(Calendar.DAY_OF_MONTH));
-        examEnd.set(Calendar.HOUR, examStart.get(Calendar.HOUR));
+        examEnd.set(Calendar.HOUR_OF_DAY, examStart.get(Calendar.HOUR_OF_DAY));
         examEnd.set(Calendar.MINUTE, examStart.get(Calendar.MINUTE));
         examEnd.set(Calendar.SECOND, examStart.get(Calendar.SECOND));
         examEnd.add(Calendar.MINUTE, pharmacyAdminExamDto.getDuration());
+        examEnd.set(Calendar.MILLISECOND, 0);
 
         return new TimeInterval(examStart, examEnd);
     }

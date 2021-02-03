@@ -1,23 +1,23 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 public class VacationTimeResponseEmailParams {
-    private boolean approved;
+    private String status;
     private String reason;
 
     public VacationTimeResponseEmailParams() {
     }
 
-    public VacationTimeResponseEmailParams(boolean approved, String reason) {
-        this.approved = approved;
+    public VacationTimeResponseEmailParams(String status, String reason) {
+        this.status = status;
         this.reason = reason;
     }
 
-    public boolean isApproved() {
-        return approved;
+    public String getStatus() {
+        return status;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getReason() {

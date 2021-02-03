@@ -105,10 +105,10 @@ INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('4', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('6', '9');
 
-INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (1, false, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', 'Waiting for response');
-INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (2, false, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', 'Waiting for response');
-INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (3, false, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', 'Waiting for response');
-INSERT INTO vacation_time_request(id, approved, rejected_reason, time_end, time_start, status) VALUES (4, false, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', 'Waiting for response');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (1, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', '2');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (2, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', '2');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (3, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', '2');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (4, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', '2');
 
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
@@ -129,6 +129,8 @@ INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 12:00:00', '1970-01-01 08:00:00', '2');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 09:00:00', '3');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '4');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '5');
+INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '6');
 
 INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '1', '4');
 INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '2', '5');

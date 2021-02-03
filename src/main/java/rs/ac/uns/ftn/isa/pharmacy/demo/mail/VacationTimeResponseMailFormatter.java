@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.mail;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.VacationTimeResponseEmailParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
 
 public class VacationTimeResponseMailFormatter implements MailFormatter<VacationTimeResponseEmailParams> {
     private static final String APPROVED_TEXT = "Your vacation time request has been approved!";
@@ -8,7 +9,7 @@ public class VacationTimeResponseMailFormatter implements MailFormatter<Vacation
     @Override
     public String getText(VacationTimeResponseEmailParams params) {
         String message = "";
-        if (params.isApproved())
+        if (params.getStatus().equals(VacationStatus.APPROVED.label.toUpperCase()))
             message = APPROVED_TEXT;
         else
             message = getDeclinedText(params.getReason());

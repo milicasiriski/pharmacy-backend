@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class VacationDto implements Serializable {
 
@@ -10,38 +9,20 @@ public class VacationDto implements Serializable {
     private String surname;
     private String vacationInterval;
     private String role;
-    private boolean approved;
     private String reason;
     private String status;
 
     public VacationDto() {
     }
 
-    public VacationDto(Long id, String name, String surname, String vacationInterval, String role, boolean approved, String reason, String status) {
+    public VacationDto(Long id, String name, String surname, String vacationInterval, String role, String reason, String status) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.vacationInterval = vacationInterval;
         this.role = role;
-        this.approved = approved;
         this.reason = reason;
         this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
     }
 
     public Long getId() {
@@ -50,14 +31,6 @@ public class VacationDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
     }
 
     public String getName() {
@@ -92,36 +65,19 @@ public class VacationDto implements Serializable {
         this.role = role;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        VacationDto that = (VacationDto) o;
-        return approved == that.approved &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(surname, that.surname) &&
-                Objects.equals(vacationInterval, that.vacationInterval) &&
-                Objects.equals(role, that.role) &&
-                Objects.equals(reason, that.reason) &&
-                Objects.equals(status, that.status);
+    public String getReason() {
+        return reason;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, surname, vacationInterval, role, approved, reason, status);
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    @Override
-    public String toString() {
-        return "VacationDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", vacationInterval='" + vacationInterval + '\'' +
-                ", role='" + role + '\'' +
-                ", approved=" + approved +
-                ", reason='" + reason + '\'' +
-                '}';
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
