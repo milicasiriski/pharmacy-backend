@@ -27,13 +27,13 @@ public class Patient extends User {
     private String activationCode;
 
     @Column(name = "patient_penalty_points")
-    private Integer penaltyPoints;
+    private int penaltyPoints;
 
     public Patient() {
         super();
     }
 
-    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber, Integer penaltyPoints) {
+    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber, int penaltyPoints) {
         super(email, password, name, surname);
         this.name = name;
         this.surname = surname;

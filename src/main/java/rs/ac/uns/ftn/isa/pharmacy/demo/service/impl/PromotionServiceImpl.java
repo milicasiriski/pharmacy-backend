@@ -51,7 +51,7 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public boolean subscribeOrUnsubscribe(Long pharmacyId) {
+    public boolean updateSubscription(Long pharmacyId) {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Patient> subscribers = patientRepository.findSubscribersByPharmacyId(pharmacyId);
         boolean subscribed;
@@ -83,7 +83,6 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public boolean isSubscribed(Long pharmacyId) {
-        System.out.println(pharmacyId);
         List<Long> ids = patientRepository.findSubscribersIdsByPharmacyId(pharmacyId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ids.contains(user.getId());
