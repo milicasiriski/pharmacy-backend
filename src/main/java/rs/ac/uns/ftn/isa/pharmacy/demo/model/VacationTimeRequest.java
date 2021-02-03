@@ -32,7 +32,7 @@ public abstract class VacationTimeRequest {
 
     }
 
-    public VacationTimeRequest(TimeInterval requestedTimeForVacation, VacationStatus status, String rejectedReason) {
+    protected VacationTimeRequest(TimeInterval requestedTimeForVacation, VacationStatus status, String rejectedReason) {
         this.requestedTimeForVacation = requestedTimeForVacation;
         this.status = status;
         this.rejectedReason = rejectedReason;

@@ -9,7 +9,7 @@ public class VacationTimeResponseMailFormatter implements MailFormatter<Vacation
     @Override
     public String getText(VacationTimeResponseEmailParams params) {
         String message = "";
-        if (params.getStatus().equals(VacationStatus.APPROVED.label.toUpperCase()))
+        if (params.getStatus().equalsIgnoreCase(VacationStatus.APPROVED.label))
             message = APPROVED_TEXT;
         else
             message = getDeclinedText(params.getReason());

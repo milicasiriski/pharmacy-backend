@@ -41,7 +41,7 @@ public class ExamController {
 
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @DeleteMapping("/delete/{examId}")
-    public ResponseEntity<String> deleteReservation(@PathVariable("examId") Long examId) {
+    public ResponseEntity<String> deleteExam(@PathVariable("examId") Long examId) {
         try {
             examService.deleteExam(examId);
             return new ResponseEntity<>(HttpStatus.OK);
