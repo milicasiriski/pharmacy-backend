@@ -35,6 +35,13 @@ public class Pharmacy {
             inverseJoinColumns = {@JoinColumn(name = "pharmacist_id")})
     private List<Pharmacist> pharmacists;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "pharmacy_subscribers",
+            joinColumns = {@JoinColumn(name = "pharmacy_id")},
+            inverseJoinColumns = {@JoinColumn(name = "patient_id")})
+    private List<Patient> subscribers;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pharmacy_id")
     private List<PharmacyAdmin> pharmacyAdmins;
@@ -72,12 +79,13 @@ public class Pharmacy {
         this.examPriceList = new HashMap<>();
     }
 
-    public Pharmacy(String name, Address address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
+    public Pharmacy(String name, Address address, String about, Map<Dermatologist, Employment> dermatologists, List<Pharmacist> pharmacists, List<Patient> subscribers, List<PharmacyAdmin> pharmacyAdmins, List<Promotion> pharmacyPromotions, Map<Medicine, MedicineStatus> medicine, Map<Exam, Double> examPriceList, double rating) {
         this.name = name;
         this.address = address;
         this.about = about;
         this.dermatologists = dermatologists;
         this.pharmacists = pharmacists;
+        this.subscribers = subscribers;
         this.pharmacyAdmins = pharmacyAdmins;
         this.pharmacyPromotions = pharmacyPromotions;
         this.medicine = medicine;
@@ -189,6 +197,14 @@ public class Pharmacy {
         this.rating = rating;
     }
 
+    public List<Patient> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<Patient> subscribers) {
+        this.subscribers = subscribers;
+    }
+
     public double getCurrentMedicinePrice(Medicine medicine) {
         List<MedicinePriceListItem> prices = this.medicine.get(medicine).getPrices();
         return currentPrice(prices);
@@ -212,21 +228,40 @@ public class Pharmacy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pharmacy pharmacy = (Pharmacy) o;
-        return Double.compare(pharmacy.rating, rating) == 0 &&
-                Objects.equals(id, pharmacy.id) &&
+        return Objects.equals(id, pharmacy.id) &&
                 Objects.equals(name, pharmacy.name) &&
                 Objects.equals(address, pharmacy.address) &&
                 Objects.equals(about, pharmacy.about) &&
                 Objects.equals(dermatologists, pharmacy.dermatologists) &&
                 Objects.equals(pharmacists, pharmacy.pharmacists) &&
+                Objects.equals(subscribers, pharmacy.subscribers) &&
                 Objects.equals(pharmacyAdmins, pharmacy.pharmacyAdmins) &&
                 Objects.equals(pharmacyPromotions, pharmacy.pharmacyPromotions) &&
                 Objects.equals(medicine, pharmacy.medicine) &&
-                Objects.equals(examPriceList, pharmacy.examPriceList);
+                Objects.equals(examPriceList, pharmacy.examPriceList) &&
+                Objects.equals(rating, pharmacy.rating);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, address);
+    }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address=" + address +
+                ", about='" + about + '\'' +
+                ", dermatologists=" + dermatologists +
+                ", pharmacists=" + pharmacists +
+                ", subscribers=" + subscribers +
+                ", pharmacyAdmins=" + pharmacyAdmins +
+                ", pharmacyPromotions=" + pharmacyPromotions +
+                ", medicine=" + medicine +
+                ", examPriceList=" + examPriceList +
+                ", rating=" + rating +
+                '}';
     }
 }
