@@ -72,16 +72,20 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, pharmacy_id) VALUES ('12', 'PHARMACY_ADMIN', 'pharmacyisa6+admin3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 6);
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('13', 'SUPPLIER', 'pharmacyisa6+supplier1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('14', 'SUPPLIER', 'pharmacyisa7+supplier2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('15', 'SUPPLIER', 'pharmacyisa8+supplier1@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
-INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('16', 'SUPPLIER', 'pharmacyisa9+supplier2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('14', 'SUPPLIER', 'pharmacyisa6+supplier2@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('15', 'SUPPLIER', 'pharmacyisa6+supplier3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('16', 'SUPPLIER', 'pharmacyisa6+supplier4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
 
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (1, '2021-06-16 00:00:00', 10);
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (2, '2021-06-16 00:00:00', 11);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (3, '2021-07-16 00:00:00', 11);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (4, '2021-08-16 00:00:00', 11);
 
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 5, 1);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 6, 2);
-INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 7, 3);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 5, 1);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 6, 2);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 7, 3);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 7, 3);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 7, 4);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 8, 4);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (2, 8, 4);
 
@@ -91,6 +95,8 @@ INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id)
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 3, 3);
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 91, 5);
 
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (1, 100, 10, 0, 1, 13);
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (2, 100, 20, 0, 2, 13);
 
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES ('2', '7');
