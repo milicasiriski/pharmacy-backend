@@ -2,6 +2,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
@@ -12,6 +14,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
@@ -20,11 +23,13 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     private final PharmacistRepository pharmacistRepository;
     private final PharmacistVacationRepository pharmacistVacationRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final MailService<TimeInterval> mailService;
 
-    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository) {
+    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository, MailService<TimeInterval> mailService) {
         this.pharmacistRepository = pharmacistRepository;
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -64,7 +69,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
-    public void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws EntityNotFoundException, ExamAlreadyScheduledException {
+    public void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws EntityNotFoundException, ExamAlreadyScheduledException, MessagingException {
         Pharmacist pharmacist = getPharmacistById(params.getPharmacistId());
         Pharmacy pharmacy = pharmacist.getPharmacy();
         Calendar start = getCalendarFromDate(params.getDateTime());
@@ -77,7 +82,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         pharmacist.addExam(exam);
         pharmacistRepository.save(pharmacist);
 
-        // TODO: send a confirmation email
+        mailService.sendMail(patient.getEmail(), appointment, new ExamConfirmationMailFormatter());
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {

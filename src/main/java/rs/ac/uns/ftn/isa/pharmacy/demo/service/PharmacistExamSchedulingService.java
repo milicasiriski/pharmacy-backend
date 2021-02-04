@@ -7,6 +7,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 
 public interface PharmacistExamSchedulingService {
@@ -14,5 +15,5 @@ public interface PharmacistExamSchedulingService {
 
     Iterable<Pharmacist> getPharmacistsWithAvailableAppointments(Date dateTime, long pharmacyId, PharmacistSortType sortType);
 
-    void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient);
+    void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws MessagingException;
 }
