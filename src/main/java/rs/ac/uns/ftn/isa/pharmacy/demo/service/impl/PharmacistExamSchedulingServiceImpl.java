@@ -5,24 +5,28 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
 public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedulingService {
     private final PharmacistRepository pharmacistRepository;
     private final PharmacistVacationRepository pharmacistVacationRepository;
+    private final PharmacyRepository pharmacyRepository;
 
-    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository) {
+    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository) {
         this.pharmacistRepository = pharmacistRepository;
         this.pharmacistVacationRepository = pharmacistVacationRepository;
+        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override
     public Iterable<Pharmacy> getPharmaciesWithAvailableAppointments(Date dateTime, PharmacySortType sortType) {
-        Iterable<Pharmacist> pharmacists = pharmacistRepository.getAll();
+        Iterable<Pharmacist> pharmacists = pharmacistRepository.findAll();
         List<Pharmacy> pharmacies = new ArrayList<>();
 
         pharmacists.forEach(pharmacist -> {
@@ -37,6 +41,22 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         sortPharmacies(pharmacies, sortType);
 
         return pharmacies;
+    }
+
+    @Override
+    public Iterable<Pharmacist> getPharmacistsWithAvailableAppointments(Date dateTime, long pharmacyId) {
+        Pharmacy pharmacy = getPharmacyById(pharmacyId);
+        TimeInterval appointment = new TimeInterval(getCalendarFromDate(dateTime), pharmacy.getPharmacistExamDuration());
+
+        List<Pharmacist> result = new ArrayList<>();
+        Iterable<Pharmacist> pharmacists = pharmacistRepository.findByPharmacyId(pharmacyId);
+        pharmacists.forEach(pharmacist -> {
+            if (isAppointmentAvailable(appointment, pharmacist)) {
+                result.add(pharmacist);
+            }
+        });
+
+        return result;
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {
@@ -91,5 +111,14 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         Calendar result = Calendar.getInstance();
         result.setTime(date);
         return result;
+    }
+
+    private Pharmacy getPharmacyById(Long id) throws EntityNotFoundException {
+        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(id);
+        if (optionalPharmacy.isPresent()) {
+            return optionalPharmacy.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }
