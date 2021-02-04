@@ -106,9 +106,9 @@ public class Pharmacy {
     }
 
     public void addMedicinesOnStock(Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
-        medicineAmount.keySet().forEach(medicine -> {
-            if (this.getMedicine().containsKey(medicine)) {
-                this.getMedicine().get(medicine).addMedicineAmount(medicineAmount.get(medicine));
+        medicineAmount.keySet().forEach(m -> {
+            if (this.getMedicine().containsKey(m)) {
+                this.getMedicine().get(m).addMedicineAmount(medicineAmount.get(m));
             } else {
                 throw new EntityNotFoundException();
             }
