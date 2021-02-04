@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 public class PromotionDto implements Serializable {
 
