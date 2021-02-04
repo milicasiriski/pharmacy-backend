@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,14 +23,19 @@ public class Pharmacist extends User {
     @MapKeyColumn(name = "day_of_week")
     private Map<DaysOfWeek, TimeInterval> shifts;
 
+    @OneToMany(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "pharmacist_id")
+    List<Exam> exams;
+
     public Pharmacist() {
         super();
     }
 
-    public Pharmacist(String email, String password, String name, String surname, Pharmacy pharmacy, Map<DaysOfWeek, TimeInterval> shifts) {
+    public Pharmacist(String email, String password, String name, String surname, Pharmacy pharmacy, Map<DaysOfWeek, TimeInterval> shifts, List<Exam> exams) {
         super(email, password, name, surname);
         this.pharmacy = pharmacy;
         this.shifts = shifts;
+        this.exams = exams;
     }
 
     public Pharmacy getPharmacy() {
@@ -46,6 +52,14 @@ public class Pharmacist extends User {
 
     public void setShifts(Map<DaysOfWeek, TimeInterval> shifts) {
         this.shifts = shifts;
+    }
+
+    public List<Exam> getExams() {
+        return exams;
+    }
+
+    public void setExams(List<Exam> exams) {
+        this.exams = exams;
     }
 
     @Override

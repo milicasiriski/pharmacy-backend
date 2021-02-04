@@ -1,10 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.TimeInterval;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.VacationTimeRequestPharmacist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
@@ -64,8 +61,8 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     private boolean isAppointmentOverlappingWithScheduled(TimeInterval appointment, Pharmacist pharmacist) {
-        // TODO:
-        return false;
+        List<Exam> exams = pharmacist.getExams();
+        return exams.stream().anyMatch(exam -> appointment.isOverlapping(exam.getTimeInterval()));
     }
 
     private Calendar getCalendarFromDate(Date date) {
