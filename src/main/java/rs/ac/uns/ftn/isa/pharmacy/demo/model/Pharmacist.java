@@ -17,6 +17,9 @@ public class Pharmacist extends User {
     @JoinColumn(name = "pharmacy_id")
     private Pharmacy pharmacy;
 
+    @Column(name = "rating")
+    private double rating;
+
     @ElementCollection
     @CollectionTable(name = "pharmacist_shift",
             joinColumns = {@JoinColumn(name = "pharmacist_id", referencedColumnName = "id")})
@@ -31,11 +34,9 @@ public class Pharmacist extends User {
         super();
     }
 
-    public Pharmacist(String email, String password, String name, String surname, Pharmacy pharmacy, Map<DaysOfWeek, TimeInterval> shifts, List<Exam> exams) {
+    public Pharmacist(String email, String password, String name, String surname, double rating) {
         super(email, password, name, surname);
-        this.pharmacy = pharmacy;
-        this.shifts = shifts;
-        this.exams = exams;
+        this.rating = rating;
     }
 
     public Pharmacy getPharmacy() {
@@ -44,6 +45,14 @@ public class Pharmacist extends User {
 
     public void setPharmacy(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public Map<DaysOfWeek, TimeInterval> getShifts() {

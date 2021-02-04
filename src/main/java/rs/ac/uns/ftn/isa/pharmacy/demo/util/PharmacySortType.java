@@ -5,5 +5,5 @@ public enum PharmacySortType {
     PRICE_ASC,
     PRICE_DESC,
     RATING_ASC,
-    RATING_DESC,
+    RATING_DESC
 }
