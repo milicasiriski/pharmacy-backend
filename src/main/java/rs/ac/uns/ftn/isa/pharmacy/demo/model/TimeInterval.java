@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
@@ -25,6 +26,19 @@ public class TimeInterval implements Serializable {
         this.end = end;
     }
 
+    public TimeInterval(Calendar start, int durationInMinutes) {
+        this.start = start;
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.YEAR, start.get(Calendar.YEAR));
+        end.set(Calendar.MONTH, start.get(Calendar.MONTH));
+        end.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH));
+        end.set(Calendar.HOUR_OF_DAY, start.get(Calendar.HOUR_OF_DAY));
+        end.set(Calendar.MINUTE, start.get(Calendar.MINUTE) + durationInMinutes);
+        end.set(Calendar.SECOND, 0);
+        end.set(Calendar.MILLISECOND, 0);
+        this.end = end;
+    }
+
     public Calendar getStart() {
         return start;
     }
@@ -39,6 +53,10 @@ public class TimeInterval implements Serializable {
 
     public void setEnd(Calendar end) {
         this.end = end;
+    }
+
+    public int getDayOfWeek() {
+        return this.start.get(Calendar.DAY_OF_WEEK);
     }
 
     @Override
@@ -77,26 +95,26 @@ public class TimeInterval implements Serializable {
         return !this.start.before(other.start) && !this.end.after(other.end);
     }
 
-    public boolean containsTime(Calendar dateTime) {
-        Calendar normalized = getNormalizedTime(dateTime);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
-        System.out.println("---------------------------");
-        System.out.println("Normalized: " + dateFormat.format(normalized.getTime()));
-        System.out.println("---------------------------");
-        boolean isAfterStart = !normalized.before(start);
-        boolean isBeforeEnd = normalized.before(end);
-        return isAfterStart && isBeforeEnd;
+    public boolean isTimeInside(TimeInterval other) {
+        TimeInterval otherNormalized = getNormalized(other);
+        return !this.start.before(otherNormalized.start) && !this.end.after(otherNormalized.end);
     }
 
-    private Calendar getNormalizedTime(Calendar dateTime) {
+    private TimeInterval getNormalized(TimeInterval other) {
+        Calendar normalizedStart = getNormalized(other.start);
+        Calendar normalizedEnd = getNormalized(other.end);
+        return new TimeInterval(normalizedStart, normalizedEnd);
+    }
+
+    private Calendar getNormalized(Calendar time) {
         Calendar normalized = Calendar.getInstance();
         normalized.set(Calendar.YEAR, start.get(Calendar.YEAR));
         normalized.set(Calendar.MONTH, start.get(Calendar.MONTH));
         normalized.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH));
-        normalized.set(Calendar.HOUR_OF_DAY, dateTime.get(Calendar.HOUR_OF_DAY));
-        normalized.set(Calendar.MINUTE, dateTime.get(Calendar.MINUTE));
-        normalized.set(Calendar.SECOND, dateTime.get(Calendar.SECOND));
-        normalized.set(Calendar.MILLISECOND, dateTime.get(Calendar.MILLISECOND));
+        normalized.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
+        normalized.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
+        normalized.set(Calendar.SECOND, 0);
+        normalized.set(Calendar.MILLISECOND, 0);
         return normalized;
     }
 }
