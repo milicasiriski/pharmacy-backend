@@ -46,7 +46,6 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     private boolean isAppointmentInPharmacistsShift(TimeInterval appointment, Pharmacist pharmacist) {
-        // TODO: test
         DaysOfWeek dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(appointment.getDayOfWeek());
         Map<DaysOfWeek, TimeInterval> shifts = pharmacist.getShifts();
         if (!shifts.containsKey(dayOfWeek)) {
