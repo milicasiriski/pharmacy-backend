@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.VacationTimeRequestPharmacist;
 
 import java.util.Calendar;

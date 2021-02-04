@@ -3,8 +3,6 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -28,15 +26,15 @@ public class TimeInterval implements Serializable {
 
     public TimeInterval(Calendar start, int durationInMinutes) {
         this.start = start;
-        Calendar end = Calendar.getInstance();
-        end.set(Calendar.YEAR, start.get(Calendar.YEAR));
-        end.set(Calendar.MONTH, start.get(Calendar.MONTH));
-        end.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH));
-        end.set(Calendar.HOUR_OF_DAY, start.get(Calendar.HOUR_OF_DAY));
-        end.set(Calendar.MINUTE, start.get(Calendar.MINUTE) + durationInMinutes);
-        end.set(Calendar.SECOND, 0);
-        end.set(Calendar.MILLISECOND, 0);
-        this.end = end;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, start.get(Calendar.YEAR));
+        calendar.set(Calendar.MONTH, start.get(Calendar.MONTH));
+        calendar.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY, start.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, start.get(Calendar.MINUTE) + durationInMinutes);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        this.end = calendar;
     }
 
     public Calendar getStart() {
