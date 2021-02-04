@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
-    public Iterable<Pharmacy> getPharmaciesWithAvailableAppointments(Date dateTime) {
+    public Iterable<Pharmacy> getPharmaciesWithAvailableAppointments(Date dateTime, PharmacySortType sortType) {
         Iterable<Pharmacist> pharmacists = pharmacistRepository.getAll();
         List<Pharmacy> pharmacies = new ArrayList<>();
 
@@ -33,8 +34,29 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
                 pharmacies.add(pharmacy);
             }
         });
+        sortPharmacies(pharmacies, sortType);
 
         return pharmacies;
+    }
+
+    private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {
+        switch (sortType) {
+            case PRICE_ASC:
+                pharmacies.sort(Comparator.comparingDouble(Pharmacy::getPharmacistExamPrice));
+                break;
+            case PRICE_DESC:
+                Comparator<Pharmacy> comparatorPrice = Comparator.comparingDouble(Pharmacy::getPharmacistExamPrice);
+                pharmacies.sort(comparatorPrice.reversed());
+                break;
+            case RATING_ASC:
+                pharmacies.sort(Comparator.comparingDouble(Pharmacy::getRating));
+                break;
+            case RATING_DESC:
+                Comparator<Pharmacy> comparatorRating = Comparator.comparingDouble(Pharmacy::getRating);
+                pharmacies.sort(comparatorRating.reversed());
+                break;
+            default:
+        }
     }
 
     private boolean isAppointmentAvailable(TimeInterval appointment, Pharmacist pharmacist) {

@@ -27,7 +27,7 @@ public class GetPharmaciesForPharmacistExamResponse implements Serializable {
         this.name = pharmacy.getName();
         this.address = pharmacy.getAddress().getCity() + ", " + pharmacy.getAddress().getStreet();
         this.rating = pharmacy.getRating();
-        this.price = 0.0; // TODO: add pharmacist exam price to pharmacy model
+        this.price = pharmacy.getPharmacistExamPrice();
     }
 
     public Long getId() {
