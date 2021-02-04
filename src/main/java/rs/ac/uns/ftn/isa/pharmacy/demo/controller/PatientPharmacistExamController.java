@@ -4,16 +4,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmaciesForPharmacistExamResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExamResponse;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +27,21 @@ public class PatientPharmacistExamController {
 
     public PatientPharmacistExamController(PharmacistExamSchedulingService pharmacistExamSchedulingService) {
         this.pharmacistExamSchedulingService = pharmacistExamSchedulingService;
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PostMapping("/")
+    public ResponseEntity<String> scheduleAppointment(@RequestBody SchedulePharmacistExamParams params) {
+        try {
+            pharmacistExamSchedulingService.scheduleAppointment(params, getSignedInUser());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Selected pharmacist does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (ExamAlreadyScheduledException e) {
+            return new ResponseEntity<>("Appointment is no longer available, please try again!", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
@@ -85,5 +102,9 @@ public class PatientPharmacistExamController {
                 result.add(new GetPharmacistsForPharmacistExamResponse(pharmacist))
         );
         return result;
+    }
+
+    private Patient getSignedInUser() {
+        return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

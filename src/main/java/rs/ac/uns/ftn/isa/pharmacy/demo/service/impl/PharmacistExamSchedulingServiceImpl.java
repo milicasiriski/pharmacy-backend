@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
@@ -59,6 +61,23 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         sortPharmacists(result, sortType);
 
         return result;
+    }
+
+    @Override
+    public void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws EntityNotFoundException, ExamAlreadyScheduledException {
+        Pharmacist pharmacist = getPharmacistById(params.getPharmacistId());
+        Pharmacy pharmacy = pharmacist.getPharmacy();
+        Calendar start = getCalendarFromDate(params.getDateTime());
+        TimeInterval appointment = new TimeInterval(start, pharmacy.getPharmacistExamDuration());
+        if (!isAppointmentAvailable(appointment, pharmacist)) {
+            throw new ExamAlreadyScheduledException();
+        }
+
+        Exam exam = new Exam(pharmacy.getPharmacistExamPrice(), appointment, patient);
+        pharmacist.addExam(exam);
+        pharmacistRepository.save(pharmacist);
+
+        // TODO: send a confirmation email
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {
@@ -132,6 +151,15 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(id);
         if (optionalPharmacy.isPresent()) {
             return optionalPharmacy.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    private Pharmacist getPharmacistById(Long id) throws EntityNotFoundException {
+        Optional<Pharmacist> optionalPharmacist = pharmacistRepository.findById(id);
+        if (optionalPharmacist.isPresent()) {
+            return optionalPharmacist.get();
         } else {
             throw new EntityNotFoundException();
         }
