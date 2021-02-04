@@ -24,36 +24,51 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     @Override
     public Iterable<Pharmacy> getPharmaciesWithAvailableAppointments(Date dateTime) {
         Iterable<Pharmacist> pharmacists = pharmacistRepository.getAll();
-        Calendar start = getCalendarFromDate(dateTime);
         List<Pharmacy> pharmacies = new ArrayList<>();
 
         pharmacists.forEach(pharmacist -> {
-            // TODO: get exam duration and check if the end is in time interval
-            DaysOfWeek dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(start.get(Calendar.DAY_OF_WEEK));
-            Map<DaysOfWeek, TimeInterval> shifts = pharmacist.getShifts();
+            Pharmacy pharmacy = pharmacist.getPharmacy();
+            int duration = pharmacy.getPharmacistExamDuration();
+            TimeInterval appointment = new TimeInterval(getCalendarFromDate(dateTime), duration);
 
-            if (shifts.containsKey(dayOfWeek)) {
-                TimeInterval shift = shifts.get(dayOfWeek);
-                Pharmacy pharmacy = pharmacist.getPharmacy();
-                if (shift.containsTime(start) && !pharmacies.contains(pharmacy)) {
-                    pharmacies.add(pharmacy);
-                }
+            if (isAppointmentAvailable(appointment, pharmacist) && !pharmacies.contains(pharmacy)) {
+                pharmacies.add(pharmacy);
             }
         });
 
         return pharmacies;
     }
 
+    private boolean isAppointmentAvailable(TimeInterval appointment, Pharmacist pharmacist) {
+        return isAppointmentInPharmacistsShift(appointment, pharmacist) &&
+                !isAppointmentOnPharmacistsVacation(appointment, pharmacist) &&
+                !isAppointmentOverlappingWithScheduled(appointment, pharmacist);
+    }
+
+    private boolean isAppointmentInPharmacistsShift(TimeInterval appointment, Pharmacist pharmacist) {
+        // TODO: test
+        DaysOfWeek dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(appointment.getDayOfWeek());
+        Map<DaysOfWeek, TimeInterval> shifts = pharmacist.getShifts();
+        if (!shifts.containsKey(dayOfWeek)) {
+            return false;
+        }
+        TimeInterval shift = shifts.get(dayOfWeek);
+        return appointment.isTimeInside(shift);
+    }
+
+    private boolean isAppointmentOnPharmacistsVacation(TimeInterval appointment, Pharmacist pharmacist) {
+        // TODO:
+        return false;
+    }
+
+    private boolean isAppointmentOverlappingWithScheduled(TimeInterval appointment, Pharmacist pharmacist) {
+        // TODO:
+        return false;
+    }
+
     private Calendar getCalendarFromDate(Date date) {
         Calendar result = Calendar.getInstance();
         result.setTime(date);
         return result;
-    }
-
-    private TimeInterval createTimeInterval(Date dateTime, int duration) {
-        Calendar start = getCalendarFromDate(dateTime);
-        Calendar end = getCalendarFromDate(dateTime);
-        end.add(Calendar.MINUTE, duration);
-        return new TimeInterval(start, end);
     }
 }
