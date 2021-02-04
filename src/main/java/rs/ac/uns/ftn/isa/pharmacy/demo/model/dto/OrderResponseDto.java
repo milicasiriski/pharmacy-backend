@@ -13,10 +13,11 @@ public class OrderResponseDto {
 
     }
 
-    public OrderResponseDto(String deadlineString, List<MedicineAmountDto> medicineAmount, Long adminId) {
+    public OrderResponseDto(String deadlineString, List<MedicineAmountDto> medicineAmount, Long adminId, Long id) {
         this.deadlineString = deadlineString;
         this.medicineAmount = medicineAmount;
         this.adminId = adminId;
+        this.id = id;
     }
 
     public String getDeadlineString() {

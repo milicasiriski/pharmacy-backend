@@ -139,14 +139,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     private void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
-        medicineAmount.keySet().forEach(medicine -> {
-            if (pharmacy.getMedicine().containsKey(medicine)) {
-                int stock = pharmacy.getMedicine().get(medicine).getStock() + medicineAmount.get(medicine);
-                pharmacy.getMedicine().get(medicine).setStock(stock);
-            } else {
-                throw new EntityNotFoundException();
-            }
-        });
+        pharmacy.addMedicinesOnStock(medicineAmount);
         pharmacyRepository.save(pharmacy);
     }
 

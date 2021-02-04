@@ -29,6 +29,10 @@ public class MedicineStatus {
         this.prices = prices;
     }
 
+    public void addMedicineAmount(int stock) {
+        this.stock += stock;
+    }
+
     public Long getId() {
         return id;
     }

@@ -125,8 +125,7 @@ public class OrderServiceImpl implements OrderService {
 
             String strDate = dateFormat.format(order.getDeadline().getTime());
             OrderResponseDto orderResponseDto = new OrderResponseDto(strDate, medicineAmounts,
-                    ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
-            orderResponseDto.setId(order.getId());
+                    ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId(), order.getId());
             ordersDto.add(orderResponseDto);
         });
         return ordersDto;
