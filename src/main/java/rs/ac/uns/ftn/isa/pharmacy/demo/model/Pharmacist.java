@@ -26,7 +26,7 @@ public class Pharmacist extends User {
     @MapKeyColumn(name = "day_of_week")
     private Map<DaysOfWeek, TimeInterval> shifts;
 
-    @OneToMany(cascade = CascadeType.DETACH)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pharmacist_id")
     List<Exam> exams;
 
@@ -69,6 +69,10 @@ public class Pharmacist extends User {
 
     public void setExams(List<Exam> exams) {
         this.exams = exams;
+    }
+
+    public void addExam(Exam exam) {
+        exams.add(exam);
     }
 
     @Override

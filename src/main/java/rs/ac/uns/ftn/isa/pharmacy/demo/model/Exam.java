@@ -58,6 +58,12 @@ public class Exam {
         this.timeInterval = timeInterval;
     }
 
+    public Exam(double price, TimeInterval timeInterval, Patient patient) {
+        this.price = price;
+        this.timeInterval = timeInterval;
+        this.patient = patient;
+    }
+
     public Long getId() {
         return id;
     }

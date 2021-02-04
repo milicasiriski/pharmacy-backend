@@ -70,10 +70,6 @@ public class MedicineReservationController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    private Patient getSignedInUser() {
-        return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @DeleteMapping("/cancel/{medicineReservationId}")
     public ResponseEntity<String> deleteReservation(@PathVariable("medicineReservationId") Long medicineReservationId) {
@@ -92,5 +88,9 @@ public class MedicineReservationController {
     @Scheduled(cron = "${medicineReservationCleanUp.cron}")
     public void executeMedicineReservationCleanUp() {
         medicineReservationService.removeAllExpiredMedicineReservations();
+    }
+
+    private Patient getSignedInUser() {
+        return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
