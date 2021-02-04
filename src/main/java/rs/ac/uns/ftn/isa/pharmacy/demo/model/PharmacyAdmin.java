@@ -49,5 +49,4 @@ public class PharmacyAdmin extends User {
     public int hashCode() {
         return Objects.hash(super.hashCode(), administrationRole, pharmacy);
     }
-
 }

@@ -14,4 +14,6 @@ public interface OrderService {
     List<OrderForOfferDto> getNotOfferedOrders();
 
     List<OrderResponseDto> getOrdersByPharmacy();
+
+    void deleteOrder(long orderId);
 }
