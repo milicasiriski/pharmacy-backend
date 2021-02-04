@@ -34,7 +34,6 @@ public class PatientPharmacistExamController {
             Iterable<GetPharmaciesForPharmacistExamResponse> response = getPharmacies(dateTime, PharmacySortType.NONE);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -46,7 +45,6 @@ public class PatientPharmacistExamController {
             Iterable<GetPharmaciesForPharmacistExamResponse> response = getPharmacies(dateTime, sort);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -55,11 +53,20 @@ public class PatientPharmacistExamController {
     @GetMapping("/pharmacists/{pharmacyId}/{dateTime}")
     public ResponseEntity<Iterable<GetPharmacistsForPharmacistExamResponse>> getAvailablePharmacists(@PathVariable Date dateTime, @PathVariable long pharmacyId) {
         try {
-            pharmacistExamSchedulingService.getPharmacistsWithAvailableAppointments(dateTime, pharmacyId);
             Iterable<GetPharmacistsForPharmacistExamResponse> response = getPharmacists(dateTime, pharmacyId, PharmacistSortType.NONE);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/pharmacists/{pharmacyId}/{dateTime}/{sort}")
+    public ResponseEntity<Iterable<GetPharmacistsForPharmacistExamResponse>> getAvailablePharmacists(@PathVariable Date dateTime, @PathVariable long pharmacyId, @PathVariable PharmacistSortType sort) {
+        try {
+            Iterable<GetPharmacistsForPharmacistExamResponse> response = getPharmacists(dateTime, pharmacyId, sort);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -74,7 +81,7 @@ public class PatientPharmacistExamController {
 
     private Iterable<GetPharmacistsForPharmacistExamResponse> getPharmacists(Date dateTime, long pharmacyId, PharmacistSortType sort) {
         List<GetPharmacistsForPharmacistExamResponse> result = new ArrayList<>();
-        pharmacistExamSchedulingService.getPharmacistsWithAvailableAppointments(dateTime, pharmacyId).forEach(pharmacist ->
+        pharmacistExamSchedulingService.getPharmacistsWithAvailableAppointments(dateTime, pharmacyId, sort).forEach(pharmacist ->
                 result.add(new GetPharmacistsForPharmacistExamResponse(pharmacist))
         );
         return result;
