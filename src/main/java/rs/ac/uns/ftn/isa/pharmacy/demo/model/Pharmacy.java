@@ -105,6 +105,16 @@ public class Pharmacy {
         this.rating = rating;
     }
 
+    public void addMedicinesOnStock(Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
+        medicineAmount.keySet().forEach(medicine -> {
+            if (this.getMedicine().containsKey(medicine)) {
+                this.getMedicine().get(medicine).addMedicineAmount(medicineAmount.get(medicine));
+            } else {
+                throw new EntityNotFoundException();
+            }
+        });
+    }
+
     public Long getId() {
         return id;
     }
