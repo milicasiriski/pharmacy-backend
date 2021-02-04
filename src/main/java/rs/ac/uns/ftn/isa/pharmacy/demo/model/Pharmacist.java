@@ -28,7 +28,7 @@ public class Pharmacist extends User {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pharmacist_id")
-    List<Exam> exams;
+    private List<Exam> exams;
 
     public Pharmacist() {
         super();

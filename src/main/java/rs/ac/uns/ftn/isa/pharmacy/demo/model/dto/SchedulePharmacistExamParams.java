@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SchedulePharmacistExamParams implements Serializable {
