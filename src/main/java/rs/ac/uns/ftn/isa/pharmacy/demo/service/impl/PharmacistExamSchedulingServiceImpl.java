@@ -7,6 +7,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
 import javax.persistence.EntityNotFoundException;
@@ -44,7 +45,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
-    public Iterable<Pharmacist> getPharmacistsWithAvailableAppointments(Date dateTime, long pharmacyId) {
+    public Iterable<Pharmacist> getPharmacistsWithAvailableAppointments(Date dateTime, long pharmacyId, PharmacistSortType sortType) {
         Pharmacy pharmacy = getPharmacyById(pharmacyId);
         TimeInterval appointment = new TimeInterval(getCalendarFromDate(dateTime), pharmacy.getPharmacistExamDuration());
 
@@ -55,6 +56,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
                 result.add(pharmacist);
             }
         });
+        sortPharmacists(result, sortType);
 
         return result;
     }
@@ -74,6 +76,19 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
             case RATING_DESC:
                 Comparator<Pharmacy> comparatorRating = Comparator.comparingDouble(Pharmacy::getRating);
                 pharmacies.sort(comparatorRating.reversed());
+                break;
+            default:
+        }
+    }
+
+    private void sortPharmacists(List<Pharmacist> pharmcists, PharmacistSortType sortType) {
+        switch (sortType) {
+            case RATING_ASC:
+                pharmcists.sort(Comparator.comparingDouble(Pharmacist::getRating));
+                break;
+            case RATING_DESC:
+                Comparator<Pharmacist> comparatorRating = Comparator.comparingDouble(Pharmacist::getRating);
+                pharmcists.sort(comparatorRating.reversed());
                 break;
             default:
         }
