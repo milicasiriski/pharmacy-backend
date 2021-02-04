@@ -15,6 +15,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +40,8 @@ public class PatientPharmacistExamController {
             return new ResponseEntity<>("Selected pharmacist does not exist!", HttpStatus.BAD_REQUEST);
         } catch (ExamAlreadyScheduledException e) {
             return new ResponseEntity<>("Appointment is no longer available, please try again!", HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("Email could not be sent.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
