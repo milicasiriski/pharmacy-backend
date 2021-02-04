@@ -4,21 +4,22 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.TimeInterval;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.VacationTimeRequestPharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 
 import java.util.*;
 
 @Service
 public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedulingService {
-    private final PharmacyRepository pharmacyRepository;
     private final PharmacistRepository pharmacistRepository;
+    private final PharmacistVacationRepository pharmacistVacationRepository;
 
-    public PharmacistExamSchedulingServiceImpl(PharmacyRepository pharmacyRepository, PharmacistRepository pharmacistRepository) {
-        this.pharmacyRepository = pharmacyRepository;
+    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository) {
         this.pharmacistRepository = pharmacistRepository;
+        this.pharmacistVacationRepository = pharmacistVacationRepository;
     }
 
     @Override
@@ -48,6 +49,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     private boolean isAppointmentInPharmacistsShift(TimeInterval appointment, Pharmacist pharmacist) {
         DaysOfWeek dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(appointment.getDayOfWeek());
         Map<DaysOfWeek, TimeInterval> shifts = pharmacist.getShifts();
+
         if (!shifts.containsKey(dayOfWeek)) {
             return false;
         }
@@ -56,8 +58,9 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     private boolean isAppointmentOnPharmacistsVacation(TimeInterval appointment, Pharmacist pharmacist) {
-        // TODO:
-        return false;
+        Iterable<VacationTimeRequestPharmacist> vacationRequests =
+                pharmacistVacationRepository.findApprovedVacationRequestsForPharmacistOnDay(pharmacist.getId(), appointment.getStart());
+        return vacationRequests.iterator().hasNext();
     }
 
     private boolean isAppointmentOverlappingWithScheduled(TimeInterval appointment, Pharmacist pharmacist) {

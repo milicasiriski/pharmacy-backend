@@ -126,9 +126,11 @@ INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, sta
 INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (2, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', '2');
 INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (3, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', '2');
 INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (4, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', '2');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (5, '', '2021-03-10 00:00:00', '2021-02-28 00:00:00', '1');
 
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
+INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('5', '8');
 
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('3', '4', '4');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('4', '4', '4');
