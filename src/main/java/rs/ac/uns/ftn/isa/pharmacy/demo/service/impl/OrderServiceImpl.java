@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OrderHasOfferException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OtherPharmacyAdminCreatedOrderException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
@@ -90,6 +92,27 @@ public class OrderServiceImpl implements OrderService {
         return convertOrdersToOrderResponse(orderRepository.getOrdersByPharmacy(pharmacyId));
     }
 
+    @Override
+    public void deleteOrder(long orderId) throws EntityNotFoundException, OtherPharmacyAdminCreatedOrderException, OrderHasOfferException {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            throw new EntityNotFoundException();
+        }
+
+        List<Offer> offers = offerRepository.findOffersByOrder(orderId);
+        if (!offers.isEmpty()) {
+            throw new OrderHasOfferException();
+        }
+
+        if (order.getPharmacyAdmin().getId().equals(pharmacyAdmin.getId())) {
+            orderRepository.delete(order);
+        } else {
+            throw new OtherPharmacyAdminCreatedOrderException();
+        }
+    }
+
     private List<OrderResponseDto> convertOrdersToOrderResponse(List<Order> orders) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<OrderResponseDto> ordersDto = new ArrayList<>();
@@ -103,6 +126,7 @@ public class OrderServiceImpl implements OrderService {
             String strDate = dateFormat.format(order.getDeadline().getTime());
             OrderResponseDto orderResponseDto = new OrderResponseDto(strDate, medicineAmounts,
                     ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+            orderResponseDto.setId(order.getId());
             ordersDto.add(orderResponseDto);
         });
         return ordersDto;

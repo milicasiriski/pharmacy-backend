@@ -7,6 +7,7 @@ public class OrderResponseDto {
     private String deadlineString;
     private List<MedicineAmountDto> medicineAmount;
     private Long adminId;
+    private Long id;
 
     public OrderResponseDto() {
 
@@ -20,6 +21,14 @@ public class OrderResponseDto {
 
     public String getDeadlineString() {
         return deadlineString;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setDeadlineString(String deadlineString) {

@@ -14,4 +14,8 @@ public interface OfferService {
     List<OfferDto> getAllOffers();
 
     Offer updateOffer(OfferDto offerDto);
+
+    List<List<OfferDto>> getAllOffersByOrders();
+
+    void acceptOffer(Long offerId);
 }

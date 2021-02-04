@@ -7,11 +7,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OfferDeadlineHasNotExpiredException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OrderException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -74,4 +76,22 @@ public class OfferController {
         }
     }
 
+    @GetMapping("/getOffersByPharmacy")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<List<List<OfferDto>>> getOffersByOrders() {
+        return ResponseEntity.ok(offerService.getAllOffersByOrders());
+    }
+
+    @PutMapping("/acceptOffer/{offerId}")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> acceptOffer(@PathVariable("offerId") Long offerId) {
+        try {
+            offerService.acceptOffer(offerId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Offer does not exists!", HttpStatus.BAD_REQUEST);
+        } catch (OfferDeadlineHasNotExpiredException e) {
+            return new ResponseEntity<>("Deadline has not expired!", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

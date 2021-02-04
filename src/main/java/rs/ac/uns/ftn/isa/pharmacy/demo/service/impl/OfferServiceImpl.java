@@ -3,23 +3,15 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.OrderException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Offer;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Order;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Supplier;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.OfferStatus;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OfferRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.OrderRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -29,13 +21,16 @@ public class OfferServiceImpl implements OfferService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final MedicineRepository medicineRepository;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
-    public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository, MedicineRepository medicineRepository) {
+    public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository,
+                            MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository) {
         this.offerRepository = offerRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.medicineRepository = medicineRepository;
+        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override
@@ -104,6 +99,84 @@ public class OfferServiceImpl implements OfferService {
                 throw new BadRequestException();
             }
         }
+    }
+
+    @Override
+    public List<List<OfferDto>> getAllOffersByOrders() {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pharmacy pharmacy = pharmacyAdmin.getPharmacy();
+        List<Long> orderIds = orderRepository.getOrderIdsByPharmacy(pharmacy.getId());
+
+        return extractRelevantOffers(orderIds);
+    }
+
+    @Override
+    public void acceptOffer(Long offerId) throws EntityNotFoundException, OtherPharmacyAdminCreatedOrderException, OfferDeadlineHasNotExpiredException {
+        Offer offer = offerRepository.findById(offerId).orElse(null);
+
+        if (offer == null) {
+            throw new EntityNotFoundException();
+        }
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Order order = orderRepository.findById(offer.getOrder().getId()).orElse(null);
+        Pharmacy pharmacy = pharmacyRepository.findById(pharmacyAdmin.getPharmacy().getId()).orElse(null);
+
+        if (order == null || pharmacy == null) {
+            throw new EntityNotFoundException();
+        }
+
+        if (order.getDeadline().after(Calendar.getInstance())) {
+            throw new OfferDeadlineHasNotExpiredException();
+        }
+
+        if (order.getPharmacyAdmin().getId().equals(pharmacyAdmin.getId())) {
+            updateOfferStatus(offer);
+            Map<Medicine, Integer> medicineAmount = order.getMedicineAmount();
+            updateMedicineStatus(pharmacy, medicineAmount);
+        } else {
+            throw new OtherPharmacyAdminCreatedOrderException();
+        }
+    }
+
+    private void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
+        medicineAmount.keySet().forEach(medicine -> {
+            if (pharmacy.getMedicine().containsKey(medicine)) {
+                int stock = pharmacy.getMedicine().get(medicine).getStock() + medicineAmount.get(medicine);
+                pharmacy.getMedicine().get(medicine).setStock(stock);
+            } else {
+                throw new EntityNotFoundException();
+            }
+        });
+        pharmacyRepository.save(pharmacy);
+    }
+
+    private void updateOfferStatus(Offer offer) {
+        offer.setStatus(OfferStatus.ACCEPTED);
+        List<Offer> offers = offerRepository.findOffersByOrder(offer.getOrder().getId());
+        offers.forEach(o -> {
+            if (!o.equals(offer)) {
+                o.setStatus(OfferStatus.REJECTED);
+                offerRepository.save(o);
+            }
+        });
+        offerRepository.save(offer);
+    }
+
+    private List<List<OfferDto>> extractRelevantOffers(List<Long> orderIds) {
+        List<List<OfferDto>> allOffers = new ArrayList<>();
+        orderIds.forEach(id -> {
+            List<Offer> offers;
+            List<OfferDto> offerDtos = new ArrayList<>();
+            offers = offerRepository.findOffersByOrder(id);
+            offers.forEach(offer -> {
+                OfferDto offerDto = new OfferDto(offer.getShippingDays(), offer.getPrice(),
+                        offer.getOrder().getId(), offer.getStatus(), offer.getId(), offer.getOrder().getDeadline().getTime());
+                offerDtos.add(offerDto);
+            });
+
+            allOffers.add(offerDtos);
+        });
+        return allOffers;
     }
 
     private boolean canUpdate(Offer offer) {
