@@ -9,9 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParamsDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetMedicineReservationResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
@@ -24,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/medicine-reservation", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicineReservationController {
+
     private final MedicineReservationService medicineReservationService;
 
     @Autowired
@@ -46,22 +46,17 @@ public class MedicineReservationController {
 
     @GetMapping("/pharmacies/{medicineId}")
     public ResponseEntity<Iterable<PharmaciesMedicinePriceDto>> getPharmaciesWithMedicineOnStock(@PathVariable("medicineId") Long medicineId) {
-        ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();
-        Medicine medicine = medicineReservationService.getMedicineById(medicineId);
-
-        // TODO: Give real address to constructor
-        medicineReservationService.getPharmaciesWithMedicineOnStock(medicineId).forEach(pharmacy -> {
-            result.add(new PharmaciesMedicinePriceDto(pharmacy.getId(), pharmacy.getName(), "", pharmacy.getAbout(), pharmacy.getCurrentMedicinePrice(medicine)));
-        });
+        ArrayList<PharmaciesMedicinePriceDto> result = medicineReservationService.getPharmaciesMedicinePriceDtos(medicineId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
-    public ResponseEntity<Void> confirmReservation(@RequestBody CreateMedicineReservationParams createMedicineReservationParams) {
-        if (medicineReservationService.isReservationValid(createMedicineReservationParams)) {
+    public ResponseEntity<Void> confirmReservation(@RequestBody CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
+        if (medicineReservationService.isReservationValid(createMedicineReservationParamsDto)) {
             try {
-                medicineReservationService.confirmReservation(createMedicineReservationParams, getSignedInUser());
+                medicineReservationService.confirmReservation(createMedicineReservationParamsDto, getSignedInUser());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (MessagingException e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

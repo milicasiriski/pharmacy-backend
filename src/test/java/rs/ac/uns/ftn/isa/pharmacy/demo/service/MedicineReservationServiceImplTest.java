@@ -32,12 +32,14 @@ class MedicineReservationServiceImplTest {
     private UserRepository userRepository;
     @Mock
     private MailService<MedicineReservationEmailParams> mailService;
+    @Mock
+    private LoyaltyService loyaltyService;
 
     private MedicineReservationServiceImpl subject;
 
     @BeforeEach
     void setUp() {
-        subject = new MedicineReservationServiceImpl(medicineRepository, medicineReservationRepository, pharmacyRepository, userRepository, mailService);
+        subject = new MedicineReservationServiceImpl(medicineRepository, medicineReservationRepository, pharmacyRepository, userRepository, mailService, loyaltyService);
     }
 
     @Test

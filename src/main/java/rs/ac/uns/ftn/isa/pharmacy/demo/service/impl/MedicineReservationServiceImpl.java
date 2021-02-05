@@ -8,12 +8,14 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCan
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParamsDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineReservationEmailParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineReservationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
@@ -26,11 +28,13 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class MedicineReservationServiceImpl implements MedicineReservationService {
-    private MedicineRepository medicineRepository;
-    private MedicineReservationRepository medicineReservationRepository;
-    private PharmacyRepository pharmacyRepository;
-    private UserRepository userRepository;
-    private MailService<MedicineReservationEmailParams> mailService;
+
+    private final MedicineRepository medicineRepository;
+    private final MedicineReservationRepository medicineReservationRepository;
+    private final PharmacyRepository pharmacyRepository;
+    private final UserRepository userRepository;
+    private final MailService<MedicineReservationEmailParams> mailService;
+    private final LoyaltyService loyaltyService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -40,12 +44,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
             MedicineReservationRepository medicineReservationRepository,
             PharmacyRepository pharmacyRepository,
             UserRepository userRepository,
-            MailService<MedicineReservationEmailParams> mailService) {
+            MailService<MedicineReservationEmailParams> mailService, LoyaltyService loyaltyService) {
         this.medicineRepository = medicineRepository;
         this.medicineReservationRepository = medicineReservationRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.loyaltyService = loyaltyService;
     }
 
     @Override
@@ -59,10 +64,10 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public boolean isReservationValid(CreateMedicineReservationParams createMedicineReservationParams) {
+    public boolean isReservationValid(CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
         try {
-            Medicine medicine = getMedicineById(createMedicineReservationParams.getMedicineId());
-            Pharmacy pharmacy = getPharmacyById(createMedicineReservationParams.getPharmacyId());
+            Medicine medicine = getMedicineById(createMedicineReservationParamsDto.getMedicineId());
+            Pharmacy pharmacy = getPharmacyById(createMedicineReservationParamsDto.getPharmacyId());
             if (pharmacy.getMedicine().containsKey(medicine)) {
                 return pharmacy.getMedicine().get(medicine).getStock() > 0;
             } else {
@@ -74,12 +79,12 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    public void confirmReservation(CreateMedicineReservationParams createMedicineReservationParams, Patient patient) throws MessagingException {
-        Medicine medicine = getMedicineById(createMedicineReservationParams.getMedicineId());
-        Pharmacy pharmacy = getPharmacyById(createMedicineReservationParams.getPharmacyId());
+    public void confirmReservation(CreateMedicineReservationParamsDto createMedicineReservationParamsDto, Patient patient) throws MessagingException {
+        Medicine medicine = getMedicineById(createMedicineReservationParamsDto.getMedicineId());
+        Pharmacy pharmacy = getPharmacyById(createMedicineReservationParamsDto.getPharmacyId());
 
         Calendar expirationDate = Calendar.getInstance();
-        expirationDate.setTime(createMedicineReservationParams.getExpirationDate());
+        expirationDate.setTime(createMedicineReservationParamsDto.getExpirationDate());
         expirationDate.set(Calendar.HOUR, 23);
         expirationDate.set(Calendar.MINUTE, 59);
         expirationDate.set(Calendar.SECOND, 59);
@@ -94,9 +99,11 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
 
+        patient.addLoyaltyPoints(medicine.getPoints());
+        userRepository.save(patient);
         // TODO: Give real address to constructor
         MedicineReservationEmailParams params = new MedicineReservationEmailParams(medicine.getName(),
-                createMedicineReservationParams.getExpirationDate(),
+                createMedicineReservationParamsDto.getExpirationDate(),
                 pharmacy.getName(),
                 "",
                 uniqueReservationNumber);
@@ -198,5 +205,18 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    public ArrayList<PharmaciesMedicinePriceDto> getPharmaciesMedicinePriceDtos(Long medicineId) {
+        Medicine medicine = getMedicineById(medicineId);
+        ArrayList<PharmaciesMedicinePriceDto> result = new ArrayList<>();
+        getPharmaciesWithMedicineOnStock(medicineId).forEach(pharmacy -> {
+            result.add(new PharmaciesMedicinePriceDto(
+                    pharmacy.getId(), pharmacy.getName(),
+                    pharmacy.getAddress().toString(),
+                    pharmacy.getAbout(),
+                    loyaltyService.getDiscount() * pharmacy.getCurrentMedicinePrice(medicine)));
+        });
+        return result;
     }
 }
