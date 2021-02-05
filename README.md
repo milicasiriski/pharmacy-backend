@@ -1,7 +1,7 @@
 # PHARMACY-SYSTEM
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=lukaDoric_pharmacy-backend)](https://sonarcloud.io/dashboard?id=lukaDoric_pharmacy-backend)
-[![Build Status](https://travis-ci.com/lukaDoric/pharmacy-backend.svg?branch=develop)](https://travis-ci.com/lukaDoric/pharmacy-backend)
+[![Build Status](https://travis-ci.com/milicasiriski/pharmacy-backend.svg?branch=develop)](https://travis-ci.com/milicasiriski/pharmacy-backend.svg)
 
 This is backend part of our web app (Student Project at FTN: Faculty of Technical Sciences).
 The main role of the project is to help patients find appropriate pharmacy, pharmacist,
