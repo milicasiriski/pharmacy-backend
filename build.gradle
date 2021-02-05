@@ -53,7 +53,7 @@ test {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "lukaDoric_pharmacy-backend"
+        property "sonar.projectKey", "milicasiriski_pharmacy-backend"
         property 'sonar.coverage.exclusions', "**/test/**,**/test"
         property 'sonar.coverage.exclusions', "**/main/**,**/main"
     }
