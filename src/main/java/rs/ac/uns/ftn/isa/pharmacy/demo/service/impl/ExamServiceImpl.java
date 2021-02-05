@@ -20,6 +20,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 
 import javax.mail.MessagingException;
@@ -34,15 +35,17 @@ public class ExamServiceImpl implements ExamService {
     private final ExamRepository examRepository;
     private final MailService<TimeInterval> mailService;
     private final DermatologistVacationRepository dermatologistVacationRepository;
+    private final LoyaltyService loyaltyService;
 
     @Autowired
     public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository,
-                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository) {
+                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService) {
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
         this.mailService = mailService;
+        this.loyaltyService = loyaltyService;
     }
 
     @Override
@@ -90,6 +93,7 @@ public class ExamServiceImpl implements ExamService {
     public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException, MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);
+            exam.setPrice(exam.getPrice()*loyaltyService.getDiscount());
             exam.setPatient(patient);
             examRepository.save(exam);
 
@@ -114,7 +118,7 @@ public class ExamServiceImpl implements ExamService {
         Set<Dermatologist> dermatologists = map.keySet();
 
         dermatologists.forEach(key -> map.get(key).getExams().stream()
-                .filter(it -> !it.isScheduled()).forEach(exam -> result.add(new ExamAndDermatologistDto(exam, key))));
+                .filter(it -> !it.isScheduled()).forEach(exam -> {exam.setPrice(exam.getPrice()*loyaltyService.getDiscount());result.add(new ExamAndDermatologistDto(exam, key));}));
         sortExams(result, sortType);
         return result;
     }
@@ -130,6 +134,7 @@ public class ExamServiceImpl implements ExamService {
         if (!exam.isCancellable()) {
             throw new ExamCannotBeCancelledException();
         }
+        exam.setPrice(exam.getPrice()/loyaltyService.getDiscount());
         exam.cancel();
         examRepository.save(exam);
     }
