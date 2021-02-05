@@ -1,9 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Address;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
@@ -62,6 +64,32 @@ public class PharmacyServiceImpl implements PharmacyService {
         List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
 
         return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
+    }
+
+    @Override
+    public PharmacyDto getPharmacyInfoByAdmin() {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pharmacy pharmacy = findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
+
+        return new PharmacyDto(pharmacy);
+    }
+
+    @Override
+    public void updatePharmacyInfo(PharmacyDto pharmacyDto) {
+        Pharmacy pharmacy = findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+
+        Address address = pharmacy.getAddress();
+        AddressDto addressDto = pharmacyDto.getAddress();
+
+        pharmacy.setAbout(pharmacyDto.getAbout());
+        pharmacy.setName(pharmacyDto.getName());
+        address.setCity(addressDto.getCity());
+        address.setCountry(addressDto.getCountry());
+        address.setStreet(addressDto.getStreet());
+        address.setLatitude(addressDto.getLatitude());
+        address.setLongitude(addressDto.getLongitude());
+
+        pharmacyRepository.save(pharmacy);
     }
 
     private List<MedicinesBasicInfoDto> findMedicines(Pharmacy pharmacy) {

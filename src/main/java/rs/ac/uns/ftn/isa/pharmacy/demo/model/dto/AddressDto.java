@@ -28,7 +28,7 @@ public class AddressDto implements Serializable {
         this.city = address.getCity();
         this.country = address.getCountry();
         this.latitude = address.getLatitude();
-        this.longitude = address.getLatitude();
+        this.longitude = address.getLongitude();
         this.street = address.getStreet();
     }
 

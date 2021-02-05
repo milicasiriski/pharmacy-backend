@@ -56,4 +56,18 @@ public class PharmacyController {
             return new ResponseEntity<>("Pharmacy failed to register.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @GetMapping("/getPharmacyByAdmin")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<PharmacyDto> getPharmacyByPharmacyAdmin() {
+        return new ResponseEntity<>(pharmacyService.getPharmacyInfoByAdmin(), HttpStatus.OK);
+    }
+
+    @PostMapping("/updatePharmacy")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> updatePharmacyInfo(@RequestBody PharmacyDto pharmacyDto) {
+        pharmacyService.updatePharmacyInfo(pharmacyDto);
+        return ResponseEntity.ok("Pharmacy registered.");
+    }
 }
