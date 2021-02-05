@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Address;
+
 import java.io.Serializable;
 
 public class AddressDto implements Serializable {
@@ -20,6 +22,14 @@ public class AddressDto implements Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.street = street;
+    }
+
+    public AddressDto(Address address) {
+        this.city = address.getCity();
+        this.country = address.getCountry();
+        this.latitude = address.getLatitude();
+        this.longitude = address.getLatitude();
+        this.street = address.getStreet();
     }
 
     public String getCity() {

@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmaciesForPharmacistExamResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExamResponse;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
@@ -49,9 +49,9 @@ public class PatientPharmacistExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacies/{dateTime}")
-    public ResponseEntity<Iterable<GetPharmaciesForPharmacistExamResponse>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime) {
+    public ResponseEntity<Iterable<PharmacyDto>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime) {
         try {
-            Iterable<GetPharmaciesForPharmacistExamResponse> response = getPharmacies(dateTime, PharmacySortType.NONE);
+            Iterable<PharmacyDto> response = getPharmacies(dateTime, PharmacySortType.NONE);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -60,9 +60,9 @@ public class PatientPharmacistExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacies/{dateTime}/{sort}")
-    public ResponseEntity<Iterable<GetPharmaciesForPharmacistExamResponse>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime, @PathVariable("sort") PharmacySortType sort) {
+    public ResponseEntity<Iterable<PharmacyDto>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime, @PathVariable("sort") PharmacySortType sort) {
         try {
-            Iterable<GetPharmaciesForPharmacistExamResponse> response = getPharmacies(dateTime, sort);
+            Iterable<PharmacyDto> response = getPharmacies(dateTime, sort);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -91,10 +91,10 @@ public class PatientPharmacistExamController {
         }
     }
 
-    private Iterable<GetPharmaciesForPharmacistExamResponse> getPharmacies(Date dateTime, PharmacySortType sort) {
-        List<GetPharmaciesForPharmacistExamResponse> result = new ArrayList<>();
+    private Iterable<PharmacyDto> getPharmacies(Date dateTime, PharmacySortType sort) {
+        List<PharmacyDto> result = new ArrayList<>();
         pharmacistExamSchedulingService.getPharmaciesWithAvailableAppointments(dateTime, sort).forEach(pharmacy ->
-                result.add(new GetPharmaciesForPharmacistExamResponse(pharmacy))
+                result.add(new PharmacyDto(pharmacy))
         );
         return result;
     }

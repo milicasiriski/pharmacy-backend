@@ -26,9 +26,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<PharmacyDto> findAll() {
         List<PharmacyDto> dtoPharmacies = new ArrayList<>();
 
-        pharmacyRepository.findAll().forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy.getName(),
-                new AddressDto(pharmacy.getAddress().getCity(), pharmacy.getAddress().getCountry(), pharmacy.getAddress().getLatitude(),
-                        pharmacy.getAddress().getLongitude(), pharmacy.getAddress().getStreet()), pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating())));
+        pharmacyRepository.findAll().forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy)));
 
         return dtoPharmacies;
     }
@@ -57,8 +55,7 @@ public class PharmacyServiceImpl implements PharmacyService {
             throw new EntityNotFoundException();
         }
 
-        AddressDto addressDto = findAddress(pharmacy);
-        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy.getName(), addressDto, pharmacy.getAbout(), pharmacy.getId(), pharmacy.getRating());
+        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
 
         List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
         List<PharmacistDto> pharamcists = findPharmacists(pharmacy);
@@ -95,11 +92,6 @@ public class PharmacyServiceImpl implements PharmacyService {
             dermatologists.add(dermatologistDto);
         });
         return dermatologists;
-    }
-
-    private AddressDto findAddress(Pharmacy pharmacy) {
-        Address address = pharmacy.getAddress();
-        return new AddressDto(address.getCity(), address.getCountry(), address.getLatitude(), address.getLongitude(), address.getStreet());
     }
 
     @Override

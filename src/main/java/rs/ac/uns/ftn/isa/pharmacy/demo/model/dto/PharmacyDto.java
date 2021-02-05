@@ -1,25 +1,37 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 public class PharmacyDto implements Serializable {
 
-    private String name;
-    private AddressDto address;
-    private String about;
-    private Double rating;
     private Long id;
+    private String name;
+    private String about;
+    private AddressDto address;
+    private Double rating;
+    private double pharmacistExamPrice;
 
-    public PharmacyDto(String name, AddressDto address, String about, Long id, Double rating) {
+    public PharmacyDto() {
+    }
+
+    public PharmacyDto(String name, AddressDto address, String about, Long id, Double rating, double pharmacistExamPrice) {
         this.name = name;
         this.address = address;
         this.about = about;
         this.id = id;
         this.rating = rating;
+        this.pharmacistExamPrice = pharmacistExamPrice;
     }
 
-    public PharmacyDto() {
+    public PharmacyDto(Pharmacy pharmacy) {
+        this.id = pharmacy.getId();
+        this.name = pharmacy.getName();
+        this.about = pharmacy.getAbout();
+        this.address = new AddressDto(pharmacy.getAddress());
+        this.rating = pharmacy.getRating();
+        this.pharmacistExamPrice = pharmacy.getPharmacistExamPrice();
     }
 
     public String getName() {
@@ -62,29 +74,11 @@ public class PharmacyDto implements Serializable {
         this.rating = rating;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PharmacyDto that = (PharmacyDto) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(address, that.address) &&
-                Objects.equals(about, that.about) &&
-                Objects.equals(id, that.id);
+    public double getPharmacistExamPrice() {
+        return pharmacistExamPrice;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, address, about, id);
-    }
-
-    @Override
-    public String toString() {
-        return "PharmacyDto{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", about='" + about + '\'' +
-                ", id=" + id +
-                '}';
+    public void setPharmacistExamPrice(double pharmacistExamPrice) {
+        this.pharmacistExamPrice = pharmacistExamPrice;
     }
 }
