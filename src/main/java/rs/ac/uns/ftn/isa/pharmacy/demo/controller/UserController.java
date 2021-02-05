@@ -1,14 +1,17 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PasswordDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.security.TokenUtils;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.UserService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.CustomUserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +20,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    private TokenUtils tokenUtils;
-    private CustomUserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final CustomUserDetailsService userDetailsService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(TokenUtils tokenUtils, CustomUserDetailsService userDetailsService) {
+    public UserController(TokenUtils tokenUtils, CustomUserDetailsService userDetailsService, UserService userService) {
         this.tokenUtils = tokenUtils;
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     @PostMapping(value = "/refresh")
@@ -39,6 +44,34 @@ public class UserController {
         } else {
             UserTokenState userTokenState = new UserTokenState();
             return ResponseEntity.badRequest().body(userTokenState);
+        }
+    }
+
+    @GetMapping("/")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<UserDto> getUserInfo() {
+        return ResponseEntity.ok(userService.getUserInfo());
+    }
+
+    @PostMapping("/")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> updateUserInfo(@RequestBody UserDto userDto) {
+        try {
+            userService.updateUserInfo(userDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/changePassword")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
+        try {
+            userService.updatePassword(passwordDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

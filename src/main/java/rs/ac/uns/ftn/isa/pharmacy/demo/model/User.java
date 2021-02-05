@@ -44,6 +44,9 @@ public abstract class User implements UserDetails {
     @Column(name = "surname")
     protected String surname;
 
+    @Embedded
+    private Address address;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -53,11 +56,12 @@ public abstract class User implements UserDetails {
     protected User() {
     }
 
-    protected User(String email, String password, String name, String surname) {
+    protected User(String email, String password, String name, String surname, Address address) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.address = address;
     }
 
     public void setAuthorities(List<Authority> authorities) {
@@ -100,6 +104,14 @@ public abstract class User implements UserDetails {
 
     public String getAdministrationRole() {
         return this.administrationRole;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public void Enable() {

@@ -35,7 +35,7 @@ public class Pharmacist extends User {
     }
 
     public Pharmacist(String email, String password, String name, String surname, double rating) {
-        super(email, password, name, surname);
+        super(email, password, name, surname, new Address());
         this.rating = rating;
     }
 
