@@ -246,10 +246,8 @@ public class Pharmacy {
 
     private Double currentPrice(List<MedicinePriceListItem> prices) {
         Calendar calendar = Calendar.getInstance();
-
         Optional<MedicinePriceListItem> currentPriceListItem = prices.stream().filter(price ->
                 (calendar.compareTo(price.getTimeInterval().getStart()) >= 0 && calendar.compareTo(price.getTimeInterval().getEnd()) <= 0)).findAny();
-
         if (currentPriceListItem.isEmpty()) {
             return 0.0;
         } else {

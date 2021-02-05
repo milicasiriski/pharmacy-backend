@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.ExamStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
@@ -80,7 +81,7 @@ public class ExamServiceImpl implements ExamService {
             }
         });
 
-        Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), examTimeInterval);
+        Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), examTimeInterval, ExamStatus.WAITING);
         employment.getExams().add(exam);
         pharmacyRepository.save(pharmacy);
     }

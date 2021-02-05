@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.util;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParamsDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 
@@ -54,6 +54,6 @@ public class TestConstants {
     public static Pharmacy PHARMACY_MEDICINE_EMPTY_TEST_OBJECT = new Pharmacy(PHARMACY_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
             PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, new HashMap<>(), PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
 
-    public static CreateMedicineReservationParams MEDICINE_RESERVATION_DTO_TEST_OBJECT =
-            new CreateMedicineReservationParams(MEDICINE_ID, PHARMACY_ID, new Date());
+    public static CreateMedicineReservationParamsDto MEDICINE_RESERVATION_DTO_TEST_OBJECT =
+            new CreateMedicineReservationParamsDto(MEDICINE_ID, PHARMACY_ID, new Date());
 }

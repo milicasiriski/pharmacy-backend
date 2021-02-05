@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.ExamStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.Constants;
 
@@ -50,12 +51,16 @@ public class Exam {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @Column
+    private ExamStatus status;
+
     public Exam() {
     }
 
-    public Exam(double price, TimeInterval timeInterval) {
+    public Exam(double price, TimeInterval timeInterval, ExamStatus status) {
         this.price = price;
         this.timeInterval = timeInterval;
+        this.status = status;
     }
 
     public Exam(double price, TimeInterval timeInterval, Patient patient) {
@@ -110,6 +115,14 @@ public class Exam {
 
     public void cancel() {
         this.patient = null;
+    }
+
+    public ExamStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExamStatus status) {
+        this.status = status;
     }
 
     @Override

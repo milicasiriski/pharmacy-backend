@@ -1,6 +1,6 @@
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points) VALUES ('1', 'PATIENT', 'mika@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Mikin bulevar 123', 'Mikici', 'Srbija', 'Mika', '0601231234', 'Mikic', true, '2017-10-01 21:58:58.508-07', 1);
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07', 2);
-INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07', 0);
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points) VALUES ('1', 'PATIENT', 'mika@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Mikin bulevar 123', 'Mikici', 'Srbija', 'Mika', '0601231234', 'Mikic', true, '2017-10-01 21:58:58.508-07', 1, 1);
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07', 2, 2);
+INSERT INTO pharmacy_user(id, user_type, email, password, patient_address, patient_city, patient_country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07', 0, 0);
 
 INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('1', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 30, 45, 4.6);
 INSERT INTO pharmacy(id, about, city, country, latitude, longitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('2', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 20, 20, 5);
@@ -85,6 +85,8 @@ INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (2, '2021-01-
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (3, '2021-07-16 00:00:00', 10);
 INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (4, '2021-08-16 00:00:00', 10);
 
+INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('17', 'SYSTEM_ADMIN', 'pharmacyisa6+systemadmin4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
+
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 4, 4);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 4, 1);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 4, 2);
@@ -138,11 +140,12 @@ INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VA
 INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
 INSERT INTO employment(id, duration, price) VALUES ('2', '20', '30');
 
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', '1');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', '2');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', '1');
-INSERT INTO exam(id, price, end_time, start_time, employment_id) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2');
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id) VALUES ('5', '20', '2021-03-30 18:00', '2021-03-30 17:30', '1', '8');
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', '1', 1, 1);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', '2', 1, 1);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', '1', 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2', 2, 1);
+
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status) VALUES ('5', '20', '2021-03-30 18:00', '2021-03-30 17:30', '1', '8', 1);
 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');
@@ -177,3 +180,4 @@ INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (11, 4);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (12, 4);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (13, 6);
 INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (14, 6);
+INSERT INTO USER_AUTHORITY (user_id, authority_id) VALUES (17, 5);

@@ -29,11 +29,14 @@ public class Patient extends User {
     @Column(name = "patient_penalty_points")
     private int penaltyPoints;
 
+    @Column(name = "patient_loyalty_points")
+    private int loyaltyPoints;
+
     public Patient() {
         super();
     }
 
-    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber, int penaltyPoints) {
+    public Patient(String email, String password, String name, String surname, String address, String city, String country, String phoneNumber, int penaltyPoints, int loyaltyPoints) {
         super(email, password, name, surname);
         this.name = name;
         this.surname = surname;
@@ -42,6 +45,7 @@ public class Patient extends User {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.penaltyPoints = penaltyPoints;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
     @Override
@@ -103,6 +107,22 @@ public class Patient extends User {
 
     public void subtractPenaltyPoints(int points) {
         this.penaltyPoints -= points;
+    }
+
+    public int getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
+
+    public void setLoyaltyPoints(int loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    public void addLoyaltyPoints(int points) {
+        this.loyaltyPoints += points;
+    }
+
+    public void subtractLoyaltyPoints(int points) {
+        this.loyaltyPoints -= points;
     }
 
     @Override
