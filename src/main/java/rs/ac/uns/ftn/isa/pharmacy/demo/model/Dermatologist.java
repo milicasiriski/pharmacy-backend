@@ -27,7 +27,7 @@ public class Dermatologist extends User {
     }
 
     public Dermatologist(String email, String password, String name, String surname, Map<Pharmacy, Employment> pharmacies, double rating) {
-        super(email, password, name, surname);
+        super(email, password, name, surname, new Address());
         this.name = name;
         this.surname = surname;
         this.pharmacies = pharmacies;

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Address;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 
 public class PatientDto {
@@ -108,7 +109,7 @@ public class PatientDto {
 
     public Patient createPatient() {
         Patient patient = new Patient(this.email, this.password, this.name, this.surname,
-                this.address, this.city, this.country, this.phoneNumber, 0, 0);
+                this.phoneNumber, 0, new Address(this.country, this.address, this.city), 0);
         patient.Disable();
 
         return patient;

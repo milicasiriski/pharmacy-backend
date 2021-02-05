@@ -15,7 +15,7 @@ public class SystemAdmin extends User implements Serializable {
     }
 
     public SystemAdmin(String email, String password, String name, String surname) {
-        super(email, password, name, surname);
+        super(email, password, name, surname, new Address());
     }
 
     @Override

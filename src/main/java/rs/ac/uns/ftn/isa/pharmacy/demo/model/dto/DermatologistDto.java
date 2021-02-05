@@ -9,6 +9,7 @@ public class DermatologistDto implements Serializable {
     private String name;
     private String surname;
     private Double rating;
+    private String email;
     private long id;
     private List<PharmacyNameAndAddressDto> pharmacies;
 
@@ -24,6 +25,13 @@ public class DermatologistDto implements Serializable {
         this.name = name;
         this.surname = surname;
         this.rating = rating;
+        this.id = id;
+    }
+
+    public DermatologistDto(String name, String surname, String email, long id) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
         this.id = id;
     }
 
@@ -67,27 +75,11 @@ public class DermatologistDto implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DermatologistDto that = (DermatologistDto) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(surname, that.surname) &&
-                Objects.equals(rating, that.rating);
+    public String getEmail() {
+        return email;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, surname, rating);
-    }
-
-    @Override
-    public String toString() {
-        return "DermatologistDto{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", rating=" + rating +
-                '}';
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

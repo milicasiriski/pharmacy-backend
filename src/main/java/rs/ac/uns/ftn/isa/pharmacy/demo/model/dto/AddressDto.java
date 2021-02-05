@@ -32,6 +32,12 @@ public class AddressDto implements Serializable {
         this.street = address.getStreet();
     }
 
+    public AddressDto(String city, String country, String street) {
+        this.city = city;
+        this.country = country;
+        this.street = street;
+    }
+
     public String getCity() {
         return city;
     }

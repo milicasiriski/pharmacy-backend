@@ -18,7 +18,7 @@ public class PharmacyAdmin extends User {
     }
 
     public PharmacyAdmin(String email, String password, Pharmacy pharmacy, String name, String surname) {
-        super(email, password, name, surname);
+        super(email, password, name, surname, new Address());
         this.pharmacy = pharmacy;
     }
 
