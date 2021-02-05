@@ -17,4 +17,8 @@ public interface PharmacyService {
     List<PharmacyNameAndAddressDto> findPharmaciesBasicInfo();
 
     PharmacyProfileDto findPharmacyById(Long pharmacyId);
+
+    PharmacyDto getPharmacyInfoByAdmin();
+
+    void updatePharmacyInfo(PharmacyDto pharmacyDto);
 }
