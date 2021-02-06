@@ -7,14 +7,16 @@ public class PharmacyNameAndAddressDto implements Serializable {
 
     private String pharmacyName;
     private String pharmacyAddress;
+    private Long id;
 
     public PharmacyNameAndAddressDto() {
 
     }
 
-    public PharmacyNameAndAddressDto(String pharmacyName, String pharmacyAddress) {
+    public PharmacyNameAndAddressDto(String pharmacyName, String pharmacyAddress, Long id) {
         this.pharmacyName = pharmacyName;
         this.pharmacyAddress = pharmacyAddress;
+        this.id = id;
     }
 
     public String getPharmacyName() {
@@ -33,25 +35,11 @@ public class PharmacyNameAndAddressDto implements Serializable {
         this.pharmacyAddress = pharmacyAddress;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PharmacyNameAndAddressDto that = (PharmacyNameAndAddressDto) o;
-        return Objects.equals(pharmacyName, that.pharmacyName) &&
-                Objects.equals(pharmacyAddress, that.pharmacyAddress);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(pharmacyName, pharmacyAddress);
-    }
-
-    @Override
-    public String toString() {
-        return "PharmacyNameAndAddressDto{" +
-                "pharmacyName='" + pharmacyName + '\'' +
-                ", pharmacyAddress='" + pharmacyAddress + '\'' +
-                '}';
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -26,9 +26,9 @@ public class PharmacistsController implements PharmacistConverter {
         this.pharmacistService = pharmacistService;
     }
 
-    @GetMapping(value = "/getPharmacistsByPharmacy/{pharmacyName}")
-    public ResponseEntity<List<PharmacistDto>> getPharmacistsByPharmacy(@PathVariable String pharmacyName) {
-        List<Pharmacist> pharmacists = pharmacistService.getPharmacistsByPharmacy(pharmacyName);
+    @GetMapping(value = "/getPharmacistsByPharmacy/{pharmacyId}")
+    public ResponseEntity<List<PharmacistDto>> getPharmacistsByPharmacy(@PathVariable Long pharmacyId) {
+        List<Pharmacist> pharmacists = pharmacistService.getPharmacistsByPharmacy(pharmacyId);
         return ResponseEntity.ok(createResponse(pharmacists));
     }
 

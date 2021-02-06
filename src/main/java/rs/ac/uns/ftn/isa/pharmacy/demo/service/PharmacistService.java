@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PharmacistService {
 
-    List<Pharmacist> getAllPharmacists();
-    List<Pharmacist> getPharmacistsByPharmacy(String pharmacyName);
+    Iterable<Pharmacist> getAllPharmacists();
+    List<Pharmacist> getPharmacistsByPharmacy(Long pharmacyId);
 }

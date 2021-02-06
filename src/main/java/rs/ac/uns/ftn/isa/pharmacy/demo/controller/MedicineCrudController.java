@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,5 +51,10 @@ public class MedicineCrudController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/getIfDoesntExist")
+    public ResponseEntity<List<MedicineDto>> getMedicineIfDoesntExistInPharmacy() {
+        return new ResponseEntity<>(medicineService.getMedicineIfDoesntExistInPharmacy(), HttpStatus.OK);
     }
 }

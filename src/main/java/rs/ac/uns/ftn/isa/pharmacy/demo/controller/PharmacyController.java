@@ -57,7 +57,6 @@ public class PharmacyController {
         }
     }
 
-
     @GetMapping("/getPharmacyByAdmin")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<PharmacyDto> getPharmacyByPharmacyAdmin() {
@@ -69,5 +68,29 @@ public class PharmacyController {
     public ResponseEntity<String> updatePharmacyInfo(@RequestBody PharmacyDto pharmacyDto) {
         pharmacyService.updatePharmacyInfo(pharmacyDto);
         return ResponseEntity.ok("Pharmacy registered.");
+    }
+
+    @PutMapping("/addMedicine/{medicineId}")
+    public ResponseEntity<String> addMedicine(@PathVariable Long medicineId) {
+        pharmacyService.addMedicine(medicineId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteMedicine/{medicineId}")
+    public ResponseEntity<String> deleteMedicine(@PathVariable Long medicineId) {
+        pharmacyService.removeMedicine(medicineId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletePharmacist/{pharmacistId}")
+    public ResponseEntity<String> deletePharmacist(@PathVariable Long pharmacistId) {
+        pharmacyService.removePharmacist(pharmacistId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteDermatologist/{dermatologistId}")
+    public ResponseEntity<String> deleteDermatologist(@PathVariable Long dermatologistId) {
+        pharmacyService.removeDermatologist(dermatologistId);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
