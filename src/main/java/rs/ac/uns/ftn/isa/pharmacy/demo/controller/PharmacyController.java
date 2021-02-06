@@ -6,6 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacistHasExamException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
@@ -67,7 +70,7 @@ public class PharmacyController {
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> updatePharmacyInfo(@RequestBody PharmacyDto pharmacyDto) {
         pharmacyService.updatePharmacyInfo(pharmacyDto);
-        return ResponseEntity.ok("Pharmacy registered.");
+        return ResponseEntity.ok("Pharmacy updated successfully.");
     }
 
     @PutMapping("/addMedicine/{medicineId}")
@@ -78,19 +81,37 @@ public class PharmacyController {
 
     @DeleteMapping("/deleteMedicine/{medicineId}")
     public ResponseEntity<String> deleteMedicine(@PathVariable Long medicineId) {
-        pharmacyService.removeMedicine(medicineId);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        try {
+            pharmacyService.removeMedicine(medicineId);
+            return new ResponseEntity<>("Medicine successfully deleted!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Medicine does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (MedicineHasReservationException e) {
+            return new ResponseEntity<>("Medicine has reservation!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/deletePharmacist/{pharmacistId}")
     public ResponseEntity<String> deletePharmacist(@PathVariable Long pharmacistId) {
-        pharmacyService.removePharmacist(pharmacistId);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        try {
+            pharmacyService.removePharmacist(pharmacistId);
+            return new ResponseEntity<>("Pharmacist removed successfully!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Pharmacist does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (PharmacistHasExamException e) {
+            return new ResponseEntity<>("Pharmacist has exam!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/deleteDermatologist/{dermatologistId}")
     public ResponseEntity<String> deleteDermatologist(@PathVariable Long dermatologistId) {
-        pharmacyService.removeDermatologist(dermatologistId);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        try {
+            pharmacyService.removeDermatologist(dermatologistId);
+            return new ResponseEntity<>("Dermatologist removed successfully!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Dermatologist does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (DermatologistHasExamException e) {
+            return new ResponseEntity<>("Dermatologist has exam!", HttpStatus.BAD_REQUEST);
+        }
     }
 }

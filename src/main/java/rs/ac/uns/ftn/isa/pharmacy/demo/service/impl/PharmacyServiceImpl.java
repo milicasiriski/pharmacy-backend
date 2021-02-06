@@ -3,12 +3,12 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacistHasExamException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,13 +23,19 @@ public class PharmacyServiceImpl implements PharmacyService {
     private final MedicineRepository medicineRepository;
     private final PharmacistRepository pharmacistRepository;
     private final DermatologistRepository dermatologistRepository;
+    private final MedicineReservationRepository medicineReservationRepository;
+    private final ExamRepository examRepository;
 
     @Autowired
-    public PharmacyServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository) {
+    public PharmacyServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository,
+                               PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository,
+                               MedicineReservationRepository medicineReservationRepository, ExamRepository examRepository) {
         this.pharmacyRepository = pharmacyRepository;
         this.medicineRepository = medicineRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.dermatologistRepository = dermatologistRepository;
+        this.medicineReservationRepository = medicineReservationRepository;
+        this.examRepository = examRepository;
     }
 
     @Override
@@ -117,10 +123,14 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public void removeMedicine(Long medicineId) throws EntityNotFoundException {
-        // TODO: if medicine has reservation do not remove
+    public void removeMedicine(Long medicineId) throws EntityNotFoundException, MedicineHasReservationException {
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         Map<Medicine, MedicineStatus> medicines = pharmacy.getMedicine();
+        List<MedicineReservation> medicineReservations = medicineReservationRepository.getReservationByPharmacyAndMedicine(medicineId, pharmacy.getId());
+
+        if (!medicineReservations.isEmpty()) {
+            throw new MedicineHasReservationException();
+        }
 
         Medicine medicine = medicineRepository.findById(medicineId).orElse(null);
         if (medicine == null) {
@@ -132,12 +142,17 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public void removePharmacist(Long pharmacistId) throws EntityNotFoundException {
-        // TODO: if pharmacist has exam do not remove
+    public void removePharmacist(Long pharmacistId) throws EntityNotFoundException, PharmacistHasExamException {
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         List<Pharmacist> pharmacists = pharmacy.getPharmacists();
 
         Pharmacist pharmacist = pharmacistRepository.findById(pharmacistId).orElse(null);
+
+        List<Exam> exams = examRepository.getExamByPharmacist(pharmacistId);
+
+        if (!exams.isEmpty()) {
+            throw new PharmacistHasExamException();
+        }
 
         if (pharmacist == null) {
             throw new EntityNotFoundException();
@@ -149,15 +164,20 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public void removeDermatologist(Long dermatologistId) throws EntityNotFoundException {
-        // TODO: if dermatologist has exam do not remove
+    public void removeDermatologist(Long dermatologistId) throws EntityNotFoundException, DermatologistHasExamException {
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
 
         Dermatologist dermatologist = dermatologistRepository.findById(dermatologistId).orElse(null);
-
         if (dermatologist == null) {
             throw new EntityNotFoundException();
+        }
+
+        Employment employment = dermatologist.getPharmacies().get(pharmacy);
+        List<Exam> exams = examRepository.getExamByDermatologistEmployment(employment.getId());
+
+        if (!exams.isEmpty()) {
+            throw new DermatologistHasExamException();
         }
 
         dermatologists.remove(dermatologist);
