@@ -22,16 +22,16 @@ public class DermatologistServiceImpl implements DermatologistService {
     }
 
     @Override
-    public List<Dermatologist> getAllDermatologists() {
+    public Iterable<Dermatologist> getAllDermatologists() {
         if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")) {
             PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return getDermatologistsByPharmacy(pharmacyAdmin.getPharmacy().getName());
+            return getDermatologistsByPharmacy(pharmacyAdmin.getPharmacy().getId());
         } else {
-            return dermatologistRepository.getAllDermatologists();
+            return dermatologistRepository.findAll();
         }
     }
 
-    public List<Dermatologist> getDermatologistsByPharmacy(String pharmacyName) {
-        return dermatologistRepository.getDermatologistsByPharmacy(pharmacyName);
+    public List<Dermatologist> getDermatologistsByPharmacy(Long pharmacyId) {
+        return dermatologistRepository.getDermatologistsByPharmacy(pharmacyId);
     }
 }

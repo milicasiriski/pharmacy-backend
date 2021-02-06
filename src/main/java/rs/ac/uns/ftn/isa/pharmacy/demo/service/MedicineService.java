@@ -14,4 +14,6 @@ public interface MedicineService {
     List<MedicineDto> getAll();
 
     List<List<MedicineNameUuidDto>> getAlternativesGroups();
+
+    List<MedicineDto> getMedicineIfDoesntExistInPharmacy();
 }

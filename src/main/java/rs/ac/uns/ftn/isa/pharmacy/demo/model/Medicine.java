@@ -231,25 +231,13 @@ public class Medicine implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Medicine medicine = (Medicine) o;
-        return prescribed == medicine.prescribed &&
-                points == medicine.points &&
-                Objects.equals(id, medicine.id) &&
-                Objects.equals(uuid, medicine.uuid) &&
-                Objects.equals(name, medicine.name) &&
-                Objects.equals(description, medicine.description) &&
-                Objects.equals(manufacturer, medicine.manufacturer) &&
-                Objects.equals(composition, medicine.composition) &&
-                Objects.equals(ratings, medicine.ratings) &&
-                form == medicine.form &&
-                type == medicine.type &&
-                Objects.equals(recommendedDose, medicine.recommendedDose) &&
-                Objects.equals(sideEffects, medicine.sideEffects) &&
-                Objects.equals(alternatives, medicine.alternatives);
+        return Objects.equals(id, medicine.id) &&
+                Objects.equals(uuid, medicine.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, description, manufacturer, composition, ratings, form, type, prescribed, recommendedDose, sideEffects, points, alternatives);
+        return Objects.hash(id, uuid);
     }
 
     @Override

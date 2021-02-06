@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DermatologistService {
 
-    List<Dermatologist> getAllDermatologists();
-    List<Dermatologist> getDermatologistsByPharmacy(String pharmacyName);
+    Iterable<Dermatologist> getAllDermatologists();
+    List<Dermatologist> getDermatologistsByPharmacy(Long pharmacyId);
 }

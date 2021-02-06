@@ -5,6 +5,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class MedicineDto implements Serializable {
 
@@ -167,5 +168,18 @@ public class MedicineDto implements Serializable {
                 ", \"alternatives\":" + alternatives +
                 ", \"points:\":" + points +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MedicineDto that = (MedicineDto) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

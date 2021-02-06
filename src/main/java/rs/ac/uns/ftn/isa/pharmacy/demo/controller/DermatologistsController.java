@@ -27,9 +27,9 @@ public class DermatologistsController implements DermatologistConverter {
         this.dermatologistEmploymentService = dermatologistEmploymentService;
     }
 
-    @GetMapping(value = "/getDermatologistsByPharmacy/{pharmacyName}")
-    public ResponseEntity<List<DermatologistDto>> getDermatologistsByPharmacy(@PathVariable String pharmacyName) {
-        List<Dermatologist> dermatologists = dermatologistService.getDermatologistsByPharmacy(pharmacyName);
+    @GetMapping(value = "/getDermatologistsByPharmacy/{pharmacyId}")
+    public ResponseEntity<List<DermatologistDto>> getDermatologistsByPharmacy(@PathVariable Long pharmacyId) {
+        List<Dermatologist> dermatologists = dermatologistService.getDermatologistsByPharmacy(pharmacyId);
         List<DermatologistDto> dermatologistsDto = createResponse(dermatologists);
         return ResponseEntity.ok(dermatologistsDto);
     }
@@ -37,7 +37,7 @@ public class DermatologistsController implements DermatologistConverter {
     @PreAuthorize("hasAnyRole('ROLE_PATIENT','ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     @GetMapping(value = "/getAllDermatologists")
     public ResponseEntity<List<DermatologistDto>> getAllDermatologists() {
-        List<Dermatologist> dermatologists = dermatologistService.getAllDermatologists();
+        Iterable<Dermatologist> dermatologists = dermatologistService.getAllDermatologists();
         return ResponseEntity.ok(createResponse(dermatologists));
     }
 

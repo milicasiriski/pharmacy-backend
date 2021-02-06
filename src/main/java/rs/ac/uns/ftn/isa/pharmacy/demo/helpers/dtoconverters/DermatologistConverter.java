@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DermatologistConverter {
 
-    default List<DermatologistDto> createResponse(List<Dermatologist> dermatologists) {
+    default List<DermatologistDto> createResponse(Iterable<Dermatologist> dermatologists) {
         List<DermatologistDto> dermatologistsDto = new ArrayList<>();
         dermatologists.forEach(dermatologist -> {
                     Iterable<Pharmacy> pharmacies = dermatologist.getPharmacies().keySet();
@@ -25,7 +25,7 @@ public interface DermatologistConverter {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
 
         pharmacies.forEach(pharmacy -> {
-            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet());
+            PharmacyNameAndAddressDto pharmacyNameAndAddressDto = new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet(), pharmacy.getId());
             dtoPharmacies.add(pharmacyNameAndAddressDto);
         });
         return dtoPharmacies;

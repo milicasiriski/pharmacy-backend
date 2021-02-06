@@ -22,17 +22,17 @@ public class PharmacistServiceImpl implements PharmacistService {
     }
 
     @Override
-    public List<Pharmacist> getPharmacistsByPharmacy(String pharmacyName) {
-        return pharmacistRepository.getByPharmacyName(pharmacyName);
+    public List<Pharmacist> getPharmacistsByPharmacy(Long pharmacyId) {
+        return pharmacistRepository.getByPharmacy(pharmacyId);
     }
 
     @Override
-    public List<Pharmacist> getAllPharmacists() {
+    public Iterable<Pharmacist> getAllPharmacists() {
         if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")) {
             PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return getPharmacistsByPharmacy(pharmacyAdmin.getPharmacy().getName());
+            return getPharmacistsByPharmacy(pharmacyAdmin.getPharmacy().getId());
         } else {
-            return pharmacistRepository.getAll();
+            return pharmacistRepository.findAll();
         }
     }
 }

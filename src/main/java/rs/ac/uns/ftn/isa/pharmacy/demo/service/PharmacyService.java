@@ -21,4 +21,12 @@ public interface PharmacyService {
     PharmacyDto getPharmacyInfoByAdmin();
 
     void updatePharmacyInfo(PharmacyDto pharmacyDto);
+
+    void addMedicine(Long medicineId);
+
+    void removeMedicine(Long medicineId);
+
+    void removePharmacist(Long pharmacistId);
+
+    void removeDermatologist(Long dermatologistId);
 }
