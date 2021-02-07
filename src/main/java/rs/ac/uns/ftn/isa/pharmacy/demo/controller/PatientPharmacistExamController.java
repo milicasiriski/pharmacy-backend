@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExamResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
@@ -29,6 +31,7 @@ public class PatientPharmacistExamController {
     public PatientPharmacistExamController(PharmacistExamSchedulingService pharmacistExamSchedulingService) {
         this.pharmacistExamSchedulingService = pharmacistExamSchedulingService;
     }
+
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
@@ -88,6 +91,21 @@ public class PatientPharmacistExamController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @DeleteMapping("/cancel/{examId}")
+    public ResponseEntity<String> cancelDermatologistExam(@RequestParam long examId) {
+        try {
+            pharmacistExamSchedulingService.cancelAppointment(examId, getSignedInUser());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (WrongPatientException e) {
+            return new ResponseEntity<>("You are not authorized to cancel this exam.", HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("The exam you've tried to cancel does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (ExamCanNoLongerBeCancelledException e) {
+            return new ResponseEntity<>("Sorry, the exam can no longer be cancelled.", HttpStatus.BAD_REQUEST);
         }
     }
 

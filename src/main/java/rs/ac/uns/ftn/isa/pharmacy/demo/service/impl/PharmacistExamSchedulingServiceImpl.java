@@ -2,11 +2,14 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
@@ -23,12 +26,14 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     private final PharmacistRepository pharmacistRepository;
     private final PharmacistVacationRepository pharmacistVacationRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final ExamRepository examRepository;
     private final MailService<TimeInterval> mailService;
 
-    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository, MailService<TimeInterval> mailService) {
+    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService<TimeInterval> mailService) {
         this.pharmacistRepository = pharmacistRepository;
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.examRepository = examRepository;
         this.mailService = mailService;
     }
 
@@ -83,6 +88,20 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         pharmacistRepository.save(pharmacist);
 
         mailService.sendMail(patient.getEmail(), appointment, new ExamConfirmationMailFormatter());
+    }
+
+    @Override
+    public void cancelAppointment(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
+        Exam exam = getExamById(examId);
+
+        if (!signedInUser.equals(exam.getPatient())) {
+            throw new WrongPatientException();
+        }
+        if (!exam.isCancellable()) {
+            throw new ExamCanNoLongerBeCancelledException();
+        }
+
+        examRepository.delete(exam);
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {
@@ -165,6 +184,15 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         Optional<Pharmacist> optionalPharmacist = pharmacistRepository.findById(id);
         if (optionalPharmacist.isPresent()) {
             return optionalPharmacist.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    private Exam getExamById(long id) throws EntityNotFoundException {
+        Optional<Exam> optionalExam = examRepository.findById(id);
+        if (optionalExam.isPresent()) {
+            return optionalExam.get();
         } else {
             throw new EntityNotFoundException();
         }

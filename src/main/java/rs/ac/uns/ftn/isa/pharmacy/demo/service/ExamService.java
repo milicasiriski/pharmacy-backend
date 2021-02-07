@@ -19,7 +19,7 @@ public interface ExamService {
 
     Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient);
 
-    void cancelDermatologistExam(long examId);
+    void cancelDermatologistExam(long examId, Patient signedInUser);
 
     void deleteExam(long examId);
 }

@@ -67,6 +67,7 @@ public class Exam {
         this.price = price;
         this.timeInterval = timeInterval;
         this.patient = patient;
+        this.status = ExamStatus.WAITING;
     }
 
     public Long getId() {
