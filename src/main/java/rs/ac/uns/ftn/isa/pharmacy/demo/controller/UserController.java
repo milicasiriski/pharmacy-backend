@@ -58,9 +58,9 @@ public class UserController {
     public ResponseEntity<String> updateUserInfo(@RequestBody UserDto userDto) {
         try {
             userService.updateUserInfo(userDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Info successfully updated!",HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -69,9 +69,9 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
         try {
             userService.updatePassword(passwordDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Password successfully updated!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
         }
     }
 }

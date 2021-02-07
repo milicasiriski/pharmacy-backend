@@ -6,14 +6,24 @@ public class TimeIntervalDto {
 
     private Date start;
     private Date end;
+    private Boolean shiftDefined;
 
     public TimeIntervalDto() {
 
     }
 
-    public TimeIntervalDto(Date start, Date end) {
+    public TimeIntervalDto(Date start, Date end, Boolean shiftDefined) {
         this.start = start;
         this.end = end;
+        this.shiftDefined = shiftDefined;
+    }
+
+    public Boolean getShiftDefined() {
+        return shiftDefined;
+    }
+
+    public void setShiftDefined(Boolean shiftDefined) {
+        this.shiftDefined = shiftDefined;
     }
 
     public Date getStart() {
