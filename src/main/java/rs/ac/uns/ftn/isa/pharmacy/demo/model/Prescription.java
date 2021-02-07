@@ -10,9 +10,7 @@ import java.util.Objects;
 public class Prescription {
 
     @Id
-    @SequenceGenerator(name = "prescription_sequence_generator", sequenceName = "prescription_sequence", initialValue = 4)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prescription_sequence_generator")
-    private Long id;
+    private String id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
@@ -32,18 +30,18 @@ public class Prescription {
     public Prescription() {
     }
 
-    public Prescription(Long id, Patient patient, Map<Medicine, Integer> medicines, Calendar prescriptionDate) {
+    public Prescription(String id, Patient patient, Map<Medicine, Integer> medicines, Calendar prescriptionDate) {
         this.id = id;
         this.patient = patient;
         this.medicines = medicines;
         this.prescriptionDate = prescriptionDate;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -71,11 +69,11 @@ public class Prescription {
         this.prescriptionDate = prescriptionDate;
     }
 
-    public String getName(){
+    public String getName() {
         return patient.getName();
     }
 
-    public String getSurname(){
+    public String getSurname() {
         return patient.getSurname();
     }
 
