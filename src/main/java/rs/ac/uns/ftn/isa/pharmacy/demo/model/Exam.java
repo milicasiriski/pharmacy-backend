@@ -19,16 +19,20 @@ import java.util.concurrent.TimeUnit;
                                 @ColumnResult(name = "price", type = Double.class),
                                 @ColumnResult(name = "end_time", type = Calendar.class),
                                 @ColumnResult(name = "start_time", type = Calendar.class),
-                                @ColumnResult(name = "dermatologist_name", type = String.class),
-                                @ColumnResult(name = "dermatologist_surname", type = String.class),
+                                @ColumnResult(name = "examiner_name", type = String.class),
+                                @ColumnResult(name = "examiner_surname", type = String.class),
                                 @ColumnResult(name = "pharmacy_name", type = String.class)
                         }
                 )
         }
 )
-@NamedNativeQuery(name = "Exam.getExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS dermatologist_name, pu.surname AS dermatologist_surname, ph.name AS pharmacy_name\n" +
-        "\tFROM public.exam AS e, public.dermatologist_employment_mapping AS dem, public.pharmacy as ph, public.pharmacy_user as pu\n" +
+@NamedNativeQuery(name = "Exam.getDermatologistExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+        "\tFROM public.exam AS e, dermatologist_employment_mapping AS dem, pharmacy as ph, pharmacy_user as pu\n" +
         "\tWHERE employment_id = dermatologist_employment_id AND dem.pharmacy_id = ph.id AND dem.dermatologist_id = pu.id\n" +
+        "\tAND e.patient_id = :patientId", resultSetMapping = "ExamDetailsMapping")
+@NamedNativeQuery(name = "Exam.getPharmacistExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+        "\tFROM exam AS e, pharmacy as ph, pharmacy_user as pu\n" +
+        "\tWHERE e.pharmacist_id = pu.id AND user_type = 'PHARMACIST' AND pu.pharmacy_id = ph.id\n" +
         "\tAND e.patient_id = :patientId", resultSetMapping = "ExamDetailsMapping")
 @Entity
 @Table(name = "exam")

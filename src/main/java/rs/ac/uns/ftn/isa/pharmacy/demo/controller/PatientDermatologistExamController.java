@@ -40,11 +40,17 @@ public class PatientDermatologistExamController {
     @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")
     // NOSONAR the focus of this project is not on web security
     @GetMapping("/{pharmacyId}")
-    public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId) {
-        ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
-        examService.getAvailableDermatologistExamsForPharmacy(pharmacyId, ExamSortType.NONE).forEach(it ->
-                response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") String pharmacyId) {
+        try {
+            long id = Long.parseLong(pharmacyId);
+            ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
+            examService.getAvailableDermatologistExamsForPharmacy(id, ExamSortType.NONE).forEach(it ->
+                    response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")

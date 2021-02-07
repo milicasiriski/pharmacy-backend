@@ -4,6 +4,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
@@ -18,4 +19,6 @@ public interface PharmacistExamSchedulingService {
     void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws MessagingException;
 
     void cancelAppointment(long examId, Patient signedInUser);
+
+    Iterable<ExamDetails> getPharmacistExamsForPatient(Patient patient);
 }

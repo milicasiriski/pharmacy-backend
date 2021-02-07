@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExamResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
@@ -32,6 +33,12 @@ public class PatientPharmacistExamController {
         this.pharmacistExamSchedulingService = pharmacistExamSchedulingService;
     }
 
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/")
+    public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamsForPatient() {
+        Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getPharmacistExamsForPatient(getSignedInUser());
+        return new ResponseEntity<>(exams, HttpStatus.OK);
+    }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
@@ -96,7 +103,7 @@ public class PatientPharmacistExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @DeleteMapping("/cancel/{examId}")
-    public ResponseEntity<String> cancelDermatologistExam(@RequestParam long examId) {
+    public ResponseEntity<String> cancelDermatologistExam(@PathVariable long examId) {
         try {
             pharmacistExamSchedulingService.cancelAppointment(examId, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);
@@ -106,6 +113,8 @@ public class PatientPharmacistExamController {
             return new ResponseEntity<>("The exam you've tried to cancel does not exist.", HttpStatus.BAD_REQUEST);
         } catch (ExamCanNoLongerBeCancelledException e) {
             return new ResponseEntity<>("Sorry, the exam can no longer be cancelled.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
     }
 

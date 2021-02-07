@@ -11,21 +11,21 @@ public class ExamDetails implements Serializable {
     private Calendar examStart;
     private Calendar examEnd;
     private double price;
-    private String dermatologistName;
-    private String dermatologistSurname;
+    private String examinerName;
+    private String examinerSurname;
     private String pharmacyName;
     private boolean cancellable;
 
     public ExamDetails() {
     }
 
-    public ExamDetails(Long id, double price, Calendar examStart, Calendar examEnd, String dermatologistName, String dermatologistSurname, String pharmacyName) {
+    public ExamDetails(Long id, double price, Calendar examStart, Calendar examEnd, String examinerName, String examinerSurname, String pharmacyName) {
         this.id = id;
         this.price = price;
         this.examStart = examStart;
         this.examEnd = examEnd;
-        this.dermatologistName = dermatologistName;
-        this.dermatologistSurname = dermatologistSurname;
+        this.examinerName = examinerName;
+        this.examinerSurname = examinerSurname;
         this.pharmacyName = pharmacyName;
         this.cancellable = isExamCancellable();
     }
@@ -62,20 +62,20 @@ public class ExamDetails implements Serializable {
         this.price = price;
     }
 
-    public String getDermatologistName() {
-        return dermatologistName;
+    public String getExaminerName() {
+        return examinerName;
     }
 
-    public void setDermatologistName(String dermatologistName) {
-        this.dermatologistName = dermatologistName;
+    public void setExaminerName(String examinerName) {
+        this.examinerName = examinerName;
     }
 
-    public String getDermatologistSurname() {
-        return dermatologistSurname;
+    public String getExaminerSurname() {
+        return examinerSurname;
     }
 
-    public void setDermatologistSurname(String dermatologistSurname) {
-        this.dermatologistSurname = dermatologistSurname;
+    public void setExaminerSurname(String examinerSurname) {
+        this.examinerSurname = examinerSurname;
     }
 
     public String getPharmacyName() {
@@ -108,8 +108,8 @@ public class ExamDetails implements Serializable {
                 "examStart=" + examStart +
                 ", examEnd=" + examEnd +
                 ", price=" + price +
-                ", dermatologistName='" + dermatologistName + '\'' +
-                ", dermatologistSurname='" + dermatologistSurname + '\'' +
+                ", dermatologistName='" + examinerName + '\'' +
+                ", dermatologistSurname='" + examinerSurname + '\'' +
                 ", pharmacyName='" + pharmacyName + '\'' +
                 '}';
     }
