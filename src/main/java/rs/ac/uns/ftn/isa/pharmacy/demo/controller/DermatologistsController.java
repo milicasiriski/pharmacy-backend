@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistShiftDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -45,5 +47,15 @@ public class DermatologistsController implements DermatologistConverter {
     @GetMapping(value = "/shiftIntervals/{dermatologistId}")
     public ResponseEntity<DermatologistShiftDto> getAllDermatologistShifts(@PathVariable Long dermatologistId) {
         return ResponseEntity.ok(dermatologistEmploymentService.getDermatologistShifts(dermatologistId));
+    }
+
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/getOtherDermatologists")
+    public ResponseEntity<List<DermatologistDto>> getOtherDermatologists() {
+        try {
+            return new ResponseEntity<>(dermatologistService.getOtherDermatologists(), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

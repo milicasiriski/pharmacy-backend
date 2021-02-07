@@ -239,6 +239,12 @@ public class Pharmacy {
         this.subscribers = subscribers;
     }
 
+    public void addDermatologist(Dermatologist dermatologist, Employment employment) {
+        if (!dermatologists.containsKey(dermatologist)) {
+            dermatologists.put(dermatologist, employment);
+        }
+    }
+
     public double getCurrentMedicinePrice(Medicine medicine) {
         List<MedicinePriceListItem> prices = this.medicine.get(medicine).getPrices();
         return currentPrice(prices);
