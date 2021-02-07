@@ -37,8 +37,7 @@ public class PatientDermatologistExamController {
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")
-    // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") String pharmacyId) {
         try {
@@ -48,13 +47,11 @@ public class PatientDermatologistExamController {
                     response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")
-    // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR
     @GetMapping("/{pharmacyId}/{sort}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId, @PathVariable("sort") ExamSortType sort) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
