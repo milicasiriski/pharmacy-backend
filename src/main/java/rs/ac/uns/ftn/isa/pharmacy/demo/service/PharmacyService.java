@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
@@ -29,4 +30,6 @@ public interface PharmacyService {
     void removePharmacist(Long pharmacistId);
 
     void removeDermatologist(Long dermatologistId);
+
+    void addDermatologist(AddDermatologistDto addDermatologistDto);
 }

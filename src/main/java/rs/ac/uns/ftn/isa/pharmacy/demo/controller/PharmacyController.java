@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasShiftInAnotherPharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacistHasExamException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
@@ -73,13 +75,16 @@ public class PharmacyController {
         return ResponseEntity.ok("Pharmacy updated successfully.");
     }
 
+
     @PutMapping("/addMedicine/{medicineId}")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> addMedicine(@PathVariable Long medicineId) {
         pharmacyService.addMedicine(medicineId);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteMedicine/{medicineId}")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> deleteMedicine(@PathVariable Long medicineId) {
         try {
             pharmacyService.removeMedicine(medicineId);
@@ -92,6 +97,7 @@ public class PharmacyController {
     }
 
     @DeleteMapping("/deletePharmacist/{pharmacistId}")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> deletePharmacist(@PathVariable Long pharmacistId) {
         try {
             pharmacyService.removePharmacist(pharmacistId);
@@ -104,6 +110,7 @@ public class PharmacyController {
     }
 
     @DeleteMapping("/deleteDermatologist/{dermatologistId}")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> deleteDermatologist(@PathVariable Long dermatologistId) {
         try {
             pharmacyService.removeDermatologist(dermatologistId);
@@ -113,5 +120,17 @@ public class PharmacyController {
         } catch (DermatologistHasExamException e) {
             return new ResponseEntity<>("Dermatologist has exam!", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/addDermatologist/")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> addDermatologist(@RequestBody AddDermatologistDto addDermatologistDto) {
+        try {
+            pharmacyService.addDermatologist(addDermatologistDto);
+            return ResponseEntity.ok("Dermatologist successfully added!");
+        } catch (DermatologistHasShiftInAnotherPharmacy e) {
+            return new ResponseEntity<>("Dermatologist has shift in another pharmacy!", HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

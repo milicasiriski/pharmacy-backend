@@ -4,17 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasShiftInAnotherPharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacistHasExamException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
@@ -86,6 +86,14 @@ public class PharmacyServiceImpl implements PharmacyService {
         Pharmacy pharmacy = findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
 
         return new PharmacyDto(pharmacy);
+    }
+
+    @Override
+    public Pharmacy save(PharmacyDto dto) {
+        // TODO: Give real address to constructor
+        Pharmacy pharmacy = new Pharmacy(dto.getName(), new Address(), dto.getAbout());
+        pharmacy = pharmacyRepository.save(pharmacy);
+        return pharmacy;
     }
 
     @Override
@@ -184,6 +192,40 @@ public class PharmacyServiceImpl implements PharmacyService {
         pharmacyRepository.save(pharmacy);
     }
 
+    @Override
+    public void addDermatologist(AddDermatologistDto addDermatologistDto) throws EntityNotFoundException, DermatologistHasShiftInAnotherPharmacy {
+        Dermatologist dermatologist = dermatologistRepository.findById(addDermatologistDto.getDermatologistId()).orElse(null);
+        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+
+        if (dermatologist == null) {
+            throw new EntityNotFoundException();
+        }
+        Map<DaysOfWeek, TimeInterval> convertedShifts = generateShifts(addDermatologistDto.getShifts());
+        Collection<Employment> employments = dermatologist.getPharmacies().values();
+
+        employments.forEach(employment -> {
+            Map<DaysOfWeek, TimeInterval> shifts = employment.getShifts();
+            checkIfIntervalsOverlapping(convertedShifts, shifts);
+        });
+
+        Employment newEmployment = new Employment(convertedShifts, 20.0, 20, new ArrayList<>());
+        pharmacy.addDermatologist(dermatologist, newEmployment);
+        pharmacyRepository.save(pharmacy);
+    }
+
+    private void checkIfIntervalsOverlapping(Map<DaysOfWeek, TimeInterval> convertedShifts, Map<DaysOfWeek, TimeInterval> shifts) {
+        if (shifts.get(DaysOfWeek.MONDAY).isOverlapping(convertedShifts.get(DaysOfWeek.MONDAY))
+                || shifts.get(DaysOfWeek.TUESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.TUESDAY))
+                || shifts.get(DaysOfWeek.WEDNESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.WEDNESDAY))
+                || shifts.get(DaysOfWeek.THURSDAY).isOverlapping(convertedShifts.get(DaysOfWeek.THURSDAY))
+                || shifts.get(DaysOfWeek.FRIDAY).isOverlapping(convertedShifts.get(DaysOfWeek.FRIDAY))
+                || shifts.get(DaysOfWeek.SATURDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SATURDAY))
+                || shifts.get(DaysOfWeek.SUNDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SUNDAY))) {
+            throw new DermatologistHasShiftInAnotherPharmacy();
+        }
+    }
+
     private List<MedicinesBasicInfoDto> findMedicines(Pharmacy pharmacy) {
         List<MedicinesBasicInfoDto> medicines = new ArrayList<>();
 
@@ -214,11 +256,28 @@ public class PharmacyServiceImpl implements PharmacyService {
         return dermatologists;
     }
 
-    @Override
-    public Pharmacy save(PharmacyDto dto) {
-        // TODO: Give real address to constructor
-        Pharmacy pharmacy = new Pharmacy(dto.getName(), new Address(), dto.getAbout());
-        pharmacy = pharmacyRepository.save(pharmacy);
-        return pharmacy;
+    private Map<DaysOfWeek, TimeInterval> generateShifts(List<TimeIntervalDto> timeIntervals) {
+        Map<DaysOfWeek, TimeInterval> shifts = new HashMap<>();
+        for (int i = 0; i <= 6; i++) {
+            TimeInterval shift = generateShiftTimeInterval(timeIntervals.get(i));
+            shifts.put(DaysOfWeek.values()[i], shift);
+        }
+
+        return shifts;
+    }
+
+    private TimeInterval generateShiftTimeInterval(TimeIntervalDto timeIntervalDto) {
+        Calendar shiftStart = Calendar.getInstance();
+        Calendar shiftEnd = Calendar.getInstance();
+
+        shiftStart.setTime(timeIntervalDto.getStart());
+        shiftStart.set(Calendar.SECOND, 0);
+        shiftStart.set(Calendar.MILLISECOND, 0);
+
+        shiftEnd.setTime(timeIntervalDto.getEnd());
+        shiftEnd.set(Calendar.SECOND, 0);
+        shiftEnd.set(Calendar.MILLISECOND, 0);
+
+        return new TimeInterval(shiftStart, shiftEnd);
     }
 }
