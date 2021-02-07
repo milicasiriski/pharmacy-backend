@@ -79,8 +79,12 @@ public class PharmacyController {
     @PutMapping("/addMedicine/{medicineId}")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> addMedicine(@PathVariable Long medicineId) {
-        pharmacyService.addMedicine(medicineId);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        try {
+            pharmacyService.addMedicine(medicineId);
+            return new ResponseEntity<>("Medicine successfully added!", HttpStatus.OK);
+        } catch (EntityNotFoundException e){
+            return new ResponseEntity<>("There is no such medicine in system!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/deleteMedicine/{medicineId}")
@@ -130,7 +134,8 @@ public class PharmacyController {
             return ResponseEntity.ok("Dermatologist successfully added!");
         } catch (DermatologistHasShiftInAnotherPharmacy e) {
             return new ResponseEntity<>("Dermatologist has shift in another pharmacy!", HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("There is no such dermatologist in system!", HttpStatus.BAD_REQUEST);
         }
-
     }
 }

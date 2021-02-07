@@ -45,8 +45,10 @@ public class RegisterPharmacistServiceImpl implements RegisterPharmacistService 
     private Map<DaysOfWeek, TimeInterval> generateShifts(List<TimeIntervalDto> timeIntervals) {
         Map<DaysOfWeek, TimeInterval> shifts = new HashMap<>();
         for (int i = 0; i <= 6; i++) {
-            TimeInterval shift = generateShiftTimeInterval(timeIntervals.get(i));
-            shifts.put(DaysOfWeek.values()[i], shift);
+            if (timeIntervals.get(i).getShiftDefined()) {
+                TimeInterval shift = generateShiftTimeInterval(timeIntervals.get(i));
+                shifts.put(DaysOfWeek.values()[i], shift);
+            }
         }
 
         return shifts;

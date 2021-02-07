@@ -46,7 +46,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException, NullPointerException {
+    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ShiftIsNotDefinedException, ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException, NullPointerException {
         Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(pharmacyAdminExamDto.getDermatologistId());
 
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder
@@ -59,6 +59,11 @@ public class ExamServiceImpl implements ExamService {
         TimeInterval examTimeInterval = generateExamTimeInterval(pharmacyAdminExamDto);
 
         String dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(examTimeInterval.getStart().get(Calendar.DAY_OF_WEEK)).label;
+
+        if (!shifts.containsKey(DaysOfWeek.fromCalendarDayOfWeek(examTimeInterval.getStart().get(Calendar.DAY_OF_WEEK)))) {
+            throw new ShiftIsNotDefinedException();
+        }
+
         TimeInterval shiftForDayOfWeek = shifts.get(DaysOfWeek.valueOf(dayOfWeek.toUpperCase()));
         TimeInterval examShiftTimeInterval = getIntervalForShiftCompare(examTimeInterval, shiftForDayOfWeek);
 

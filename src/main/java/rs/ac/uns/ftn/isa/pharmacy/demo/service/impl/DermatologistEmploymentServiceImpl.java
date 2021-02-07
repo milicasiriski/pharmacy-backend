@@ -41,8 +41,12 @@ public class DermatologistEmploymentServiceImpl implements DermatologistEmployme
 
         EnumSet.allOf(DaysOfWeek.class)
                 .forEach(day -> {
-                    dermatologistShifts.add(dateFormat.format(shifts.get(day).getStart().getTime()).split(" ")[1]
-                            + '-' + dateFormat.format(shifts.get(day).getEnd().getTime()).split(" ")[1]);
+                    if(shifts.containsKey(day)) {
+                        dermatologistShifts.add(dateFormat.format(shifts.get(day).getStart().getTime()).split(" ")[1]
+                                + '-' + dateFormat.format(shifts.get(day).getEnd().getTime()).split(" ")[1]);
+                    } else {
+                        dermatologistShifts.add("/ - /");
+                    }
                 });
 
         return dermatologistShifts;

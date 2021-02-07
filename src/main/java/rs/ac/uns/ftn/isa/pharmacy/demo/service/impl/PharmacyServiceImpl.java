@@ -215,13 +215,13 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     private void checkIfIntervalsOverlapping(Map<DaysOfWeek, TimeInterval> convertedShifts, Map<DaysOfWeek, TimeInterval> shifts) {
-        if (shifts.get(DaysOfWeek.MONDAY).isOverlapping(convertedShifts.get(DaysOfWeek.MONDAY))
-                || shifts.get(DaysOfWeek.TUESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.TUESDAY))
-                || shifts.get(DaysOfWeek.WEDNESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.WEDNESDAY))
-                || shifts.get(DaysOfWeek.THURSDAY).isOverlapping(convertedShifts.get(DaysOfWeek.THURSDAY))
-                || shifts.get(DaysOfWeek.FRIDAY).isOverlapping(convertedShifts.get(DaysOfWeek.FRIDAY))
-                || shifts.get(DaysOfWeek.SATURDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SATURDAY))
-                || shifts.get(DaysOfWeek.SUNDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SUNDAY))) {
+        if ((convertedShifts.containsKey(DaysOfWeek.MONDAY) && shifts.get(DaysOfWeek.MONDAY).isOverlapping(convertedShifts.get(DaysOfWeek.MONDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.TUESDAY) && shifts.get(DaysOfWeek.TUESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.TUESDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.WEDNESDAY) && shifts.get(DaysOfWeek.WEDNESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.WEDNESDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.THURSDAY) && shifts.get(DaysOfWeek.THURSDAY).isOverlapping(convertedShifts.get(DaysOfWeek.THURSDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.FRIDAY) && shifts.get(DaysOfWeek.FRIDAY).isOverlapping(convertedShifts.get(DaysOfWeek.FRIDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.SATURDAY) && shifts.get(DaysOfWeek.SATURDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SATURDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.SUNDAY) && shifts.get(DaysOfWeek.SUNDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SUNDAY)))) {
             throw new DermatologistHasShiftInAnotherPharmacy();
         }
     }
@@ -259,8 +259,10 @@ public class PharmacyServiceImpl implements PharmacyService {
     private Map<DaysOfWeek, TimeInterval> generateShifts(List<TimeIntervalDto> timeIntervals) {
         Map<DaysOfWeek, TimeInterval> shifts = new HashMap<>();
         for (int i = 0; i <= 6; i++) {
-            TimeInterval shift = generateShiftTimeInterval(timeIntervals.get(i));
-            shifts.put(DaysOfWeek.values()[i], shift);
+            if (timeIntervals.get(i).getShiftDefined()) {
+                TimeInterval shift = generateShiftTimeInterval(timeIntervals.get(i));
+                shifts.put(DaysOfWeek.values()[i], shift);
+            }
         }
 
         return shifts;
