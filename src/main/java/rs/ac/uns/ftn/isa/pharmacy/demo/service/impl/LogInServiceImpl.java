@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadPasswordException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.UserAlreadyEnabled;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Supplier;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.SystemAdmin;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.LogInDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserTokenState;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
@@ -62,7 +59,8 @@ public class LogInServiceImpl implements LogInService {
     }
 
     private boolean isValidType(User user) {
-        return user.getClass() == SystemAdmin.class || user.getClass() == Supplier.class || user.getClass() == PharmacyAdmin.class;
+        return user.getClass() == SystemAdmin.class || user.getClass() == Supplier.class || user.getClass() == PharmacyAdmin.class ||
+                user.getClass() == Pharmacist.class;
     }
 
     private UserTokenState getUserTokenState(LogInDto authenticationRequest) {

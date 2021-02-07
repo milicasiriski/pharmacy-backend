@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.UserType;
 
-import java.util.Objects;
+import java.util.List;
 
 public class UserRegistrationDto {
 
@@ -12,6 +12,10 @@ public class UserRegistrationDto {
     private String surname;
     private UserType type;
     private Long pharmacyId;
+    private String country;
+    private String street;
+    private String city;
+    private List<TimeIntervalDto> shifts;
 
     public UserRegistrationDto(String email, String password, String name, String surname, UserType type, Long pharmacyId) {
         this.email = email;
@@ -23,6 +27,38 @@ public class UserRegistrationDto {
     }
 
     public UserRegistrationDto() {
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public List<TimeIntervalDto> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<TimeIntervalDto> shifts) {
+        this.shifts = shifts;
     }
 
     public String getEmail() {
@@ -71,35 +107,5 @@ public class UserRegistrationDto {
 
     public void setPharmacyId(Long pharmacyId) {
         this.pharmacyId = pharmacyId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRegistrationDto that = (UserRegistrationDto) o;
-        return Objects.equals(email, that.email) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(surname, that.surname) &&
-                type == that.type &&
-                Objects.equals(pharmacyId, that.pharmacyId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password, name, surname, type, pharmacyId);
-    }
-
-    @Override
-    public String toString() {
-        return "UserRegistrationDto{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", type=" + type +
-                ", pharmacyId=" + pharmacyId +
-                '}';
     }
 }
