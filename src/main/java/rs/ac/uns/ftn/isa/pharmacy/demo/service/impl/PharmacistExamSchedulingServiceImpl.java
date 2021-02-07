@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
@@ -94,7 +95,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     public void cancelAppointment(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
         Exam exam = getExamById(examId);
 
-        if (!signedInUser.equals(exam.getPatient())) {
+        if (!signedInUser.getId().equals(exam.getPatient().getId())) {
             throw new WrongPatientException();
         }
         if (!exam.isCancellable()) {
@@ -102,6 +103,11 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         }
 
         examRepository.delete(exam);
+    }
+
+    @Override
+    public Iterable<ExamDetails> getPharmacistExamsForPatient(Patient patient) {
+        return examRepository.getPharmacistExamDetails(patient.getId());
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {

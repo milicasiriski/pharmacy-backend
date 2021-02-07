@@ -125,14 +125,14 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient) {
-        return examRepository.getExamDetails(patient.getId());
+        return examRepository.getDermatologistExamDetails(patient.getId());
     }
 
     @Override
     public void cancelDermatologistExam(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
         Exam exam = getExamById(examId);
 
-        if (!signedInUser.equals(exam.getPatient())) {
+        if (!signedInUser.getId().equals(exam.getPatient().getId())) {
             throw new WrongPatientException();
         }
         if (!exam.isCancellable()) {

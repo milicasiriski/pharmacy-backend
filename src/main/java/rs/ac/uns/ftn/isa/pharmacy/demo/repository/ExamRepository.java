@@ -9,5 +9,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 public interface ExamRepository extends CrudRepository<Exam, Long> {
 
     @Query(nativeQuery=true)
-    Iterable<ExamDetails> getExamDetails(@Param("patientId") long patientId);
+    Iterable<ExamDetails> getDermatologistExamDetails(@Param("patientId") long patientId);
+
+    @Query(nativeQuery=true)
+    Iterable<ExamDetails> getPharmacistExamDetails(@Param("patientId") long patientId);
 }

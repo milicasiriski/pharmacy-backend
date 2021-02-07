@@ -140,10 +140,10 @@ INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VA
 INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
 INSERT INTO employment(id, duration, price) VALUES ('2', '20', '30');
 
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', '1', 1, 1);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', '2', 1, 1);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', '1', 1, 0);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2', 2, 1);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', 1, 1);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', 1, 1);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2', 3, 1);
 
 INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status) VALUES ('5', '20', '2021-03-30 18:00', '2021-03-30 17:30', '1', '8', 1);
 
