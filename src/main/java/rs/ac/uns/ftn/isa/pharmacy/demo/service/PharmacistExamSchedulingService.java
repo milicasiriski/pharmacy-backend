@@ -16,4 +16,6 @@ public interface PharmacistExamSchedulingService {
     Iterable<Pharmacist> getPharmacistsWithAvailableAppointments(Date dateTime, long pharmacyId, PharmacistSortType sortType);
 
     void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws MessagingException;
+
+    void cancelAppointment(long examId, Patient signedInUser);
 }

@@ -3,10 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsNotInShiftIntervalException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
@@ -93,7 +90,7 @@ public class ExamServiceImpl implements ExamService {
     public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException, MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);
-            exam.setPrice(exam.getPrice()*loyaltyService.getDiscount());
+            exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
             exam.setPatient(patient);
             examRepository.save(exam);
 
@@ -118,7 +115,10 @@ public class ExamServiceImpl implements ExamService {
         Set<Dermatologist> dermatologists = map.keySet();
 
         dermatologists.forEach(key -> map.get(key).getExams().stream()
-                .filter(it -> !it.isScheduled()).forEach(exam -> {exam.setPrice(exam.getPrice()*loyaltyService.getDiscount());result.add(new ExamAndDermatologistDto(exam, key));}));
+                .filter(it -> !it.isScheduled()).forEach(exam -> {
+                    exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
+                    result.add(new ExamAndDermatologistDto(exam, key));
+                }));
         sortExams(result, sortType);
         return result;
     }
@@ -129,12 +129,16 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void cancelDermatologistExam(long examId) throws EntityNotFoundException, ExamCannotBeCancelledException {
+    public void cancelDermatologistExam(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
         Exam exam = getExamById(examId);
-        if (!exam.isCancellable()) {
-            throw new ExamCannotBeCancelledException();
+
+        if (!signedInUser.equals(exam.getPatient())) {
+            throw new WrongPatientException();
         }
-        exam.setPrice(exam.getPrice()/loyaltyService.getDiscount());
+        if (!exam.isCancellable()) {
+            throw new ExamCanNoLongerBeCancelledException();
+        }
+        exam.setPrice(exam.getPrice() / loyaltyService.getDiscount());
         exam.cancel();
         examRepository.save(exam);
     }

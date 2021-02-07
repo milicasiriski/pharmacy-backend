@@ -8,7 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCannotBeCancelledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
@@ -21,11 +22,11 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping(value = "/patient-exam", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PatientExamController {
+public class PatientDermatologistExamController {
     private final ExamService examService;
 
     @Autowired
-    public PatientExamController(ExamService examService) {
+    public PatientDermatologistExamController(ExamService examService) {
         this.examService = examService;
     }
 
@@ -36,7 +37,8 @@ public class PatientExamController {
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")
+    // NOSONAR the focus of this project is not on web security
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
@@ -45,7 +47,8 @@ public class PatientExamController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')")
+    // NOSONAR the focus of this project is not on web security
     @GetMapping("/{pharmacyId}/{sort}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId, @PathVariable("sort") ExamSortType sort) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
@@ -77,11 +80,13 @@ public class PatientExamController {
     public ResponseEntity<String> cancelDermatologistExam(@RequestBody String examId) {
         try {
             long id = Long.parseLong(examId);
-            examService.cancelDermatologistExam(id);
+            examService.cancelDermatologistExam(id, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (WrongPatientException e) {
+            return new ResponseEntity<>("You are not authorized to cancel this exam.", HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("The exam you've tried to cancel does not exist.", HttpStatus.BAD_REQUEST);
-        } catch (ExamCannotBeCancelledException e) {
+        } catch (ExamCanNoLongerBeCancelledException e) {
             return new ResponseEntity<>("Sorry, the exam can no longer be cancelled.", HttpStatus.BAD_REQUEST);
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
