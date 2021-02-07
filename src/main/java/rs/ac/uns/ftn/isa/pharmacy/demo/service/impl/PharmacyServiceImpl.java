@@ -58,10 +58,10 @@ public class PharmacyServiceImpl implements PharmacyService {
         PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
 
         List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
-        List<PharmacistDto> pharamcists = findPharmacists(pharmacy);
+        List<PharmacistDto> pharmacists = findPharmacists(pharmacy);
         List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
 
-        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharamcists, medicines);
+        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
     }
 
     private List<MedicinesBasicInfoDto> findMedicines(Pharmacy pharmacy) {
@@ -75,13 +75,13 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     private List<PharmacistDto> findPharmacists(Pharmacy pharmacy) {
-        List<PharmacistDto> pharamcists = new ArrayList<>();
+        List<PharmacistDto> pharmacists = new ArrayList<>();
 
         pharmacy.getPharmacists().forEach(pharmacist -> {
             PharmacistDto pharmacistDto = new PharmacistDto(pharmacist.getName(), pharmacist.getSurname(), 4.5, pharmacist.getId());
-            pharamcists.add(pharmacistDto);
+            pharmacists.add(pharmacistDto);
         });
-        return pharamcists;
+        return pharmacists;
     }
 
     private List<DermatologistDto> findDermatologists(Pharmacy pharmacy) {
