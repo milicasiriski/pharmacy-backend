@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPatientService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterPharmacistService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RegisterUserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +28,16 @@ public class RegisterController {
     @Qualifier("registerUserServiceImpl")
     private RegisterUserService registerUserService;
 
+    private final RegisterPharmacistService registerPharmacistService;
+
     private final String userExistsAlert = "User already exists!";
     private final String registrationFailedAlert = "Registration failed!";
 
     @Autowired
-    public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService) {
+    public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService, RegisterPharmacistService registerPharmacistService) {
         this.registerPatientService = registerPatientService;
         this.registerUserService = registerUserService;
+        this.registerPharmacistService = registerPharmacistService;
     }
 
     @PostMapping("/patient")
@@ -44,6 +48,20 @@ public class RegisterController {
         try {
             this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/pharmacist")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> registerPharmacist(@RequestBody UserRegistrationDto credentials) {
+        if (registerUserService.userExists(credentials.getEmail())) {
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            this.registerPharmacistService.register(credentials);
+            return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }

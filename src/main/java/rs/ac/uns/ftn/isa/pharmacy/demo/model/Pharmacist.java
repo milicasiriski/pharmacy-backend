@@ -34,9 +34,10 @@ public class Pharmacist extends User {
         super();
     }
 
-    public Pharmacist(String email, String password, String name, String surname, double rating) {
-        super(email, password, name, surname, new Address());
-        this.rating = rating;
+    public Pharmacist(String email, String password, String name, String surname, Address address, Pharmacy pharmacy, Map<DaysOfWeek, TimeInterval> shifts) {
+        super(email, password, name, surname, address);
+        this.pharmacy = pharmacy;
+        this.shifts = shifts;
     }
 
     public Pharmacy getPharmacy() {
