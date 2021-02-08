@@ -169,9 +169,13 @@ INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employme
 
 INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (1, 50, '2021-07-16', 4, 3);
 INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (2, 100, '2021-08-16', 4, 3);
+INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (3, 100, '2021-08-16', 4, 3);
+INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (4, 100, '2021-08-16', 4, 3);
 
 INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (1, 10, 1);
 INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (2, 30, 2);
+INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (3, 40, 1);
+INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (4, 90, 1);
 
 INSERT INTO medicine_search (id, medicine_id, pharmacy_id) VALUES (1, 5, 4);
 
