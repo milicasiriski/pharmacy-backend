@@ -86,8 +86,11 @@ public class QRServiceImpl implements QRService {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Pharmacy> pharmacyOptional = pharmacyRepository.findById(dto.getPharmacyId());
         Map<Medicine, Integer> prescriptionMedicineAmount = new HashMap<>();
+
         if (pharmacyOptional.isPresent()) {
+
             Pharmacy pharmacy = pharmacyOptional.get();
+
             dto.getPrescription().getMedicines().forEach(medicineDto -> {
                 Medicine medicine = medicineRepository.findByUuid(medicineDto.getUuid());
                 if (pharmacy.getMedicine().isEmpty()) {
@@ -103,11 +106,14 @@ public class QRServiceImpl implements QRService {
                     userRepository.save(patient);
                 }
             });
+
             sendEmail(patient.getEmail(), patient.getName(), pharmacy.getName(), String.valueOf(dto.getBill()));
+            pharmacyRepository.save(pharmacy);
             EPrescriptionDto prescriptionDto = dto.getPrescription();
             Calendar prescriptionDate = Calendar.getInstance();
             prescriptionDate.setTime(prescriptionDto.getPrescriptionDate());
             prescriptionRepository.save(new Prescription(prescriptionDto.getId(), patient, prescriptionMedicineAmount, prescriptionDate));
+
         } else {
             throw new BadRequestException();
         }
