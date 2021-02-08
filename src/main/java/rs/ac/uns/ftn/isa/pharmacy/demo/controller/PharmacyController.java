@@ -60,7 +60,6 @@ public class PharmacyController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -106,7 +105,7 @@ public class PharmacyController {
         try {
             pharmacyService.addMedicine(medicineId);
             return new ResponseEntity<>("Medicine successfully added!", HttpStatus.OK);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("There is no such medicine in system!", HttpStatus.BAD_REQUEST);
         }
     }
