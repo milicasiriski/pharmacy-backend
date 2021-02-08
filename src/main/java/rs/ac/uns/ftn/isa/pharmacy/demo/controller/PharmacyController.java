@@ -15,6 +15,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyProfileDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.RatingFilter;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -38,6 +39,16 @@ public class PharmacyController {
     @GetMapping("/getAll")
     public ResponseEntity<List<PharmacyDto>> getAllPharmacies() {
         List<PharmacyDto> pharmacies = pharmacyService.findAll();
+        return ResponseEntity.ok(pharmacies);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_UNAUTHORISED', 'ROLE_SYSTEM_ADMINISTRATOR')") // NOSONAR
+    @GetMapping("/{ratingFilter}/{distance}/{userLon}/{userLat}")
+    public ResponseEntity<List<PharmacyDto>> getAllPharmacies(@PathVariable("ratingFilter") RatingFilter ratingFilter,
+                                                              @PathVariable("distance") double distance,
+                                                              @PathVariable("userLon") double userLon,
+                                                              @PathVariable("userLat") double userLat) {
+        List<PharmacyDto> pharmacies = pharmacyService.findAll(ratingFilter, distance, userLon, userLat);
         return ResponseEntity.ok(pharmacies);
     }
 
