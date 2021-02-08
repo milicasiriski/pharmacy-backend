@@ -167,6 +167,14 @@ INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) 
 INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '1', '4');
 INSERT INTO dermatologist_employment_mapping(pharmacy_id, dermatologist_employment_id, dermatologist_id) VALUES ('4', '2', '5');
 
+INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (1, 50, '2021-07-16', 4, 3);
+INSERT INTO medicine_purchase (id, price, purchase_date, pharmacy_id, patient_id) VALUES (2, 100, '2021-08-16', 4, 3);
+
+INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (1, 10, 1);
+INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (2, 30, 2);
+
+INSERT INTO medicine_search (id, medicine_id, pharmacy_id) VALUES (1, 5, 4);
+
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');

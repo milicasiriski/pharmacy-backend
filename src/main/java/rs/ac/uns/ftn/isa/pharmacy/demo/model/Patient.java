@@ -41,7 +41,6 @@ public class Patient extends User {
         return administrationRole;
     }
 
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
