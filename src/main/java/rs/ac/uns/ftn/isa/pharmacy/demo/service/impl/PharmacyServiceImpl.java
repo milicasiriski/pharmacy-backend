@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.RatingFilter;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -45,6 +46,21 @@ public class PharmacyServiceImpl implements PharmacyService {
         pharmacyRepository.findAll().forEach(pharmacy -> dtoPharmacies.add(new PharmacyDto(pharmacy)));
 
         return dtoPharmacies;
+    }
+
+    @Override
+    public List<PharmacyDto> findAll(RatingFilter ratingFilter, double distance, double userLon, double userLat) {
+        int rating = ratingFilter.ordinal();
+        Iterable<Pharmacy> pharmacies = pharmacyRepository.findWithRatingGreaterThan(rating);
+
+        List<PharmacyDto> result = new ArrayList<>();
+        pharmacies.forEach(pharmacy -> {
+            double calculatedDistance = calculateDistanceInKilometers(pharmacy.getAddress(), userLon, userLat);
+            if (calculatedDistance <= distance) {
+                result.add(new PharmacyDto(pharmacy));
+            }
+        });
+        return result;
     }
 
     @Override
@@ -281,5 +297,15 @@ public class PharmacyServiceImpl implements PharmacyService {
         shiftEnd.set(Calendar.MILLISECOND, 0);
 
         return new TimeInterval(shiftStart, shiftEnd);
+    }
+
+    private double calculateDistanceInKilometers(Address pharmacyAddress, double userLon, double userLat) {
+        double degToKmFactor = 10000.0 / 90.0;
+        double pharmacyLon = pharmacyAddress.getLongitude();
+        double pharmacyLat = pharmacyAddress.getLatitude();
+
+        double deltaLat = (userLat - pharmacyLat) * degToKmFactor;
+        double deltaLon = (userLon - pharmacyLon) * degToKmFactor;
+        return Math.sqrt(deltaLat * deltaLat + deltaLon * deltaLon);
     }
 }
