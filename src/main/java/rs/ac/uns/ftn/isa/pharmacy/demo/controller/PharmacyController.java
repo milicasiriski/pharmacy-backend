@@ -5,7 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasShiftInAnotherPharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
@@ -42,14 +46,23 @@ public class PharmacyController {
         return ResponseEntity.ok(pharmacies);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_UNAUTHORISED', 'ROLE_SYSTEM_ADMINISTRATOR')") // NOSONAR
     @GetMapping("/{ratingFilter}/{distance}/{userLon}/{userLat}")
     public ResponseEntity<List<PharmacyDto>> getAllPharmacies(@PathVariable("ratingFilter") RatingFilter ratingFilter,
                                                               @PathVariable("distance") double distance,
                                                               @PathVariable("userLon") double userLon,
                                                               @PathVariable("userLat") double userLat) {
-        List<PharmacyDto> pharmacies = pharmacyService.findAll(ratingFilter, distance, userLon, userLat);
-        return ResponseEntity.ok(pharmacies);
+        try {
+            if (!isUserSignedIn() || getSignedInUser().getAdministrationRole().equals("ROLE_PATIENT") ||
+                    getSignedInUser().getAdministrationRole().equals("ROLE_SYSTEM_ADMINISTRATOR")) {
+                List<PharmacyDto> pharmacies = pharmacyService.findAll(ratingFilter, distance, userLon, userLat);
+                return ResponseEntity.ok(pharmacies);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/getPharmacyById/{pharmacyId}")
@@ -148,5 +161,14 @@ public class PharmacyController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("There is no such dermatologist in system!", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private boolean isUserSignedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken);
+    }
+
+    private User getSignedInUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
