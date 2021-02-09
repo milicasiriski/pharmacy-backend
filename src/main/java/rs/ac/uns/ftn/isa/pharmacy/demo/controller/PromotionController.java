@@ -29,9 +29,9 @@ public class PromotionController {
     public ResponseEntity<String> saveNewPromotion(@RequestBody PromotionDto promotionDto) {
         try {
             promotionService.addNewPromotion(promotionDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Promotion successfully added!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
         }
     }
 
