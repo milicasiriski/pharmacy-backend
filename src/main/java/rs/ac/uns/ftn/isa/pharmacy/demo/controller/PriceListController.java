@@ -41,11 +41,11 @@ public class PriceListController {
     public ResponseEntity<String> saveNewPrice(@RequestBody PriceListItemDto priceListItemDto) {
         try {
             priceListService.updatePriceList(priceListItemDto);
+            return new ResponseEntity<>("Medicine price updated!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("There is no such medicine!", HttpStatus.BAD_REQUEST);
         } catch (PharmacyDoesNotContainMedicineException e) {
             return new ResponseEntity<>("Pharmacy doesnt have such medicine!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
