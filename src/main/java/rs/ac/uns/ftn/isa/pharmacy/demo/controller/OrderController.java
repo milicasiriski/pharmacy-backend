@@ -33,7 +33,7 @@ public class OrderController implements OrderConverter {
     @PostMapping("/")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> createOrder(@RequestBody OrderDto orderDto) {
-        try{
+        try {
             orderService.save(orderDto);
             return new ResponseEntity<>("Order successfully created!", HttpStatus.OK);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class OrderController implements OrderConverter {
     public ResponseEntity<String> deleteOrder(@PathVariable("orderId") Long orderId) {
         try {
             orderService.deleteOrder(orderId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Order successfully deleted!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("Order does not exist!", HttpStatus.BAD_REQUEST);
         } catch (OrderHasOfferException e) {
@@ -75,4 +75,18 @@ public class OrderController implements OrderConverter {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PutMapping("/updateOrder")
+    public ResponseEntity<String> updateOrder(@RequestBody OrderResponseDto updatedOrder) {
+        try {
+            orderService.updateOrder(updatedOrder);
+            return new ResponseEntity<>("Order successfully updated!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Order does not exist!", HttpStatus.BAD_REQUEST);
+        } catch (OrderHasOfferException e) {
+            return new ResponseEntity<>("Order already has offer!", HttpStatus.BAD_REQUEST);
+        } catch (OtherPharmacyAdminCreatedOrderException e) {
+            return new ResponseEntity<>("Someone else created this order!", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

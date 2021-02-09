@@ -30,6 +30,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "pharmacy_admin_id")
     private PharmacyAdmin pharmacyAdmin;
 
+    @Column(name = "offer_accepted")
+    private boolean offerAccepted = false;
+
     public Order(Map<Medicine, Integer> medicineAmount, Calendar deadline, PharmacyAdmin pharmacyAdmin) {
         this.medicineAmount = medicineAmount;
         this.deadline = deadline;
@@ -38,6 +41,14 @@ public class Order implements Serializable {
 
     public Order() {
 
+    }
+
+    public boolean isOfferAccepted() {
+        return offerAccepted;
+    }
+
+    public void setOfferAccepted(boolean offerAccepted) {
+        this.offerAccepted = offerAccepted;
     }
 
     public Long getId() {

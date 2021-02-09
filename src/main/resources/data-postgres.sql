@@ -87,12 +87,12 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, street, city, country) VALUES ('15', 'SUPPLIER', 'pharmacyisa6+supplier3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07','Mikin bulevar 123', 'Mikici', 'Srbija');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, street, city, country) VALUES ('16', 'SUPPLIER', 'pharmacyisa6+supplier4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07','Mikin bulevar 123', 'Mikici', 'Srbija');
 
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (1, '2021-06-16 00:00:00', 11);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (5, '2021-06-16 00:00:00', 11);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (6, '2021-06-16 00:00:00', 11);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (2, '2021-01-16 00:00:00', 10);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (3, '2021-07-16 00:00:00', 10);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id) VALUES (4, '2021-08-16 00:00:00', 10);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (1, '2021-06-16 00:00:00', 11, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (5, '2021-06-16 00:00:00', 11, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (6, '2021-06-16 00:00:00', 11, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (2, '2021-01-16 00:00:00', 10, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (3, '2021-07-16 00:00:00', 10, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (4, '2021-08-16 00:00:00', 10, false);
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date) VALUES ('17', 'SYSTEM_ADMIN', 'pharmacyisa6+systemadmin4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07');
 

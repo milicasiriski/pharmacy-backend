@@ -131,11 +131,17 @@ public class OfferServiceImpl implements OfferService {
 
         if (order.getPharmacyAdmin().getId().equals(pharmacyAdmin.getId())) {
             updateOfferStatus(offer);
+            updateOrderStatus(order);
             Map<Medicine, Integer> medicineAmount = order.getMedicineAmount();
             updateMedicineStatus(pharmacy, medicineAmount);
         } else {
             throw new OtherPharmacyAdminCreatedOrderException();
         }
+    }
+
+    private void updateOrderStatus(Order order) {
+        order.setOfferAccepted(true);
+        orderRepository.save(order);
     }
 
     private void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
