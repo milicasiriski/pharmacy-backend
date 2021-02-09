@@ -264,25 +264,14 @@ public class Pharmacy {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Pharmacy)) return false;
         Pharmacy pharmacy = (Pharmacy) o;
-        return Objects.equals(id, pharmacy.id) &&
-                Objects.equals(name, pharmacy.name) &&
-                Objects.equals(address, pharmacy.address) &&
-                Objects.equals(about, pharmacy.about) &&
-                Objects.equals(dermatologists, pharmacy.dermatologists) &&
-                Objects.equals(pharmacists, pharmacy.pharmacists) &&
-                Objects.equals(subscribers, pharmacy.subscribers) &&
-                Objects.equals(pharmacyAdmins, pharmacy.pharmacyAdmins) &&
-                Objects.equals(pharmacyPromotions, pharmacy.pharmacyPromotions) &&
-                Objects.equals(medicine, pharmacy.medicine) &&
-                Objects.equals(examPriceList, pharmacy.examPriceList) &&
-                Objects.equals(rating, pharmacy.rating);
+        return Objects.equals(id, pharmacy.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address);
+        return Objects.hash(id);
     }
 
     @Override
