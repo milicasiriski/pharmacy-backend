@@ -1,9 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +24,7 @@ public class MedicineDto implements Serializable {
     private String sideEffects;
     private List<MedicineNameUuidDto> alternatives;
     private int points = 0;
+    private double rating;
 
     public MedicineDto(long id, String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points) {
         this.id = id;
@@ -46,6 +49,26 @@ public class MedicineDto implements Serializable {
         this.uuid = uuid;
         this.name = name;
         this.form = form;
+    }
+
+    public MedicineDto(Medicine medicine) {
+        this.id = medicine.getId();
+        this.uuid = medicine.getUuid();
+        this.name = medicine.getName();
+        this.description = medicine.getDescription();
+        this.manufacturer = medicine.getManufacturer();
+        this.composition = medicine.getComposition();
+        this.form = medicine.getForm();
+        this.type = medicine.getType();
+        this.prescribed = medicine.isPrescribed();
+        this.recommendedDose = medicine.getRecommendedDose();
+        this.sideEffects = medicine.getSideEffects();
+        List<MedicineNameUuidDto> alternatives = new ArrayList<>();
+        medicine.getAlternatives().forEach(alternative ->
+                alternatives.add(new MedicineNameUuidDto(alternative.getUuid(), alternative.getName())));
+        this.alternatives = alternatives;
+        this.points = medicine.getPoints();
+        this.rating = medicine.getRatings();
     }
 
     public long getId() {
@@ -150,6 +173,14 @@ public class MedicineDto implements Serializable {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     @Override

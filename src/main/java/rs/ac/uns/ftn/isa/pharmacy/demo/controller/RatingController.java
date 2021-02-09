@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
@@ -26,6 +27,20 @@ public class RatingController {
 
     public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
+    }
+
+    @GetMapping("/medicine")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<List<MedicineDto>> getMedicine() {
+        try {
+            List<MedicineDto> result = new ArrayList<>();
+            ratingService.getMedicine(getSignedInUser()).forEach(medicine -> {
+                result.add(new MedicineDto(medicine));
+            });
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/dermatologists")
