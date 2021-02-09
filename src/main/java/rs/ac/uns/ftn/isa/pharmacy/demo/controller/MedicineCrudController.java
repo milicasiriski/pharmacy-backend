@@ -8,8 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineNameUuidDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineSearchDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -54,7 +56,18 @@ public class MedicineCrudController {
     }
 
     @GetMapping("/getIfDoesntExist")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<List<MedicineDto>> getMedicineIfDoesntExistInPharmacy() {
         return new ResponseEntity<>(medicineService.getMedicineIfDoesntExistInPharmacy(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getSearchedMedicine")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<List<MedicineSearchDto>> getSearchedMedicineThatWereNotOnStock() {
+        try {
+            return new ResponseEntity<>(medicineService.getSearchedMedicineThatWereNotOnStock(), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

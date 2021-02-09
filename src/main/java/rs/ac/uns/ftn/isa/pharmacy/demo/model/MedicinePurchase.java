@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "medicine_purchase")
@@ -91,5 +92,23 @@ public class MedicinePurchase {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MedicinePurchase that = (MedicinePurchase) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(medicineAmount, that.medicineAmount) &&
+                Objects.equals(pharmacy, that.pharmacy) &&
+                Objects.equals(patient, that.patient) &&
+                Objects.equals(purchaseDate, that.purchaseDate) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, medicineAmount, pharmacy, patient, purchaseDate, price);
     }
 }

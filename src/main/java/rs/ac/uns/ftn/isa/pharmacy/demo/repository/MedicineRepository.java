@@ -8,4 +8,5 @@ public interface MedicineRepository extends CrudRepository<Medicine, Long> {
     Medicine findByName(String name);
 
     Medicine findByUuid(String uuid);
+
 }

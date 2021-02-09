@@ -12,6 +12,9 @@ public interface MedicinePurchaseRepository extends CrudRepository<MedicinePurch
     @Query(value = "SELECT SUM(purchase_medicine_mapping.medicine_amount) FROM medicine_purchase, purchase_medicine_mapping WHERE\n" +
             "\t\t\tmedicine_purchase.id = purchase_medicine_mapping.purchase_id AND\n" +
             "purchase_date BETWEEN :dateStart AND :dateEnd AND pharmacy_id = :pharmacyId AND medicine_id = :medicineId", nativeQuery = true)
-    Integer getMedicinePurchaseByPharmacyAndDate(@Param("dateStart") Calendar dateStart, @Param("dateEnd") Calendar dateEnd,
-                                                 @Param("pharmacyId") Long pharmacyId, @Param("medicineId") Long medicineId);
+    Integer getMedicineAmountByPharmacyDateAndMedicine(@Param("dateStart") Calendar dateStart, @Param("dateEnd") Calendar dateEnd, @Param("pharmacyId") Long pharmacyId, @Param("medicineId") Long medicineId);
+
+    @Query(value = "SELECT SUM(price) FROM medicine_purchase " +
+            "WHERE purchase_date BETWEEN :dateStart AND :dateEnd AND pharmacy_id = :pharmacyId", nativeQuery = true)
+    Double getMedicineIncomeByPharmacyAndDate(@Param("dateStart") Calendar dateStart, @Param("dateEnd") Calendar dateEnd, @Param("pharmacyId") Long pharmacyId);
 }

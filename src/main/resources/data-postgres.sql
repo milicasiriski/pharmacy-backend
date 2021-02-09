@@ -177,7 +177,9 @@ INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id
 INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (3, 40, 1);
 INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id) VALUES (4, 90, 1);
 
-INSERT INTO medicine_search (id, medicine_id, pharmacy_id) VALUES (1, 5, 4);
+INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (1, 5, 4, '2021-07-16');
+INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (2, 4, 4, '2021-07-16');
+INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (3, 3, 4, '2021-07-16');
 
 INSERT INTO complaint(id, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, null, 'Im not happy with a service!', false , 1, null, 1);
 
