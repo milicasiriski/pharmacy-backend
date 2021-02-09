@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SubmitRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
 import java.util.ArrayList;
@@ -68,6 +68,28 @@ public class RatingController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/dermatologists")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<String> submitDermatologistsRatings(@RequestBody List<SubmitRatingDto> ratings) {
+        try {
+            ratingService.saveDermatologistRatings(ratings);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/pharmacists")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<String> submitPharmacistsRatings(@RequestBody List<SubmitRatingDto> ratings) {
+        try {
+            ratingService.savePharmacistRatings(ratings);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
     }
 
