@@ -4,6 +4,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineNameUuidDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineSearchDto;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface MedicineService {
     List<List<MedicineNameUuidDto>> getAlternativesGroups();
 
     List<MedicineDto> getMedicineIfDoesntExistInPharmacy();
+
+    List<MedicineSearchDto> getSearchedMedicineThatWereNotOnStock();
 }
