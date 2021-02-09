@@ -40,6 +40,13 @@ public class Complaint {
         this.resolved = resolved;
     }
 
+    public Complaint(Patient patient, Pharmacy pharmacy, String complaintText, boolean resolved) {
+        this.patient = patient;
+        this.pharmacy = pharmacy;
+        this.complaintText = complaintText;
+        this.resolved = resolved;
+    }
+
     public Complaint() {
     }
 

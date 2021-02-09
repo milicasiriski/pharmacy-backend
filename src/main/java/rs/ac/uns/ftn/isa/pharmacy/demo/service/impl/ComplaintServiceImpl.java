@@ -9,17 +9,12 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ComplaintResolvedException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ComplaintMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintAnswerDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ComplaintService;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ComplaintServiceImpl implements ComplaintService {
@@ -29,14 +24,16 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final UserRepository userRepository;
     private final MailService<String> mailService;
+    private final PharmacyRepository pharmacyRepository;
 
     @Autowired
-    public ComplaintServiceImpl(PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository, ComplaintRepository complaintRepository, UserRepository userRepository, MailService<String> mailService) {
+    public ComplaintServiceImpl(PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository, ComplaintRepository complaintRepository, UserRepository userRepository, MailService<String> mailService, PharmacyRepository pharmacyRepository) {
         this.pharmacistRepository = pharmacistRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.complaintRepository = complaintRepository;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.pharmacyRepository = pharmacyRepository;
     }
 
     @Override
@@ -51,24 +48,49 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+    public List<PharmacyDto> getPharmacies() {
+
+        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Pharmacy> pharmacies = pharmacyRepository.findPharmacyByPatientIdPurchase(patient.getId());
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdDermatologistsExam(patient.getId()));
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPhysiciansExam(patient.getId()));
+
+        List<PharmacyDto> dtos = new ArrayList<>();
+        for (Pharmacy pharmacy : pharmacies) {
+            PharmacyDto dto = new PharmacyDto(pharmacy);
+            if (!dtos.contains(dto)) {
+                dtos.add(dto);
+            }
+        }
+        return new ArrayList<>(dtos);
+    }
+
+    @Override
     public List<DermatologistDto> getDermatologists() {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Dermatologist> dermatologists = dermatologistRepository.getByPatientsId(patient.getId());
         List<DermatologistDto> dtos = new ArrayList<>();
         dermatologists.forEach(dermatologist -> dtos.add(new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(),
                 dermatologist.getRating(), dermatologist.getId())));
-        System.out.println(dtos);
         return dtos;
     }
 
     @Override
     public void makeAComplaint(ComplaintDto dto) {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> userOptional = userRepository.findById(dto.getStaffId());
-        if (userOptional.isEmpty()) {
-            throw new BadUserInformationException();
+        if (dto.getStaffId() != null) {
+            Optional<User> userOptional = userRepository.findById(dto.getStaffId());
+            if (userOptional.isEmpty()) {
+                throw new BadUserInformationException();
+            }
+            complaintRepository.save(new Complaint(patient, userOptional.get(), dto.getComplaintText(), false));
+        } else {
+            Optional<Pharmacy> pharmacyOptional = pharmacyRepository.findById(dto.getPharmacyId());
+            if (pharmacyOptional.isEmpty()) {
+                throw new BadUserInformationException();
+            }
+            complaintRepository.save(new Complaint(patient, pharmacyOptional.get(), dto.getComplaintText(), false));
         }
-        complaintRepository.save(new Complaint(patient, userOptional.get(), dto.getComplaintText(), false));
     }
 
     @Override
@@ -76,19 +98,19 @@ public class ComplaintServiceImpl implements ComplaintService {
         Iterable<Complaint> complaints = complaintRepository.findAllByResolved(false);
         List<ComplaintDto> dtos = new ArrayList<>();
         complaints.forEach(complaint -> {
-                dtos.add(new ComplaintDto(complaint));
+            dtos.add(new ComplaintDto(complaint));
         });
         return dtos;
     }
 
     @Override
-    public void resolveComplaint(ComplaintAnswerDto dto) throws Exception{
-        Optional<Complaint> optionalComplaint =complaintRepository.findById(dto.getId());
-        if(optionalComplaint.isEmpty()){
+    public void resolveComplaint(ComplaintAnswerDto dto) throws Exception {
+        Optional<Complaint> optionalComplaint = complaintRepository.findById(dto.getId());
+        if (optionalComplaint.isEmpty()) {
             throw new BadRequestException();
         }
         Complaint complaint = optionalComplaint.get();
-        if(complaint.isResolved()){
+        if (complaint.isResolved()) {
             throw new ComplaintResolvedException();
         }
         complaint.setAnswerText(dto.getAnswerText());
@@ -97,9 +119,8 @@ public class ComplaintServiceImpl implements ComplaintService {
         sendMail(complaint, dto);
     }
 
-
     private void sendMail(Complaint complaint, ComplaintAnswerDto dto) throws MessagingException {
-        mailService.sendMail(complaint.getPatient().getEmail(),dto.getAnswerText(),new ComplaintMailFormatter());
+        mailService.sendMail(complaint.getPatient().getEmail(), dto.getAnswerText(), new ComplaintMailFormatter());
     }
 
 

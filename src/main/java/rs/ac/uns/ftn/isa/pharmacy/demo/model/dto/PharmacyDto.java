@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PharmacyDto implements Serializable {
 
@@ -80,5 +81,18 @@ public class PharmacyDto implements Serializable {
 
     public void setPharmacistExamPrice(double pharmacistExamPrice) {
         this.pharmacistExamPrice = pharmacistExamPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PharmacyDto that = (PharmacyDto) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

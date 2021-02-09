@@ -8,22 +8,18 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PrescriptionUsedException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.PatientsShoppingConfirmMailFormatter;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Prescription;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.EPrescriptionDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientShoppingEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PrescribedMedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.QRResultDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PrescriptionRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.UserRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.QRService;
 
 import javax.mail.MessagingException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class QRServiceImpl implements QRService {
@@ -33,13 +29,17 @@ public class QRServiceImpl implements QRService {
     private final UserRepository userRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final MailService<PatientShoppingEmailParams> mailService;
+    private final MedicinePurchaseRepository medicinePurchaseRepository;
+    private final LoyaltyService loyaltyService;
 
-    public QRServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, UserRepository userRepository, PrescriptionRepository prescriptionRepository, MailService<PatientShoppingEmailParams> mailService) {
+    public QRServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, UserRepository userRepository, PrescriptionRepository prescriptionRepository, MailService<PatientShoppingEmailParams> mailService, MedicinePurchaseRepository medicinePurchaseRepository, LoyaltyService loyaltyService) {
         this.pharmacyRepository = pharmacyRepository;
         this.medicineRepository = medicineRepository;
         this.userRepository = userRepository;
         this.prescriptionRepository = prescriptionRepository;
         this.mailService = mailService;
+        this.medicinePurchaseRepository = medicinePurchaseRepository;
+        this.loyaltyService = loyaltyService;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class QRServiceImpl implements QRService {
                 }
             }
             if (hasInStock) {
-                QRResultDto resultDto = new QRResultDto(bill, pharmacy.getAddress().getStreet(), pharmacy.getName(), dto, pharmacy.getId(), pharmacy.getRating());
+                QRResultDto resultDto = new QRResultDto((int) (bill * loyaltyService.getDiscount()), pharmacy.getAddress().getStreet(), pharmacy.getName(), dto, pharmacy.getId(), pharmacy.getRating());
                 qrResultDtos.add(resultDto);
             }
         });
@@ -86,6 +86,7 @@ public class QRServiceImpl implements QRService {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Pharmacy> pharmacyOptional = pharmacyRepository.findById(dto.getPharmacyId());
         Map<Medicine, Integer> prescriptionMedicineAmount = new HashMap<>();
+        AtomicInteger price = new AtomicInteger();
 
         if (pharmacyOptional.isPresent()) {
 
@@ -98,6 +99,7 @@ public class QRServiceImpl implements QRService {
                 } else if (pharmacy.getMedicine().get(medicine).getStock() < medicineDto.getAmount()) {
                     throw new NoMedicineFoundException();
                 } else {
+                    price.addAndGet((int) (medicineDto.getAmount() * pharmacy.getCurrentMedicinePrice(medicine) * loyaltyService.getDiscount()));
                     prescriptionMedicineAmount.put(medicine, (int) (long) medicineDto.getAmount());
                     int amount = (int) (pharmacy.getMedicine().get(medicine).getStock() - medicineDto.getAmount());
                     pharmacy.getMedicine().get(medicine).setStock(amount);
@@ -109,6 +111,7 @@ public class QRServiceImpl implements QRService {
 
             sendEmail(patient.getEmail(), patient.getName(), pharmacy.getName(), String.valueOf(dto.getBill()));
             pharmacyRepository.save(pharmacy);
+            medicinePurchaseRepository.save(new MedicinePurchase(prescriptionMedicineAmount, pharmacy, patient, price.longValue()));
             EPrescriptionDto prescriptionDto = dto.getPrescription();
             Calendar prescriptionDate = Calendar.getInstance();
             prescriptionDate.setTime(prescriptionDto.getPrescriptionDate());
