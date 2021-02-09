@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.mail.OfferMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
@@ -11,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.OfferStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
@@ -22,15 +25,20 @@ public class OfferServiceImpl implements OfferService {
     private final UserRepository userRepository;
     private final MedicineRepository medicineRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final SupplierRepository supplierRepository;
+    private final MailService<Boolean> mailService;
 
     @Autowired
     public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository,
-                            MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository) {
+                            MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository, SupplierRepository supplierRepository,
+                            MailService<Boolean> mailService) {
         this.offerRepository = offerRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.medicineRepository = medicineRepository;
         this.pharmacyRepository = pharmacyRepository;
+        this.supplierRepository = supplierRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -111,8 +119,9 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void acceptOffer(Long offerId) throws EntityNotFoundException, OtherPharmacyAdminCreatedOrderException, OfferDeadlineHasNotExpiredException {
+    public void acceptOffer(Long offerId) throws EntityNotFoundException, MessagingException, OtherPharmacyAdminCreatedOrderException, OfferDeadlineHasNotExpiredException {
         Offer offer = offerRepository.findById(offerId).orElse(null);
+        List<Supplier> suppliers = new ArrayList<>();
 
         if (offer == null) {
             throw new EntityNotFoundException();
@@ -134,8 +143,37 @@ public class OfferServiceImpl implements OfferService {
             updateOrderStatus(order);
             Map<Medicine, Integer> medicineAmount = order.getMedicineAmount();
             updateMedicineStatus(pharmacy, medicineAmount);
+            sendEmail(offerId, suppliers, order);
+
         } else {
             throw new OtherPharmacyAdminCreatedOrderException();
+        }
+    }
+
+    private void sendEmail(Long offerId, List<Supplier> suppliers, Order order) throws MessagingException {
+        List<Long> supplierIds = offerRepository.getSupplierIds(order.getId());
+        Long acceptedOfferSupplierId = offerRepository.getAcceptedOfferSupplierId(offerId);
+
+        for (Long id : supplierIds) {
+            Supplier supplier = supplierRepository.findById(id).orElse(null);
+            if (supplier == null) {
+                throw new EntityNotFoundException();
+            } else {
+                suppliers.add(supplier);
+            }
+        }
+
+        Supplier supplier = supplierRepository.findById(acceptedOfferSupplierId).orElse(null);
+        if (supplier == null) {
+            throw new EntityNotFoundException();
+        } else {
+            mailService.sendMail(supplier.getEmail(), true, new OfferMailFormatter());
+        }
+
+        for (Supplier s : suppliers) {
+            if (!s.equals(supplier)) {
+                mailService.sendMail(supplier.getEmail(), false, new OfferMailFormatter());
+            }
         }
     }
 

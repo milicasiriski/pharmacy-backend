@@ -4,6 +4,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Offer;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface OfferService {
@@ -17,5 +18,5 @@ public interface OfferService {
 
     List<List<OfferDto>> getAllOffersByOrders();
 
-    void acceptOffer(Long offerId);
+    void acceptOffer(Long offerId) throws MessagingException;
 }

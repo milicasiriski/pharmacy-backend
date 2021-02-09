@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
@@ -87,11 +88,13 @@ public class OfferController {
     public ResponseEntity<String> acceptOffer(@PathVariable("offerId") Long offerId) {
         try {
             offerService.acceptOffer(offerId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Offer accepted!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("Offer does not exists!", HttpStatus.BAD_REQUEST);
         } catch (OfferDeadlineHasNotExpiredException e) {
             return new ResponseEntity<>("Deadline has not expired!", HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("Problem occurred while sending email!", HttpStatus.BAD_REQUEST);
         }
     }
 }
