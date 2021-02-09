@@ -13,4 +13,10 @@ public interface MedicineRepository extends CrudRepository<Medicine, Long> {
             "\tWHERE m.id = pm.medicine_id AND pm.purchase_id = p.id\n" +
             "\tAND p.patient_id = :patientId", nativeQuery = true)
     Iterable<Medicine> findRateableByPatientId(long patientId);
+
+    @Query(value = "SELECT case when (count(m.id) > 0) then true else false end \n" +
+            "\tFROM medicine AS m, purchase_medicine_mapping AS pm, medicine_purchase as p\n" +
+            "\tWHERE m.id = pm.medicine_id AND pm.purchase_id = p.id\n" +
+            "\tAND p.patient_id = :patientId AND m.id = :medicineId", nativeQuery = true)
+    boolean canPatientRateMedicine(long patientId, long medicineId);
 }

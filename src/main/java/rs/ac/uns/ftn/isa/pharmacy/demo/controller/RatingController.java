@@ -8,10 +8,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PatientCannotRateThisEntity;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.RatingOutOfRangeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +91,12 @@ public class RatingController {
         try {
             ratingService.saveMedicineRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (RatingOutOfRangeException e) {
+            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+        } catch (PatientCannotRateThisEntity e) {
+            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
@@ -99,6 +108,12 @@ public class RatingController {
         try {
             ratingService.saveDermatologistRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (RatingOutOfRangeException e) {
+            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+        } catch (PatientCannotRateThisEntity e) {
+            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
@@ -110,6 +125,12 @@ public class RatingController {
         try {
             ratingService.savePharmacistRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (RatingOutOfRangeException e) {
+            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+        } catch (PatientCannotRateThisEntity e) {
+            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }
@@ -121,6 +142,12 @@ public class RatingController {
         try {
             ratingService.savePharmacyRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (RatingOutOfRangeException e) {
+            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+        } catch (PatientCannotRateThisEntity e) {
+            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
         }

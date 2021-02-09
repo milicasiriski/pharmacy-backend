@@ -21,4 +21,11 @@ public interface DermatologistRepository extends CrudRepository<Dermatologist, L
             "WHERE d.user_type = 'DERMATOLOGIST' AND e.employment_id=demap.dermatologist_employment_id " +
             "AND d.id=demap.dermatologist_id AND (e.status = 0 OR e.status = 1) AND e.patient_id=:patientId", nativeQuery = true)
     List<Dermatologist> getByPatientsId(@Param("patientId") long patientId);
+
+    @Query(value = "SELECT case when (count(d.id) > 0) then true else false end\n" +
+            "\tFROM pharmacy_user AS d, exam AS e, dermatologist_employment_mapping AS demap\n" +
+            "\tWHERE d.user_type = 'DERMATOLOGIST' AND e.employment_id=demap.dermatologist_employment_id\n" +
+            "\tAND d.id=demap.dermatologist_id AND (e.status = 0 OR e.status = 1) AND e.patient_id=:patientId" +
+            "\tAND d.id = :dermatologistId", nativeQuery = true)
+    boolean canPatientRateDermatologist(long patientId, long dermatologistId);
 }

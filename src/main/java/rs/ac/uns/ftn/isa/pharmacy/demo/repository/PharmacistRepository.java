@@ -31,5 +31,8 @@ public interface PharmacistRepository extends CrudRepository<Pharmacist, Long> {
             "\tAND (e.status = 0 OR e.status = 1) AND e.patient_id=:patientId", nativeQuery = true)
     List<Pharmacist> getByPatientsId(@Param("patientId") long patientId);
 
-    Pharmacist getPharmacistByNameAndSurname(String name, String surname);
+    @Query(value = "SELECT case when (count(p.id) > 0) then true else false end\n" +
+            "\tFROM pharmacy_user AS p, exam AS e WHERE p.user_type = 'PHARMACIST' AND p.id=e.pharmacist_id \n" +
+            "\tAND (e.status = 0 OR e.status = 1) AND e.patient_id=:patientId AND p.id=:pharmacistId", nativeQuery = true)
+    boolean canPatientRatePharmacist(long patientId, long pharmacistId);
 }
