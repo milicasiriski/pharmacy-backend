@@ -32,8 +32,13 @@ public class OrderController implements OrderConverter {
 
     @PostMapping("/")
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
-    public void createOrder(@RequestBody OrderDto orderDto) {
-        orderService.save(orderDto);
+    public ResponseEntity<String> createOrder(@RequestBody OrderDto orderDto) {
+        try{
+            orderService.save(orderDto);
+            return new ResponseEntity<>("Order successfully created!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/getOrdersByPharmacy")
