@@ -42,7 +42,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Iterable<Medicine> getMedicine(Patient patient) {
-        // TODO: get medicine that patient can rate
-        return null;
+        return medicineRepository.findRateableByPatientId(patient.getId());
     }
 }
