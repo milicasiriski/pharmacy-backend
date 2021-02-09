@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PatientCannotRateThisEntity;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.RatingOutOfRangeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SubmitRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
@@ -82,8 +84,12 @@ public class RatingServiceImpl implements RatingService {
         ratings.forEach(this::saveRatingPharmacy);
     }
 
-    private void saveRatingMedicine(SubmitRatingDto rating) {
+    private void saveRatingMedicine(SubmitRatingDto rating) throws EntityNotFoundException, RatingOutOfRangeException, PatientCannotRateThisEntity {
+        validateRating(rating.getRating());
         Patient patient = getSignedInUser();
+        if (!medicineRepository.canPatientRateMedicine(patient.getId(), rating.getId())) {
+            throw new PatientCannotRateThisEntity();
+        }
         RatingMedicine ratingMedicine = getExistingRatingMedicine(patient.getId(), rating.getId());
         if (ratingMedicine == null) {
             ratingMedicine = new RatingMedicine(patient, rating.getRating(), getMedicineById(rating.getId()));
@@ -93,8 +99,12 @@ public class RatingServiceImpl implements RatingService {
         ratingMedicineRepository.save(ratingMedicine);
     }
 
-    private void saveRatingDermatologist(SubmitRatingDto rating) {
+    private void saveRatingDermatologist(SubmitRatingDto rating) throws EntityNotFoundException, RatingOutOfRangeException, PatientCannotRateThisEntity {
+        validateRating(rating.getRating());
         Patient patient = getSignedInUser();
+        if (!dermatologistRepository.canPatientRateDermatologist(patient.getId(), rating.getId())) {
+            throw new PatientCannotRateThisEntity();
+        }
         RatingDermatologist ratingDermatologist = getExistingRatingDermatologist(patient.getId(), rating.getId());
         if (ratingDermatologist == null) {
             ratingDermatologist = new RatingDermatologist(patient, rating.getRating(), getDermatologistId(rating.getId()));
@@ -104,8 +114,12 @@ public class RatingServiceImpl implements RatingService {
         ratingDermatologistRepository.save(ratingDermatologist);
     }
 
-    private void saveRatingPharmacist(SubmitRatingDto rating) {
+    private void saveRatingPharmacist(SubmitRatingDto rating) throws EntityNotFoundException, RatingOutOfRangeException, PatientCannotRateThisEntity {
+        validateRating(rating.getRating());
         Patient patient = getSignedInUser();
+        if (!pharmacistRepository.canPatientRatePharmacist(patient.getId(), rating.getId())) {
+            throw new PatientCannotRateThisEntity();
+        }
         RatingPharmacist ratingDermatologist = getExistingRatingPharmacist(patient.getId(), rating.getId());
         if (ratingDermatologist == null) {
             ratingDermatologist = new RatingPharmacist(patient, rating.getRating(), getPharmacistById(rating.getId()));
@@ -115,8 +129,12 @@ public class RatingServiceImpl implements RatingService {
         ratingPharmacistRepository.save(ratingDermatologist);
     }
 
-    private void saveRatingPharmacy(SubmitRatingDto rating) {
+    private void saveRatingPharmacy(SubmitRatingDto rating) throws EntityNotFoundException, RatingOutOfRangeException, PatientCannotRateThisEntity {
+        validateRating(rating.getRating());
         Patient patient = getSignedInUser();
+        if (!pharmacyRepository.canPatientRatePharmacy(patient.getId(), rating.getId())) {
+            throw new PatientCannotRateThisEntity();
+        }
         RatingPharmacy ratingPharmacy = getExistingRatingPharmacy(patient.getId(), rating.getId());
         if (ratingPharmacy == null) {
             ratingPharmacy = new RatingPharmacy(patient, rating.getRating(), getPharmacyById(rating.getId()));
@@ -184,5 +202,11 @@ public class RatingServiceImpl implements RatingService {
 
     private Patient getSignedInUser() {
         return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private void validateRating(int rating) throws RatingOutOfRangeException {
+        if (rating < 1 || rating > 5) {
+            throw new RatingOutOfRangeException();
+        }
     }
 }
