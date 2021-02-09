@@ -97,6 +97,23 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
+    public PharmacyProfileDto getAllPharmacyInfoByPharmacyAdmin() throws EntityNotFoundException {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pharmacy pharmacy = pharmacyRepository.findById(pharmacyAdmin.getPharmacy().getId()).orElse(null);
+
+        if (pharmacy == null) {
+            throw new EntityNotFoundException();
+        }
+
+        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
+        List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
+        List<PharmacistDto> pharmacists = findPharmacists(pharmacy);
+        List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
+
+        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
+    }
+
+    @Override
     public PharmacyDto getPharmacyInfoByAdmin() {
         PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pharmacy pharmacy = findPharmacyByPharmacyAdmin(pharmacyAdmin.getId());
