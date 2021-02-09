@@ -31,13 +31,9 @@ public class RatingController {
 
     @GetMapping("/medicine")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
-    public ResponseEntity<List<MedicineDto>> getMedicine() {
+    public ResponseEntity<Iterable<MedicineRatingDto>> getMedicine() {
         try {
-            List<MedicineDto> result = new ArrayList<>();
-            ratingService.getMedicine().forEach(medicine -> {
-                result.add(new MedicineDto(medicine));
-            });
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(ratingService.getMedicine(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -45,13 +41,9 @@ public class RatingController {
 
     @GetMapping("/dermatologists")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
-    public ResponseEntity<List<DermatologistDto>> getDermatologists() {
+    public ResponseEntity<Iterable<ExaminerRatingDto>> getDermatologists() {
         try {
-            List<DermatologistDto> result = new ArrayList<>();
-            ratingService.getDermatologists().forEach(dermatologist -> {
-                result.add(new DermatologistDto(dermatologist));
-            });
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(ratingService.getDermatologists(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -59,13 +51,9 @@ public class RatingController {
 
     @GetMapping("/pharmacists")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
-    public ResponseEntity<List<PharmacistDto>> getPharmacists() {
+    public ResponseEntity<Iterable<ExaminerRatingDto>> getPharmacists() {
         try {
-            List<PharmacistDto> result = new ArrayList<>();
-            ratingService.getPharmacists().forEach(pharmacist -> {
-                result.add(new PharmacistDto(pharmacist));
-            });
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(ratingService.getPharmacists(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -73,13 +61,9 @@ public class RatingController {
 
     @GetMapping("/pharmacies")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
-    public ResponseEntity<List<PharmacyDto>> getPharmacies() {
+    public ResponseEntity<Iterable<PharmacyRatingDto>> getPharmacies() {
         try {
-            List<PharmacyDto> result = new ArrayList<>();
-            ratingService.getPharmacies().forEach(pharmacy -> {
-                result.add(new PharmacyDto(pharmacy));
-            });
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(ratingService.getPharmacies(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
