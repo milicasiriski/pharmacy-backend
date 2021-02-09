@@ -64,42 +64,66 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public void saveMedicineRatings(List<SubmitRatingDto> ratings) {
-        Patient patient = getSignedInUser();
-        ratings.forEach(submitRatingDto -> {
-            Medicine medicine = getMedicineById(submitRatingDto.getId());
-            RatingMedicine ratingMedicine = new RatingMedicine(patient, submitRatingDto.getRating(), medicine);
-            ratingMedicineRepository.save(ratingMedicine);
-        });
+        ratings.forEach(this::saveRatingMedicine);
     }
 
     @Override
     public void saveDermatologistRatings(List<SubmitRatingDto> ratings) {
-        Patient patient = getSignedInUser();
-        ratings.forEach(submitRatingDto -> {
-            Dermatologist dermatologist = getDermatologistId(submitRatingDto.getId());
-            RatingDermatologist ratingDermatologist = new RatingDermatologist(patient, submitRatingDto.getRating(), dermatologist);
-            ratingDermatologistRepository.save(ratingDermatologist);
-        });
+        ratings.forEach(this::saveRatingDermatologist);
     }
 
     @Override
     public void savePharmacistRatings(List<SubmitRatingDto> ratings) throws EntityNotFoundException {
-        Patient patient = getSignedInUser();
-        ratings.forEach(submitRatingDto -> {
-            Pharmacist pharmacist = getPharmacistById(submitRatingDto.getId());
-            RatingPharmacist ratingPharmacist = new RatingPharmacist(patient, submitRatingDto.getRating(), pharmacist);
-            ratingPharmacistRepository.save(ratingPharmacist);
-        });
+        ratings.forEach(this::saveRatingPharmacist);
     }
 
     @Override
     public void savePharmacyRatings(List<SubmitRatingDto> ratings) {
+        ratings.forEach(this::saveRatingPharmacy);
+    }
+
+    private void saveRatingMedicine(SubmitRatingDto rating) {
         Patient patient = getSignedInUser();
-        ratings.forEach(submitRatingDto -> {
-            Pharmacy pharmacy = getPharmacyById(submitRatingDto.getId());
-            RatingPharmacy ratingPharmacy = new RatingPharmacy(patient, submitRatingDto.getRating(), pharmacy);
-            ratingPharmacyRepository.save(ratingPharmacy);
-        });
+        RatingMedicine ratingMedicine = getExistingRatingMedicine(patient.getId(), rating.getId());
+        if (ratingMedicine == null) {
+            ratingMedicine = new RatingMedicine(patient, rating.getRating(), getMedicineById(rating.getId()));
+        } else {
+            ratingMedicine.setRating(rating.getRating());
+        }
+        ratingMedicineRepository.save(ratingMedicine);
+    }
+
+    private void saveRatingDermatologist(SubmitRatingDto rating) {
+        Patient patient = getSignedInUser();
+        RatingDermatologist ratingDermatologist = getExistingRatingDermatologist(patient.getId(), rating.getId());
+        if (ratingDermatologist == null) {
+            ratingDermatologist = new RatingDermatologist(patient, rating.getRating(), getDermatologistId(rating.getId()));
+        } else {
+            ratingDermatologist.setRating(rating.getRating());
+        }
+        ratingDermatologistRepository.save(ratingDermatologist);
+    }
+
+    private void saveRatingPharmacist(SubmitRatingDto rating) {
+        Patient patient = getSignedInUser();
+        RatingPharmacist ratingDermatologist = getExistingRatingPharmacist(patient.getId(), rating.getId());
+        if (ratingDermatologist == null) {
+            ratingDermatologist = new RatingPharmacist(patient, rating.getRating(), getPharmacistById(rating.getId()));
+        } else {
+            ratingDermatologist.setRating(rating.getRating());
+        }
+        ratingPharmacistRepository.save(ratingDermatologist);
+    }
+
+    private void saveRatingPharmacy(SubmitRatingDto rating) {
+        Patient patient = getSignedInUser();
+        RatingPharmacy ratingPharmacy = getExistingRatingPharmacy(patient.getId(), rating.getId());
+        if (ratingPharmacy == null) {
+            ratingPharmacy = new RatingPharmacy(patient, rating.getRating(), getPharmacyById(rating.getId()));
+        } else {
+            ratingPharmacy.setRating(rating.getRating());
+        }
+        ratingPharmacyRepository.save(ratingPharmacy);
     }
 
     private Medicine getMedicineById(long id) throws EntityNotFoundException {
@@ -136,6 +160,26 @@ public class RatingServiceImpl implements RatingService {
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    private RatingMedicine getExistingRatingMedicine(long patientId, long medicineId) {
+        Optional<RatingMedicine> optionalRating = ratingMedicineRepository.findByPatientIdAndMedicineId(patientId, medicineId);
+        return optionalRating.orElse(null);
+    }
+
+    private RatingDermatologist getExistingRatingDermatologist(long patientId, long dermatologistId) {
+        Optional<RatingDermatologist> optionalRating = ratingDermatologistRepository.findByPatientIdAndDermatologistId(patientId, dermatologistId);
+        return optionalRating.orElse(null);
+    }
+
+    private RatingPharmacist getExistingRatingPharmacist(long patientId, long pharmacistId) {
+        Optional<RatingPharmacist> optionalRating = ratingPharmacistRepository.findByPatientIdAndPharmacistId(patientId, pharmacistId);
+        return optionalRating.orElse(null);
+    }
+
+    private RatingPharmacy getExistingRatingPharmacy(long patientId, long pharmacyId) {
+        Optional<RatingPharmacy> optionalRating = ratingPharmacyRepository.findByPatientIdAndPharmacyId(patientId, pharmacyId);
+        return optionalRating.orElse(null);
     }
 
     private Patient getSignedInUser() {
