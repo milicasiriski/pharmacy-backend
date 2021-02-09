@@ -9,8 +9,10 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -21,9 +23,10 @@ public class RatingServiceImpl implements RatingService {
     private final RatingMedicineRepository ratingMedicineRepository;
     private final RatingDermatologistRepository ratingDermatologistRepository;
     private final RatingPharmacistRepository ratingPharmacistRepository;
+    private final RatingPharmacyRepository ratingPharmacyRepository;
 
     @Autowired
-    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingMedicineRepository ratingMedicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository) {
+    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingMedicineRepository ratingMedicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository, RatingPharmacyRepository ratingPharmacyRepository) {
         this.pharmacyRepository = pharmacyRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.pharmacistRepository = pharmacistRepository;
@@ -31,27 +34,32 @@ public class RatingServiceImpl implements RatingService {
         this.ratingMedicineRepository = ratingMedicineRepository;
         this.ratingDermatologistRepository = ratingDermatologistRepository;
         this.ratingPharmacistRepository = ratingPharmacistRepository;
+        this.ratingPharmacyRepository = ratingPharmacyRepository;
     }
 
     @Override
-    public Iterable<Pharmacy> getPharmacies(Patient patient) {
-        // TODO: get pharmacies that patient can rate
-        return null;
+    public Iterable<Pharmacy> getPharmacies() {
+        long patientId = getSignedInUser().getId();
+        List<Pharmacy> pharmacies = new ArrayList<>();
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPurchase(patientId));
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdDermatologistsExam(patientId));
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPharmacistsExam(patientId));
+        return pharmacies.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
-    public Iterable<Dermatologist> getDermatologists(Patient patient) {
-        return dermatologistRepository.getByPatientsId(patient.getId());
+    public Iterable<Dermatologist> getDermatologists() {
+        return dermatologistRepository.getByPatientsId(getSignedInUser().getId());
     }
 
     @Override
-    public Iterable<Pharmacist> getPharmacists(Patient patient) {
-        return pharmacistRepository.getByPatientsId(patient.getId());
+    public Iterable<Pharmacist> getPharmacists() {
+        return pharmacistRepository.getByPatientsId(getSignedInUser().getId());
     }
 
     @Override
-    public Iterable<Medicine> getMedicine(Patient patient) {
-        return medicineRepository.findRateableByPatientId(patient.getId());
+    public Iterable<Medicine> getMedicine() {
+        return medicineRepository.findRateableByPatientId(getSignedInUser().getId());
     }
 
     @Override
@@ -84,6 +92,16 @@ public class RatingServiceImpl implements RatingService {
         });
     }
 
+    @Override
+    public void savePharmacyRatings(List<SubmitRatingDto> ratings) {
+        Patient patient = getSignedInUser();
+        ratings.forEach(submitRatingDto -> {
+            Pharmacy pharmacy = getPharmacyById(submitRatingDto.getId());
+            RatingPharmacy ratingPharmacy = new RatingPharmacy(patient, submitRatingDto.getRating(), pharmacy);
+            ratingPharmacyRepository.save(ratingPharmacy);
+        });
+    }
+
     private Medicine getMedicineById(long id) throws EntityNotFoundException {
         Optional<Medicine> optionalMedicine = medicineRepository.findById(id);
         if (optionalMedicine.isPresent()) {
@@ -106,6 +124,15 @@ public class RatingServiceImpl implements RatingService {
         Optional<Pharmacist> optionalPharmacist = pharmacistRepository.findById(id);
         if (optionalPharmacist.isPresent()) {
             return optionalPharmacist.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    private Pharmacy getPharmacyById(long id) throws EntityNotFoundException {
+        Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(id);
+        if (optionalPharmacy.isPresent()) {
+            return optionalPharmacy.get();
         } else {
             throw new EntityNotFoundException();
         }
