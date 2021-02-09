@@ -4,13 +4,13 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Complaint;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.ComplainedSubject;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.ComplaintSubject;
 
 import java.io.Serializable;
 
 public class ComplaintDto implements Serializable {
 
-    private ComplainedSubject subjectType;
+    private ComplaintSubject subjectType;
     private Long id;
     private Long staffId;
     private String staffName;
@@ -31,7 +31,7 @@ public class ComplaintDto implements Serializable {
         this.complaintText = complaint.getComplaintText();
 
         if (complaint.getPharmacy() != null) {
-            this.subjectType = ComplainedSubject.PHARMACY;
+            this.subjectType = ComplaintSubject.PHARMACY;
             this.pharmacyId = complaint.getPharmacy().getId();
             this.pharmacyName = complaint.getPharmacy().getName();
         } else {
@@ -40,9 +40,9 @@ public class ComplaintDto implements Serializable {
             this.staffId = staffMember.getId();
             this.staffSurname = staffMember.getSurname();
             if (complaint.getStaffMember().getClass() == Dermatologist.class) {
-                this.subjectType = ComplainedSubject.DERMATOLOGIST;
+                this.subjectType = ComplaintSubject.DERMATOLOGIST;
             } else {
-                this.subjectType = ComplainedSubject.PHARMACIST;
+                this.subjectType = ComplaintSubject.PHARMACIST;
             }
         }
     }
@@ -50,11 +50,11 @@ public class ComplaintDto implements Serializable {
     public ComplaintDto() {
     }
 
-    public ComplainedSubject getSubjectType() {
+    public ComplaintSubject getSubjectType() {
         return subjectType;
     }
 
-    public void setSubjectType(ComplainedSubject subjectType) {
+    public void setSubjectType(ComplaintSubject subjectType) {
         this.subjectType = subjectType;
     }
 

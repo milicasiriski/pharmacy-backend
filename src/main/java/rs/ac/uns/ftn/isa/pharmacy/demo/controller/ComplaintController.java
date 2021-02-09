@@ -53,7 +53,7 @@ public class ComplaintController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")
-    public ResponseEntity<List<ComplaintDto>> getUnresolvedComplains() {
+    public ResponseEntity<List<ComplaintDto>> getUnresolvedComplaints() {
         try {
             return new ResponseEntity<>(complaintService.getUnresolvedComplains(), HttpStatus.OK);
         } catch (Exception e) {
