@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserInfo() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Address address = user.getAddress();
-        AddressDto addressDto = new AddressDto(address.getCity(), address.getCountry(), address.getStreet());
+        AddressDto addressDto = new AddressDto(address);
 
         return new UserDto(addressDto, user.getName(), user.getSurname());
     }
