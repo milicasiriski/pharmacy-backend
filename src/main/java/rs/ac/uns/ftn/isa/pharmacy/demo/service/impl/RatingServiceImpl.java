@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PatientCannotRateThisEntity;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.RatingOutOfRangeException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExaminerRatingDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineRatingDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SubmitRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
@@ -40,28 +43,44 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Iterable<Pharmacy> getPharmacies() {
+    public Iterable<PharmacyRatingDto> getPharmacies() {
         long patientId = getSignedInUser().getId();
         List<Pharmacy> pharmacies = new ArrayList<>();
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPurchase(patientId));
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdDermatologistsExam(patientId));
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPharmacistsExam(patientId));
-        return pharmacies.stream().distinct().collect(Collectors.toList());
+
+        List<PharmacyRatingDto> result = new ArrayList<>();
+        pharmacies.stream().distinct().collect(Collectors.toList()).forEach(pharmacy ->
+                result.add(new PharmacyRatingDto(pharmacy, getExistingRatingPharmacy(patientId, pharmacy.getId()))));
+        return result;
     }
 
     @Override
-    public Iterable<Dermatologist> getDermatologists() {
-        return dermatologistRepository.getByPatientsId(getSignedInUser().getId());
+    public Iterable<ExaminerRatingDto> getDermatologists() {
+        long patientId = getSignedInUser().getId();
+        List<ExaminerRatingDto> result = new ArrayList<>();
+        dermatologistRepository.getByPatientsId(patientId).forEach(dermatologist ->
+                result.add(new ExaminerRatingDto(dermatologist, getExistingRatingDermatologist(patientId, dermatologist.getId()))));
+        return result;
     }
 
     @Override
-    public Iterable<Pharmacist> getPharmacists() {
-        return pharmacistRepository.getByPatientsId(getSignedInUser().getId());
+    public Iterable<ExaminerRatingDto> getPharmacists() {
+        long patientId = getSignedInUser().getId();
+        List<ExaminerRatingDto> result = new ArrayList<>();
+        pharmacistRepository.getByPatientsId(patientId).forEach(pharmacist ->
+                result.add(new ExaminerRatingDto(pharmacist, getExistingRatingPharmacist(patientId, pharmacist.getId()))));
+        return result;
     }
 
     @Override
-    public Iterable<Medicine> getMedicine() {
-        return medicineRepository.findRateableByPatientId(getSignedInUser().getId());
+    public Iterable<MedicineRatingDto> getMedicine() {
+        long patientId = getSignedInUser().getId();
+        List<MedicineRatingDto> result = new ArrayList<>();
+        medicineRepository.findRateableByPatientId(patientId).forEach(medicine ->
+                result.add(new MedicineRatingDto(medicine, getExistingRatingMedicine(patientId, medicine.getId()))));
+        return result;
     }
 
     @Override
