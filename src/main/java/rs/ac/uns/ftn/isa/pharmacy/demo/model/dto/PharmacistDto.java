@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +30,13 @@ public class PharmacistDto implements Serializable {
         this.surname = surname;
         this.rating = rating;
         this.id = id;
+    }
+
+    public PharmacistDto(Pharmacist pharmacist) {
+        this.name = pharmacist.getName();
+        this.surname = pharmacist.getSurname();
+        this.rating = pharmacist.getRating();
+        this.id = pharmacist.getId();
     }
 
     public Long getId() {
