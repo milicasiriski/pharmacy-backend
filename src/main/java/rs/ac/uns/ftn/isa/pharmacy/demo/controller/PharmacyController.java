@@ -73,6 +73,16 @@ public class PharmacyController {
         }
     }
 
+    @GetMapping("/getAllPharmacyInfoByPharmacyAdmin")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<PharmacyProfileDto> getAllPharmacyInfoByPharmacyAdmin() {
+        try {
+            return ResponseEntity.ok(pharmacyService.getAllPharmacyInfoByPharmacyAdmin());
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     //TODO:Vladimir, check if values are ok NOSONAR
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/register")

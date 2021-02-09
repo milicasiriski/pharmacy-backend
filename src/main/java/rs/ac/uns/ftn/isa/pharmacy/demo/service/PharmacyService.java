@@ -35,4 +35,6 @@ public interface PharmacyService {
     void removeDermatologist(Long dermatologistId);
 
     void addDermatologist(AddDermatologistDto addDermatologistDto);
+
+    PharmacyProfileDto getAllPharmacyInfoByPharmacyAdmin();
 }
