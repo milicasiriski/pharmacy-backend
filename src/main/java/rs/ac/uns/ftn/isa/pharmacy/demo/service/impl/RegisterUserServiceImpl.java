@@ -48,6 +48,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
             }
             ((PharmacyAdmin) user).setPharmacy(pharmacy.get());
         }
+        user.setAddress(new Address(dto.getAddress()));
         user.setEmail(dto.getEmail());
         user.setName(dto.getName());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));

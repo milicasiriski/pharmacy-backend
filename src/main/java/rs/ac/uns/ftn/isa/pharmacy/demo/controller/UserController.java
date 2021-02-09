@@ -54,11 +54,11 @@ public class UserController {
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> updateUserInfo(@RequestBody UserDto userDto) {
         try {
             userService.updateUserInfo(userDto);
-            return new ResponseEntity<>("Info successfully updated!",HttpStatus.OK);
+            return new ResponseEntity<>("Info successfully updated!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
         }

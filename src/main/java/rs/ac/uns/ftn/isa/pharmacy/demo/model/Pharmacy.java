@@ -207,7 +207,7 @@ public class Pharmacy {
         this.examPriceList = examPriceList;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 

@@ -2,15 +2,15 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 public class OrderForOfferDto implements Serializable {
 
-    private Map<MedicineDto, Integer> orderItems;
+    private List<MedicineAmountForOfferDto> orderItems;
     private Date deadline;
     private Long id;
 
-    public OrderForOfferDto(Map<MedicineDto, Integer> orderItems, Date deadline, Long id) {
+    public OrderForOfferDto(List<MedicineAmountForOfferDto> orderItems, Date deadline, Long id) {
         this.orderItems = orderItems;
         this.deadline = deadline;
         this.id = id;
@@ -19,11 +19,11 @@ public class OrderForOfferDto implements Serializable {
     public OrderForOfferDto() {
     }
 
-    public Map<MedicineDto, Integer> getOrderItems() {
+    public List<MedicineAmountForOfferDto> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(Map<MedicineDto, Integer> orderItems) {
+    public void setOrderItems(List<MedicineAmountForOfferDto> orderItems) {
         this.orderItems = orderItems;
     }
 

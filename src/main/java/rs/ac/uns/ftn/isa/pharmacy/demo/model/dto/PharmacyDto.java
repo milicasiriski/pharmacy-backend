@@ -12,7 +12,7 @@ public class PharmacyDto implements Serializable {
     private String about;
     private AddressDto address;
     private Double rating;
-    private double pharmacistExamPrice;
+    private Double pharmacistExamPrice;
 
     public PharmacyDto() {
     }
@@ -75,11 +75,11 @@ public class PharmacyDto implements Serializable {
         this.rating = rating;
     }
 
-    public double getPharmacistExamPrice() {
+    public Double getPharmacistExamPrice() {
         return pharmacistExamPrice;
     }
 
-    public void setPharmacistExamPrice(double pharmacistExamPrice) {
+    public void setPharmacistExamPrice(Double pharmacistExamPrice) {
         this.pharmacistExamPrice = pharmacistExamPrice;
     }
 

@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PromotionDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PromotionService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/promotion", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,6 +59,16 @@ public class PromotionController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/pharmacies")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<List<PharmacyDto>> getSubscribedPharmacies() {
+        try {
+            return new ResponseEntity<>(promotionService.getSubscribedPharmacies(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

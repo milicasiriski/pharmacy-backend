@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.PromotionMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PromotionDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
@@ -79,6 +80,15 @@ public class PromotionServiceImpl implements PromotionService {
             }
         });
         return newSubscribers;
+    }
+
+    @Override
+    public List<PharmacyDto> getSubscribedPharmacies() {
+        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Pharmacy> pharmacies = pharmacyRepository.findPharmacyBySubscriber(patient.getId());
+        List<PharmacyDto> dtos = new ArrayList<>();
+        pharmacies.forEach(pharmacy -> dtos.add(new PharmacyDto(pharmacy)));
+        return dtos;
     }
 
     @Override

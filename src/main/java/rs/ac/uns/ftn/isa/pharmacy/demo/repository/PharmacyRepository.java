@@ -42,4 +42,9 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
             "FROM pharmacy AS p, exam AS e, pharmacy_user AS u " +
             "where u.id=e.pharmacist_id AND p.id=u.pharmacy_id AND e.patient_id=:patientId", nativeQuery = true)
     List<Pharmacy> findPharmacyByPatientIdPharmacistsExam(@Param("patientId") Long patientId);
+
+    @Query(value = "SELECT DISTINCT p.id, about, city, country, latitude, longitude, street, p.name, p.rating, p.pharmacist_exam_duration, pharmacist_exam_price " +
+            "FROM pharmacy AS p JOIN pharmacy_subscribers AS ps ON p.id = pharmacy_id " +
+            "WHERE ps.patient_id = :subscriberId", nativeQuery = true)
+    List<Pharmacy> findPharmacyBySubscriber(@Param("subscriberId") Long subscriberId);
 }

@@ -53,10 +53,10 @@ public class OrderServiceImpl implements OrderService {
     private List<OrderForOfferDto> convertToOrdersDto(List<Order> orders) {
         List<OrderForOfferDto> ordersDto = new ArrayList<>();
         for (Order order : orders) {
-            HashMap<MedicineDto, Integer> medicineAmount = new HashMap<>();
+            List<MedicineAmountForOfferDto> medicineAmount = new ArrayList<>();
             for (Medicine medicine : order.getMedicineAmount().keySet()) {
                 MedicineDto medicineDto = new MedicineDto(medicine.getUuid(), medicine.getName(), medicine.getForm());
-                medicineAmount.put(medicineDto, order.getMedicineAmount().get(medicine));
+                medicineAmount.add(new MedicineAmountForOfferDto(medicineDto, order.getMedicineAmount().get(medicine)));
             }
             ordersDto.add(new OrderForOfferDto(medicineAmount, order.getDeadline().getTime(), order.getId()));
         }

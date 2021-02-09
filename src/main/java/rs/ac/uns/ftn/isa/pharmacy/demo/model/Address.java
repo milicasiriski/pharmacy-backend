@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddressDto;
+
 import javax.persistence.*;
 
 @Embeddable
@@ -36,6 +38,14 @@ public class Address {
         this.country = country;
         this.street = street;
         this.city = city;
+    }
+
+    public Address(AddressDto address) {
+        this.city = address.getCity();
+        this.street = address.getStreet();
+        this.country = address.getCountry();
+        this.latitude = address.getLatitude();
+        this.longitude = address.getLongitude();
     }
 
     public String getCountry() {

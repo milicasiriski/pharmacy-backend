@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class MedicineReservation {
 
     @Id
-    @SequenceGenerator(name = "medicine_reservation_sequence_generator", sequenceName = "medicine_reservation_sequence", initialValue = 4)
+    @SequenceGenerator(name = "medicine_reservation_sequence_generator", sequenceName = "medicine_reservation_sequence", initialValue = 14)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_reservation_sequence_generator")
     private Long id;
 
