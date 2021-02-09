@@ -8,6 +8,7 @@ public class OrderResponseDto {
     private List<MedicineAmountDto> medicineAmount;
     private Long adminId;
     private Long id;
+    private boolean accepted;
 
     public OrderResponseDto() {
 
@@ -18,6 +19,14 @@ public class OrderResponseDto {
         this.medicineAmount = medicineAmount;
         this.adminId = adminId;
         this.id = id;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     public String getDeadlineString() {

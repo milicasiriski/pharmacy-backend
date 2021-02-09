@@ -50,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
         return convertToOrdersDto(orders);
     }
 
+
     private List<OrderForOfferDto> convertToOrdersDto(List<Order> orders) {
         List<OrderForOfferDto> ordersDto = new ArrayList<>();
         for (Order order : orders) {
@@ -113,6 +114,36 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public void updateOrder(OrderResponseDto updatedOrder) {
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<MedicineAmountDto> medicineAmountDto = updatedOrder.getMedicineAmount();
+        HashMap<Medicine, Integer> medicineAmount = new HashMap<>();
+
+        medicineAmountDto.forEach(m -> {
+            Medicine medicine = medicineRepository.findByUuid(m.getUuid());
+            System.out.println(medicine.getId());
+            medicineAmount.put(medicine, m.getMedicineAmount());
+        });
+
+        Order order = orderRepository.findById(updatedOrder.getId()).orElse(null);
+        if (order == null) {
+            throw new EntityNotFoundException();
+        }
+
+        List<Offer> offers = offerRepository.findOffersByOrder(order.getId());
+        if (!offers.isEmpty()) {
+            throw new OrderHasOfferException();
+        }
+
+        if (order.getPharmacyAdmin().getId().equals(pharmacyAdmin.getId())) {
+            order.setMedicineAmount(medicineAmount);
+            orderRepository.save(order);
+        } else {
+            throw new OtherPharmacyAdminCreatedOrderException();
+        }
+    }
+
     private List<OrderResponseDto> convertOrdersToOrderResponse(List<Order> orders) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<OrderResponseDto> ordersDto = new ArrayList<>();
@@ -120,12 +151,14 @@ public class OrderServiceImpl implements OrderService {
             List<MedicineAmountDto> medicineAmounts = new ArrayList<>();
             order.getMedicineAmount().forEach((medicine, amount) -> {
                 MedicineAmountDto medicineAmount = new MedicineAmountDto(medicine.getName(), amount);
+                medicineAmount.setUuid(medicine.getUuid());
                 medicineAmounts.add(medicineAmount);
             });
 
             String strDate = dateFormat.format(order.getDeadline().getTime());
             OrderResponseDto orderResponseDto = new OrderResponseDto(strDate, medicineAmounts,
                     ((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId(), order.getId());
+            orderResponseDto.setAccepted(order.isOfferAccepted());
             ordersDto.add(orderResponseDto);
         });
         return ordersDto;
