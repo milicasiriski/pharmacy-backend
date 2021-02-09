@@ -175,6 +175,8 @@ INSERT INTO purchase_medicine_mapping (purchase_id, medicine_amount, medicine_id
 
 INSERT INTO medicine_search (id, medicine_id, pharmacy_id) VALUES (1, 5, 4);
 
+INSERT INTO complaint(id, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, null, 'Im not happy with a service!', false , 1, null, 1);
+
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');

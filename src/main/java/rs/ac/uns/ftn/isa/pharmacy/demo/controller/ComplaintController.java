@@ -6,10 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintAnswerDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ComplaintService;
 
 import java.util.List;
@@ -39,6 +36,16 @@ public class ComplaintController {
     public ResponseEntity<List<DermatologistDto>> getDermatologists() {
         try {
             return new ResponseEntity<>(complaintService.getDermatologists(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/pharmacies")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<List<PharmacyDto>> getPharmacies() {
+        try {
+            return new ResponseEntity<>(complaintService.getPharmacies(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

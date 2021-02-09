@@ -1,9 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintAnswerDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ComplaintDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 
 import java.util.List;
 
@@ -17,4 +14,6 @@ public interface ComplaintService {
     void makeAComplaint(ComplaintDto complaintDto);
 
     void resolveComplaint(ComplaintAnswerDto dto) throws Exception;
+
+    List<PharmacyDto> getPharmacies();
 }
