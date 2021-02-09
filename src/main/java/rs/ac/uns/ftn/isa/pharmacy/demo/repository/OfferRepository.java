@@ -21,4 +21,10 @@ public interface OfferRepository extends CrudRepository<Offer, Long> {
 
     @Query(value = "SELECT id, price, shipping_days, status, order_id, supplier_id FROM order_offer WHERE order_id=:orderId", nativeQuery = true)
     List<Offer> findOffersByOrder(@Param("orderId") Long orderID);
+
+    @Query(value = "SELECT supplier_id FROM order_offer WHERE order_id=:orderId", nativeQuery = true)
+    List<Long> getSupplierIds(@Param("orderId") Long orderId);
+
+    @Query(value = "SELECT supplier_id FROM order_offer WHERE id=:offerId", nativeQuery = true)
+    Long getAcceptedOfferSupplierId(@Param("offerId") Long offerId);
 }
