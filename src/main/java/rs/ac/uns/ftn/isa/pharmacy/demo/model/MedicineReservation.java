@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.Objects;
 
 @Entity
 @Table(name = "medicine_reservation")
@@ -87,5 +88,23 @@ public class MedicineReservation {
 
     public void setUniqueNumber(String uniqueNumber) {
         this.uniqueNumber = uniqueNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MedicineReservation)) return false;
+        MedicineReservation that = (MedicineReservation) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(medicine, that.medicine) &&
+                Objects.equals(patient, that.patient) &&
+                Objects.equals(pharmacy, that.pharmacy) &&
+                Objects.equals(expirationDate, that.expirationDate) &&
+                Objects.equals(uniqueNumber, that.uniqueNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, medicine, patient, pharmacy, expirationDate, uniqueNumber);
     }
 }
