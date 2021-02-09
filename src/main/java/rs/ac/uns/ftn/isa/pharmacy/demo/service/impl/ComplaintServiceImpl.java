@@ -53,7 +53,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Pharmacy> pharmacies = pharmacyRepository.findPharmacyByPatientIdPurchase(patient.getId());
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdDermatologistsExam(patient.getId()));
-        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPhysiciansExam(patient.getId()));
+        pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPharmacistsExam(patient.getId()));
 
         List<PharmacyDto> dtos = new ArrayList<>();
         for (Pharmacy pharmacy : pharmacies) {

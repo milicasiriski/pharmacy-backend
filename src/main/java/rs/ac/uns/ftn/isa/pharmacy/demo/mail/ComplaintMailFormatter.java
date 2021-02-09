@@ -25,6 +25,6 @@ public class ComplaintMailFormatter implements MailFormatter<String> {
 
     @Override
     public String getSubject() {
-        return "Complain answer.";
+        return "Complaint answer.";
     }
 }

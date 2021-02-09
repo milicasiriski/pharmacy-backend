@@ -41,5 +41,5 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
             " p.name, p.pharmacist_exam_duration, p.pharmacist_exam_price, p.rating " +
             "FROM pharmacy AS p, exam AS e, pharmacy_user AS u " +
             "where u.id=e.pharmacist_id AND p.id=u.pharmacy_id AND e.patient_id=:patientId", nativeQuery = true)
-    List<Pharmacy> findPharmacyByPatientIdPhysiciansExam(@Param("patientId") Long patientId);
+    List<Pharmacy> findPharmacyByPatientIdPharmacistsExam(@Param("patientId") Long patientId);
 }
