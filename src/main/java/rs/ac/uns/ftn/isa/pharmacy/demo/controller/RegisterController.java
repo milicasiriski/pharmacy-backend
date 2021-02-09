@@ -32,6 +32,7 @@ public class RegisterController {
 
     private final String userExistsAlert = "User already exists!";
     private final String registrationFailedAlert = "Registration failed!";
+    private final String missingBasicUserInfoAlert = "Registration failed! Missing name, email or password";
 
     @Autowired
     public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService, RegisterPharmacistService registerPharmacistService) {
@@ -42,6 +43,9 @@ public class RegisterController {
 
     @PostMapping("/patient")
     public ResponseEntity<String> registerPatient(HttpServletRequest request, @RequestBody PatientDto patientDTO) {
+        if (!validUserInfo(patientDTO.getName(), patientDTO.getEmail(), patientDTO.getPassword())) {
+            return new ResponseEntity<>(missingBasicUserInfoAlert, HttpStatus.BAD_REQUEST);
+        }
         if (this.registerPatientService.userExists(patientDTO.getEmail())) {
             return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
         }
@@ -67,9 +71,16 @@ public class RegisterController {
         }
     }
 
+    private boolean validUserInfo(String name, String email, String password) {
+        return name != null && !name.isEmpty() && email != null && !email.isEmpty() && password != null && !password.isEmpty();
+    }
+
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/user")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto credentials) {
+        if (!validUserInfo(credentials.getName(), credentials.getEmail(), credentials.getPassword())) {
+            return new ResponseEntity<>(missingBasicUserInfoAlert, HttpStatus.BAD_REQUEST);
+        }
         if (registerUserService.userExists(credentials.getEmail())) {
             return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
         }

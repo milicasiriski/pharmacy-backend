@@ -12,53 +12,21 @@ public class UserRegistrationDto {
     private String surname;
     private UserType type;
     private Long pharmacyId;
-    private String country;
-    private String street;
-    private String city;
+    private AddressDto address;
     private List<TimeIntervalDto> shifts;
 
-    public UserRegistrationDto(String email, String password, String name, String surname, UserType type, Long pharmacyId) {
+    public UserRegistrationDto(String email, String password, String name, String surname, UserType type, Long pharmacyId, AddressDto address, List<TimeIntervalDto> shifts) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.type = type;
         this.pharmacyId = pharmacyId;
+        this.address = address;
+        this.shifts = shifts;
     }
 
     public UserRegistrationDto() {
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public List<TimeIntervalDto> getShifts() {
-        return shifts;
-    }
-
-    public void setShifts(List<TimeIntervalDto> shifts) {
-        this.shifts = shifts;
     }
 
     public String getEmail() {
@@ -107,5 +75,21 @@ public class UserRegistrationDto {
 
     public void setPharmacyId(Long pharmacyId) {
         this.pharmacyId = pharmacyId;
+    }
+
+    public AddressDto getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDto address) {
+        this.address = address;
+    }
+
+    public List<TimeIntervalDto> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<TimeIntervalDto> shifts) {
+        this.shifts = shifts;
     }
 }

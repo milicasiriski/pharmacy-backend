@@ -31,7 +31,7 @@ public class RegisterPharmacistServiceImpl implements RegisterPharmacistService 
 
     @Override
     public void register(UserRegistrationDto registrationInfo) {
-        Address address = new Address(registrationInfo.getCountry(), registrationInfo.getStreet(), registrationInfo.getCity());
+        Address address = new Address(registrationInfo.getAddress());
         PharmacyAdmin admin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Pharmacist pharmacist = new Pharmacist(registrationInfo.getEmail(), passwordEncoder.encode(registrationInfo.getPassword()),

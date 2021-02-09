@@ -11,7 +11,7 @@ public interface PatientRepository extends CrudRepository<Patient, Long> {
 
     @Query(value = "SELECT DISTINCT u.id, u.user_type, u.email, u.enabled, u.last_password_reset_date," +
             " u.name, u.password, u.surname, u.patient_activation_code," +
-            " u.patient_address, u.patient_city, u.patient_country, u.patient_penalty_points," +
+            " u.street, u.city, u.country,u.longitude,u.latitude, u.patient_loyalty_points,u.patient_penalty_points," +
             " u.patient_phone_num  FROM pharmacy_subscribers AS ps," +
             " pharmacy_user AS u WHERE ps.patient_id=u.id AND ps.pharmacy_id=:id", nativeQuery = true)
     List<Patient> findSubscribersByPharmacyId(@Param("id") Long id);

@@ -72,9 +72,8 @@ public class PharmacyServiceImpl implements PharmacyService {
     public List<PharmacyNameAndAddressDto> findPharmaciesBasicInfo() {
         List<PharmacyNameAndAddressDto> dtoPharmacies = new ArrayList<>();
 
-        pharmacyRepository.findAll().forEach(pharmacy -> {
-            dtoPharmacies.add(new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet(), pharmacy.getId()));
-        });
+        pharmacyRepository.findAll().forEach(pharmacy ->
+                dtoPharmacies.add(new PharmacyNameAndAddressDto(pharmacy.getName(), pharmacy.getAddress().getStreet(), pharmacy.getId())));
 
         return dtoPharmacies;
     }
@@ -124,7 +123,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Override
     public Pharmacy save(PharmacyDto dto) {
         // TODO: Give real address to constructor
-        Pharmacy pharmacy = new Pharmacy(dto.getName(), new Address(), dto.getAbout());
+        Pharmacy pharmacy = new Pharmacy(dto.getName(), new Address(dto.getAddress()), dto.getAbout());
         pharmacy = pharmacyRepository.save(pharmacy);
         return pharmacy;
     }
