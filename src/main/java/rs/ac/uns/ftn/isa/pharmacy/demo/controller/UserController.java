@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<UserDto> getUserInfo() {
         return ResponseEntity.ok(userService.getUserInfo());
     }
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
         try {
             userService.updatePassword(passwordDto);
