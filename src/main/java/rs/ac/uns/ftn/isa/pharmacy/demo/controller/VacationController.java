@@ -43,23 +43,23 @@ public class VacationController implements VacationConverter {
 
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/pharmacistVacation")
-    public ResponseEntity<Void> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) {
+    public ResponseEntity<String> sendVacationResponsePharmacist(@RequestBody VacationDto vacationDto) {
         try {
             vacationService.sendVacationResponsePharmacist(vacationDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Vacation response successfully send.", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong.", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/dermatologistVacation")
-    public ResponseEntity<Void> sendVacationResponseDermatologist(@RequestBody VacationDto vacationDto) {
+    public ResponseEntity<String> sendVacationResponseDermatologist(@RequestBody VacationDto vacationDto) {
         try {
             vacationService.sendVacationResponseDermatologist(vacationDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Vacation response successfully send.", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Something went wrong.", HttpStatus.BAD_REQUEST);
         }
     }
 }
