@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PromotionRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PromotionService;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,13 +43,21 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public void addNewPromotion(PromotionDto promotionDto) throws MessagingException {
         PharmacyAdmin admin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Pharmacy pharmacy = pharmacyRepository.findById(admin.getPharmacy().getId()).orElse(null);
+
+        if (pharmacy == null) {
+            throw new EntityNotFoundException();
+        }
 
         Promotion promotion = new Promotion(getPromotionInterval(promotionDto), promotionDto.getNotificationMessage(),
                 (promotionDto.getDiscount()), admin.getPharmacy());
         promotionRepository.save(promotion);
 
-        // TODO: Send mail to all relevant patients.
-        mailService.sendMail(admin.getEmail(), promotionDto, new PromotionMailFormatter());
+        List<Patient> patients = pharmacy.getSubscribers();
+
+        for (Patient p : patients) {
+            mailService.sendMail(p.getEmail(), promotionDto, new PromotionMailFormatter());
+        }
     }
 
     @Override

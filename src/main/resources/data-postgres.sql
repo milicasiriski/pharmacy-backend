@@ -194,6 +194,10 @@ INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (
 
 INSERT INTO complaint(id, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, null, 'Im not happy with a service!', false , 1, null, 1);
 
+INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 1);
+INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 2);
+INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 3);
+
 INSERT INTO rating(id, rating, patient_id) VALUES ('1', '5', '1');
 INSERT INTO rating(id, rating, patient_id) VALUES ('2', '4', '1');
 INSERT INTO rating(id, rating, patient_id) VALUES ('3', '3', '1');

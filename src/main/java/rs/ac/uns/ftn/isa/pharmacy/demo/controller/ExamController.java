@@ -30,7 +30,7 @@ public class ExamController {
     public ResponseEntity<String> createExam(@RequestBody PharmacyAdminExamDto pharmacyAdminExamDto) {
         try {
             examService.createExam(pharmacyAdminExamDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Exam successfully added!", HttpStatus.OK);
         } catch (NullPointerException e) {
             return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         } catch (ExamIntervalIsOverlapping e) {
@@ -47,7 +47,7 @@ public class ExamController {
     public ResponseEntity<String> deleteExam(@PathVariable("examId") Long examId) {
         try {
             examService.deleteExam(examId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Exam successfully deleted!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("Exam does not exist!", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
