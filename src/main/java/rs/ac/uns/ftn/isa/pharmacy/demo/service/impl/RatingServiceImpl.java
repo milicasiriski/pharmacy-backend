@@ -18,15 +18,17 @@ public class RatingServiceImpl implements RatingService {
     private final DermatologistRepository dermatologistRepository;
     private final PharmacistRepository pharmacistRepository;
     private final MedicineRepository medicineRepository;
+    private final RatingMedicineRepository ratingMedicineRepository;
     private final RatingDermatologistRepository ratingDermatologistRepository;
     private final RatingPharmacistRepository ratingPharmacistRepository;
 
     @Autowired
-    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository) {
+    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingMedicineRepository ratingMedicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository) {
         this.pharmacyRepository = pharmacyRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.medicineRepository = medicineRepository;
+        this.ratingMedicineRepository = ratingMedicineRepository;
         this.ratingDermatologistRepository = ratingDermatologistRepository;
         this.ratingPharmacistRepository = ratingPharmacistRepository;
     }
@@ -53,6 +55,16 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    public void saveMedicineRatings(List<SubmitRatingDto> ratings) {
+        Patient patient = getSignedInUser();
+        ratings.forEach(submitRatingDto -> {
+            Medicine medicine = getMedicineById(submitRatingDto.getId());
+            RatingMedicine ratingMedicine = new RatingMedicine(patient, submitRatingDto.getRating(), medicine);
+            ratingMedicineRepository.save(ratingMedicine);
+        });
+    }
+
+    @Override
     public void saveDermatologistRatings(List<SubmitRatingDto> ratings) {
         Patient patient = getSignedInUser();
         ratings.forEach(submitRatingDto -> {
@@ -70,6 +82,15 @@ public class RatingServiceImpl implements RatingService {
             RatingPharmacist ratingPharmacist = new RatingPharmacist(patient, submitRatingDto.getRating(), pharmacist);
             ratingPharmacistRepository.save(ratingPharmacist);
         });
+    }
+
+    private Medicine getMedicineById(long id) throws EntityNotFoundException {
+        Optional<Medicine> optionalMedicine = medicineRepository.findById(id);
+        if (optionalMedicine.isPresent()) {
+            return optionalMedicine.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     private Dermatologist getDermatologistId(long id) throws EntityNotFoundException {

@@ -14,6 +14,8 @@ public interface RatingService {
 
     Iterable<Medicine> getMedicine(Patient patient);
 
+    void saveMedicineRatings(List<SubmitRatingDto> ratings);
+
     void saveDermatologistRatings(List<SubmitRatingDto> ratings);
 
     void savePharmacistRatings(List<SubmitRatingDto> ratings);

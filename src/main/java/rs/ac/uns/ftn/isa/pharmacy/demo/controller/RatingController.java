@@ -71,6 +71,17 @@ public class RatingController {
         }
     }
 
+    @PostMapping("/medicine")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<String> submitMedicineRatings(@RequestBody List<SubmitRatingDto> ratings) {
+        try {
+            ratingService.saveMedicineRatings(ratings);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/dermatologists")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
     public ResponseEntity<String> submitDermatologistsRatings(@RequestBody List<SubmitRatingDto> ratings) {

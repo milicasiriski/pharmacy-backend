@@ -65,11 +65,10 @@ INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id
 INSERT INTO prescription(id, prescription_date, patient_id) VALUES ('1', '2020-11-11', '3');
 INSERT INTO prescription(id, prescription_date, patient_id) VALUES ('2', '2020-10-11', '3');
 
-INSERT INTO public.prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 3, '1');
-INSERT INTO public.prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 1, '2');
-INSERT INTO public.prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 5, '3');
-INSERT INTO public.prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 2, '2');
-INSERT INTO public.prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 4, '5');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 1, '2');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 5, '3');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 2, '2');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 4, '5');
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating) VALUES ('4', 'DERMATOLOGIST', 'pharmacyisa6+djuro@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Djuro', 'Djuric', '4.5');
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating) VALUES ('5', 'DERMATOLOGIST', 'pharmacyisa6+pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Pera', 'Peric', '4.8');
