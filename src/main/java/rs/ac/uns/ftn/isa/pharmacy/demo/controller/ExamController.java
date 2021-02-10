@@ -13,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
 
 @RestController
 @RequestMapping(value = "/exam", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,14 +32,17 @@ public class ExamController {
         try {
             examService.createExam(pharmacyAdminExamDto);
             return new ResponseEntity<>("Exam successfully added!", HttpStatus.OK);
-        } catch (NullPointerException e) {
-            return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         } catch (ExamIntervalIsOverlapping e) {
             return new ResponseEntity<>("Dermatologists is already scheduled for chosen date!", HttpStatus.BAD_REQUEST);
         } catch (ExamIntervalIsNotInShiftIntervalException e) {
             return new ResponseEntity<>("Dermatologists is not available at that time!", HttpStatus.BAD_REQUEST);
         } catch (ShiftIsNotDefinedException e) {
             return new ResponseEntity<>("Shift is not defined for that day!", HttpStatus.BAD_REQUEST);
+        } catch (OptimisticLockException e) {
+            return new ResponseEntity<>("Looks like this time interval is already scheduled!", HttpStatus.I_AM_A_TEAPOT);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         }
     }
 

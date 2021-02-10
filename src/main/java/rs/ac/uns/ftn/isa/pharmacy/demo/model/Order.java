@@ -15,6 +15,9 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @ElementCollection
     @CollectionTable(name = "order_medicine_mapping", joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyJoinColumn(name = "medicine_id", referencedColumnName = "id")
@@ -57,6 +60,14 @@ public class Order implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Map<Medicine, Integer> getMedicineAmount() {

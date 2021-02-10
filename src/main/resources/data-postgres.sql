@@ -2,14 +2,14 @@ INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country,
 INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points, version) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07', 2, 2, 0);
 INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points, version) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07', 0, 0, 0);
 
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('1', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 30, 45, 4.6);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('2', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 20, 20, 5);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('3', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.8109553', '45.2516069', 'Hadziruvimova 54', 'Jankovic', 30, 40, 4.2);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('4', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Slobodana Jovanovica 35', 'Apoteka', 30, 30, 4.2);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('5', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Strazilovska 19', 'Biljana i Luka', 30, 50, 4.1);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('6', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 100', 'Memfis', 20, 45, 4.0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('7', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Maksima Gorkog 20', 'Phizer', 45, 50, 3.9);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('8', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bul Evrope 32', 'Apoteka Jovanovic', 15, 20, 4.2);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('1', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 30, 45, 4.6, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('2', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 20, 20, 5, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('3', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.8109553', '45.2516069', 'Hadziruvimova 54', 'Jankovic', 30, 40, 4.2, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('4', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Slobodana Jovanovica 35', 'Apoteka', 30, 30, 4.2, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('5', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Strazilovska 19', 'Biljana i Luka', 30, 50, 4.1, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('6', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 100', 'Memfis', 20, 45, 4.0, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('7', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Maksima Gorkog 20', 'Phizer', 45, 50, 3.9, 0);
+INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('8', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bul Evrope 32', 'Apoteka Jovanovic', 15, 20, 4.2, 0);
 
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('1','Ibuprofen' ,'Anti-inflammatory medicine. Use on adults only.', '0', 'Advil®', 'Microcrystalline, cellulose, lactose, hypromellose', '0', true, 5, 'A1', '1 tablet', 'Death', 2);
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false, 4,  'A2', '1 tablet', 'Death', 2);
@@ -87,12 +87,12 @@ INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, street, city, country, version) VALUES ('15', 'SUPPLIER', 'pharmacyisa6+supplier3@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07','Mikin bulevar 123', 'Mikici', 'Srbija', 0);
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, street, city, country, version) VALUES ('16', 'SUPPLIER', 'pharmacyisa6+supplier4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07','Mikin bulevar 123', 'Mikici', 'Srbija', 0);
 
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (1, '2021-06-16 00:00:00', 11, false);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (5, '2021-06-16 00:00:00', 11, false);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (6, '2021-06-16 00:00:00', 11, false);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (2, '2021-01-16 00:00:00', 10, false);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (3, '2021-07-16 00:00:00', 10, false);
-INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted) VALUES (4, '2021-08-16 00:00:00', 10, false);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (1, '2021-06-16 00:00:00', 11, false, 0);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (5, '2021-06-16 00:00:00', 11, false, 0);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (6, '2021-06-16 00:00:00', 11, false, 0);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (2, '2021-01-16 00:00:00', 10, false, 0);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (3, '2021-07-16 00:00:00', 10, false, 0);
+INSERT INTO medicine_order(id, deadline, pharmacy_admin_id, offer_accepted, version) VALUES (4, '2021-08-16 00:00:00', 10, false, 0);
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, version) VALUES ('17', 'SYSTEM_ADMIN', 'pharmacyisa6+systemadmin4@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 0);
 
@@ -102,6 +102,13 @@ INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id)
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (6, 1, 5);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (6, 1, 4);
 INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (1, 1, 4);
+
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (2, 2, 4);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 2, 1);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (2, 103, 2);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 1, 5);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (4, 1, 4);
+INSERT INTO order_medicine_mapping(order_id, order_medicine_amount, medicine_id) VALUES (3, 1, 4);
 
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 8, 4);
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 5, 1);
@@ -114,10 +121,10 @@ INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id)
 -- INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (3, 100, 10, 0, 1, 13);
 -- INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (4, 100, 10, 0, 1, 13);
 
-INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (2, 100, 20, 0, 2, 13);
-INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (5, 100, 20, 0, 3, 13);
-INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (6, 100, 20, 0, 4, 13);
-INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (7, 150, 20, 0, 4, 14);
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (2, 100, 20, 0, 2, 13, 0);
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (5, 100, 20, 0, 3, 13, 0);
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (6, 100, 20, 0, 4, 13, 0);
+INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (7, 150, 20, 0, 4, 14, 0);
 
 INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '0');
 INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('7', '1970-01-01 16:00:00', '1970-01-01 8:00:00', '1');
@@ -133,11 +140,11 @@ INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) V
 INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('9', '1970-01-01 18:00:00', '1970-01-01 14:00:00', '2');
 INSERT INTO pharmacist_shift(pharmacist_id, end_time, start_time, day_of_week) VALUES ('9', '1970-01-01 18:00:00', '1970-01-01 14:00:00', '4');
 
-INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (1, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', '2');
-INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (2, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', '2');
-INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (3, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', '2');
-INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (4, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', '2');
-INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status) VALUES (5, '', '2021-03-10 00:00:00', '2021-02-28 00:00:00', '1');
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status, version) VALUES (1, '', '2021-06-16 00:00:00', '2021-05-16 00:00:00', '2', 0);
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status, version) VALUES (2, '', '2021-07-16 00:00:00', '2021-06-16 00:00:00', '2', 0);
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status, version) VALUES (3, '', '2021-08-16 00:00:00', '2021-07-16 00:00:00', '2', 0);
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status, version) VALUES (4, '', '2021-09-16 00:00:00', '2021-10-16 00:00:00', '2', 0);
+INSERT INTO vacation_time_request(id, rejected_reason, time_end, time_start, status, version) VALUES (5, '', '2021-03-10 00:00:00', '2021-02-28 00:00:00', '1', 0);
 
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('1', '7');
 INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('2', '8');
@@ -146,18 +153,18 @@ INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('5', '8');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('3', '4', '4');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('4', '4', '4');
 
-INSERT INTO employment(id, duration, price) VALUES ('1', '20', '20');
-INSERT INTO employment(id, duration, price) VALUES ('2', '20', '30');
+INSERT INTO employment(id, duration, price, version) VALUES ('1', '20', '20', 0);
+INSERT INTO employment(id, duration, price, version) VALUES ('2', '20', '30', 0);
 
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', 1, 2);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', 1, 1);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', 1, 2);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2', 3, 2);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status) VALUES ('8', '30', '2021-02-05 10:40:00', '2021-02-05 10:20:00', '2', 3, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', 1, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', 1, 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', 1, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('4', '30', '2021-02-12 10:40:00', '2021-02-12 10:20:00', '2', 3, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('8', '30', '2021-02-05 10:40:00', '2021-02-05 10:20:00', '2', 3, 0, 0);
 
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status) VALUES ('5', '20', '2021-03-30 18:00', '2021-03-30 17:30', '1', '8', 2);
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status) VALUES ('6', '20', '2020-03-30 18:00', '2021-03-30 17:30', '3', '8', 1);
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status) VALUES ('7', '20', '2021-05-30 18:00', '2021-03-30 17:30', '3', '9', 2);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('5', '20', '2021-03-30 18:00', '2021-03-30 17:30', '1', '8', 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('6', '20', '2020-03-30 18:00', '2021-03-30 17:30', '3', '8', 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('7', '20', '2021-05-30 18:00', '2021-03-30 17:30', '3', '9', 2, 0);
 
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');

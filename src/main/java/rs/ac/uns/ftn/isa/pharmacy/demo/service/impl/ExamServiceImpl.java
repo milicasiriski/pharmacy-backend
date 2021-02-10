@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
@@ -22,9 +24,11 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
 public class ExamServiceImpl implements ExamService {
 
     private final DermatologistEmploymentService dermatologistEmploymentService;
@@ -46,7 +50,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws ShiftIsNotDefinedException, ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException, NullPointerException {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void createExam(PharmacyAdminExamDto pharmacyAdminExamDto) throws OptimisticLockException, ShiftIsNotDefinedException, ExamIntervalIsOverlapping, ExamIntervalIsNotInShiftIntervalException, NullPointerException {
         Dermatologist dermatologist = dermatologistEmploymentService.getDermatologistById(pharmacyAdminExamDto.getDermatologistId());
 
         Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin) SecurityContextHolder
@@ -92,6 +97,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException, MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);

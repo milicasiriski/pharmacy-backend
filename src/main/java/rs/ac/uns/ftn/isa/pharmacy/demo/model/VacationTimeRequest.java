@@ -15,6 +15,9 @@ public abstract class VacationTimeRequest {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacation_time_request_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "start", column = @Column(name = "time_start")),
@@ -52,6 +55,14 @@ public abstract class VacationTimeRequest {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public TimeInterval getRequestedTimeForVacation() {

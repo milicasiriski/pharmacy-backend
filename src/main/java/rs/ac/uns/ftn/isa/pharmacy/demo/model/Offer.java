@@ -15,6 +15,9 @@ public class Offer implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "order_id")
     private Order order;
@@ -45,6 +48,14 @@ public class Offer implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Order getOrder() {

@@ -1,8 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderResponseDto {
+public class OrderResponseDto implements Serializable {
 
     private String deadlineString;
     private List<MedicineAmountDto> medicineAmount;

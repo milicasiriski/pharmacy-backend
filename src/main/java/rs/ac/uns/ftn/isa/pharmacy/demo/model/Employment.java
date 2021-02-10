@@ -16,6 +16,9 @@ public class Employment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employment_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @ElementCollection
     @CollectionTable(name = "shift_day_mapping",
             joinColumns = {@JoinColumn(name = "employment_id", referencedColumnName = "id")})
@@ -63,6 +66,13 @@ public class Employment {
         this.id = id;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 
     public Double getPrice() {
         return price;
