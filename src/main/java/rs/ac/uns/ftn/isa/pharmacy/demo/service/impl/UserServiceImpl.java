@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
-        user.setAddress(new Address(addressDto.getCountry(), addressDto.getStreet(), addressDto.getStreet()));
+        user.setAddress(new Address(addressDto.getCountry(), addressDto.getStreet(), addressDto.getCity()));
 
         userRepository.save(user);
     }
