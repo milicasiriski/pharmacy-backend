@@ -86,13 +86,7 @@ public class PharmacyServiceImpl implements PharmacyService {
             throw new EntityNotFoundException();
         }
 
-        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
-
-        List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
-        List<PharmacistDto> pharmacists = findPharmacists(pharmacy);
-        List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
-
-        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
+        return getPharmacyProfileDto(pharmacy);
     }
 
     @Override
@@ -104,12 +98,7 @@ public class PharmacyServiceImpl implements PharmacyService {
             throw new EntityNotFoundException();
         }
 
-        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
-        List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
-        List<PharmacistDto> pharmacists = findPharmacists(pharmacy);
-        List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
-
-        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
+        return getPharmacyProfileDto(pharmacy);
     }
 
     @Override
@@ -262,7 +251,9 @@ public class PharmacyServiceImpl implements PharmacyService {
         List<MedicinesBasicInfoDto> medicines = new ArrayList<>();
 
         pharmacy.getMedicine().keySet().forEach(medicine -> {
+            Double currentPrice = pharmacy.getCurrentMedicinePrice(medicine);
             MedicinesBasicInfoDto medicinesBasicInfoDto = new MedicinesBasicInfoDto(medicine.getName(), medicine.getForm().label, medicine.getId(), medicine.getRatings());
+            medicinesBasicInfoDto.setCurrentPrice(currentPrice);
             medicines.add(medicinesBasicInfoDto);
         });
         return medicines;
@@ -313,6 +304,15 @@ public class PharmacyServiceImpl implements PharmacyService {
         shiftEnd.set(Calendar.MILLISECOND, 0);
 
         return new TimeInterval(shiftStart, shiftEnd);
+    }
+
+    private PharmacyProfileDto getPharmacyProfileDto(Pharmacy pharmacy) {
+        PharmacyDto pharmacyDto = new PharmacyDto(pharmacy);
+        List<DermatologistDto> dermatologists = findDermatologists(pharmacy);
+        List<PharmacistDto> pharmacists = findPharmacists(pharmacy);
+        List<MedicinesBasicInfoDto> medicines = findMedicines(pharmacy);
+
+        return new PharmacyProfileDto(pharmacyDto, dermatologists, pharmacists, medicines);
     }
 
     private double calculateDistanceInKilometers(Address pharmacyAddress, double userLon, double userLat) {

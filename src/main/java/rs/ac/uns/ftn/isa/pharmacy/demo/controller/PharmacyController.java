@@ -9,11 +9,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasExamException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasShiftInAnotherPharmacy;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineHasReservationException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacistHasExamException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyNameAndAddressDto;
@@ -38,6 +37,12 @@ public class PharmacyController {
     @GetMapping("/")
     public ResponseEntity<List<PharmacyNameAndAddressDto>> getAllPharmaciesBasicInfo() {
         return ResponseEntity.ok(pharmacyService.findPharmaciesBasicInfo());
+    }
+
+    @GetMapping("/getPharmacyId")
+    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<Long> getPharmacyIdByPharmacyAdmin() {
+        return ResponseEntity.ok(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPharmacy().getId());
     }
 
     @GetMapping("/getAll")
@@ -65,11 +70,20 @@ public class PharmacyController {
     }
 
     @GetMapping("/getPharmacyById/{pharmacyId}")
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_PATIENT', 'ROLE_SYSTEM_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<PharmacyProfileDto> getPharmacyById(@PathVariable Long pharmacyId) {
         try {
+            if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")){
+                PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                if (!pharmacyAdmin.getPharmacy().getId().equals(pharmacyId)) {
+                    throw new WrongAdminException();
+                }
+            }
             return ResponseEntity.ok(pharmacyService.findPharmacyById(pharmacyId));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (WrongAdminException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
