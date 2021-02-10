@@ -18,6 +18,10 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/rating", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RatingController {
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "Entity does not exist.";
+    private static final String RATING_NOT_VALID_MESSAGE = "Rating is not valid.";
+    private static final String RATING_NOT_ALLOWED_MESSAGE = "You are not authorized to rate this item.";
+    private static final String GENERIC_ERROR_MESSAGE = "Oops! Something went wrong.";
 
     @Qualifier("RatingServiceImpl")
     private final RatingService ratingService;
@@ -73,13 +77,13 @@ public class RatingController {
             ratingService.saveMedicineRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ENTITY_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (RatingOutOfRangeException e) {
-            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_VALID_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (PatientCannotRateThisEntity e) {
-            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_ALLOWED_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(GENERIC_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,13 +94,13 @@ public class RatingController {
             ratingService.saveDermatologistRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ENTITY_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (RatingOutOfRangeException e) {
-            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_VALID_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (PatientCannotRateThisEntity e) {
-            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_ALLOWED_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(GENERIC_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -107,13 +111,13 @@ public class RatingController {
             ratingService.savePharmacistRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ENTITY_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (RatingOutOfRangeException e) {
-            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_VALID_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (PatientCannotRateThisEntity e) {
-            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_ALLOWED_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(GENERIC_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -124,13 +128,13 @@ public class RatingController {
             ratingService.savePharmacyRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Entity does not exist.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ENTITY_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (RatingOutOfRangeException e) {
-            return new ResponseEntity<>("Rating is not valid.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_VALID_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (PatientCannotRateThisEntity e) {
-            return new ResponseEntity<>("You are not authorized to rate this item.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(RATING_NOT_ALLOWED_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(GENERIC_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 }

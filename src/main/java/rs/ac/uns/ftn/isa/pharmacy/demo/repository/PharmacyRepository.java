@@ -47,7 +47,6 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
             "FROM pharmacy AS p JOIN pharmacy_subscribers AS ps ON p.id = pharmacy_id " +
             "WHERE ps.patient_id = :subscriberId", nativeQuery = true)
     List<Pharmacy> findPharmacyBySubscriber(@Param("subscriberId") Long subscriberId);
-    List<Pharmacy> findPharmacyByPatientIdPharmacistsExam(@Param("patientId") long patientId);
 
     @Query(value = "SELECT case when (count(p.id) > 0) then true else false end\n" +
             "FROM pharmacy AS p, exam AS e, pharmacy_user AS u " +

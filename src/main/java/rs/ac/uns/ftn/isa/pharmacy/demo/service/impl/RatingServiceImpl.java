@@ -113,7 +113,7 @@ public class RatingServiceImpl implements RatingService {
         if (ratingMedicine == null) {
             ratingMedicine = new RatingMedicine(patient, rating.getRating(), getMedicineById(rating.getId()));
         } else {
-            ratingMedicine.setRating(rating.getRating());
+            ratingMedicine.setStars(rating.getRating());
         }
         ratingMedicineRepository.save(ratingMedicine);
     }
@@ -128,7 +128,7 @@ public class RatingServiceImpl implements RatingService {
         if (ratingDermatologist == null) {
             ratingDermatologist = new RatingDermatologist(patient, rating.getRating(), getDermatologistId(rating.getId()));
         } else {
-            ratingDermatologist.setRating(rating.getRating());
+            ratingDermatologist.setStars(rating.getRating());
         }
         ratingDermatologistRepository.save(ratingDermatologist);
     }
@@ -143,7 +143,7 @@ public class RatingServiceImpl implements RatingService {
         if (ratingDermatologist == null) {
             ratingDermatologist = new RatingPharmacist(patient, rating.getRating(), getPharmacistById(rating.getId()));
         } else {
-            ratingDermatologist.setRating(rating.getRating());
+            ratingDermatologist.setStars(rating.getRating());
         }
         ratingPharmacistRepository.save(ratingDermatologist);
     }
@@ -158,7 +158,7 @@ public class RatingServiceImpl implements RatingService {
         if (ratingPharmacy == null) {
             ratingPharmacy = new RatingPharmacy(patient, rating.getRating(), getPharmacyById(rating.getId()));
         } else {
-            ratingPharmacy.setRating(rating.getRating());
+            ratingPharmacy.setStars(rating.getRating());
         }
         ratingPharmacyRepository.save(ratingPharmacy);
     }
