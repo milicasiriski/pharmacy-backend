@@ -1,11 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
