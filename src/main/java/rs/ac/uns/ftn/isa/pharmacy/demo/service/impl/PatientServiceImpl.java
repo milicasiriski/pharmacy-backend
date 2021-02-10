@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -55,6 +56,12 @@ public class PatientServiceImpl implements PatientService {
         List<MedicinesBasicInfoDto> result = new ArrayList<>();
         medicineRepository.findAll().forEach(medicine -> result.add(new MedicinesBasicInfoDto(medicine)));
         return result;
+    }
+
+    @Override
+    public boolean hasCurrentUserExceededPenaltyPoints() {
+        Patient patient = getSignedInUser();
+        return patient.getPenaltyPoints() >= PenaltyPointsConstants.PENALTY_POINT_LIMIT;
     }
 
     private Medicine getMedicineById(Long id) throws EntityNotFoundException {

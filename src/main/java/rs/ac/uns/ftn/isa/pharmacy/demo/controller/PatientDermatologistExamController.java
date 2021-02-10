@@ -15,7 +15,9 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.ExamSortType;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -25,10 +27,12 @@ import java.util.ArrayList;
 @RequestMapping(value = "/patient-exam", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientDermatologistExamController {
     private final ExamService examService;
+    private final PatientService patientService;
 
     @Autowired
-    public PatientDermatologistExamController(ExamService examService) {
+    public PatientDermatologistExamController(ExamService examService, PatientService patientService) {
         this.examService = examService;
+        this.patientService = patientService;
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
@@ -65,6 +69,9 @@ public class PatientDermatologistExamController {
     @PutMapping("/")
     public ResponseEntity<String> scheduleDermatologistExam(@RequestBody String examId) {
         try {
+            if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+                return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            }
             long id = Long.parseLong(examId);
             examService.scheduleDermatologistExam(id, getSignedInUser());
             return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
