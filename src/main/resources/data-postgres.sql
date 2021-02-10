@@ -153,8 +153,8 @@ INSERT INTO vacation_request_pharmacist(id, pharmacist_id) VALUES ('5', '8');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('3', '4', '4');
 INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VALUES ('4', '4', '4');
 
-INSERT INTO employment(id, duration, price, version) VALUES ('1', '20', '20', 0);
-INSERT INTO employment(id, duration, price, version) VALUES ('2', '20', '30', 0);
+INSERT INTO employment(id, version) VALUES ('1', 0);
+INSERT INTO employment(id, version) VALUES ('2', 0);
 
 INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('1', '20', '2021-02-15 15:00:00', '2021-02-15 14:40:00', 1, 2, 0);
 INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('2', '40', '2021-02-02 14:40:00', '2021-02-02 14:20:00', 1, 1, 0);

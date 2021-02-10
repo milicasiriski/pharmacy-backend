@@ -25,12 +25,6 @@ public class Employment {
     @MapKeyColumn(name = "day_of_week")
     private Map<DaysOfWeek, TimeInterval> shifts;
 
-    @Column(name = "price")
-    private Double price;
-
-    @Column(name = "duration")
-    private Integer duration;
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employment_id")
     private List<Exam> exams;
@@ -39,15 +33,9 @@ public class Employment {
 
     }
 
-    public Employment(Map<DaysOfWeek, TimeInterval> shifts, Double price, Integer duration, List<Exam> exams) {
+    public Employment(Map<DaysOfWeek, TimeInterval> shifts, List<Exam> exams) {
         this.shifts = shifts;
-        this.price = price;
-        this.duration = duration;
         this.exams = exams;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     public List<Exam> getExams() {
@@ -74,14 +62,6 @@ public class Employment {
         this.version = version;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Map<DaysOfWeek, TimeInterval> getShifts() {
         return shifts;
     }
@@ -90,27 +70,16 @@ public class Employment {
         this.shifts = shifts;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employment that = (Employment) o;
-        return duration == that.duration &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(shifts, that.shifts) &&
-                Objects.equals(price, that.price);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shifts, price, duration);
+        return Objects.hash(id);
     }
 }

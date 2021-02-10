@@ -14,11 +14,9 @@ public class DermatologistShiftDto implements Serializable {
 
     }
 
-    public DermatologistShiftDto(DermatologistDto dermatologist, List<String> hourIntervals, String durationInMinutes, String price) {
+    public DermatologistShiftDto(DermatologistDto dermatologist, List<String> hourIntervals) {
         this.dermatologist = dermatologist;
         this.hourIntervals = hourIntervals;
-        this.durationInMinutes = durationInMinutes;
-        this.price = price;
     }
 
     public DermatologistDto getDermatologist() {

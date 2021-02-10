@@ -232,7 +232,7 @@ public class PharmacyServiceImpl implements PharmacyService {
             checkIfIntervalsOverlapping(convertedShifts, shifts);
         });
 
-        Employment newEmployment = new Employment(convertedShifts, 20.0, 20, new ArrayList<>());
+        Employment newEmployment = new Employment(convertedShifts, new ArrayList<>());
         pharmacy.addDermatologist(dermatologist, newEmployment);
         pharmacyRepository.save(pharmacy);
     }

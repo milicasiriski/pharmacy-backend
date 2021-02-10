@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddDermatologistDto;
