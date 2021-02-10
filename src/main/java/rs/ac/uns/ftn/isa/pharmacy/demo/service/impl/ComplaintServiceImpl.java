@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
-import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -125,7 +124,6 @@ public class ComplaintServiceImpl implements ComplaintService {
             sendMail(complaint, dto);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw e;
         }
 

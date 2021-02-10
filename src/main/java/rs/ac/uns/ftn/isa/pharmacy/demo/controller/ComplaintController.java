@@ -68,11 +68,9 @@ public class ComplaintController {
         try {
             complaintService.resolveComplaint(dto);
             return new ResponseEntity<>("Complaint resolved!", HttpStatus.OK);
-        } catch (ObjectOptimisticLockingFailureException objectOptimisticLockingFailureException){
-            return new ResponseEntity<>("Someone has already resolved patients complaint.",HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (ObjectOptimisticLockingFailureException objectOptimisticLockingFailureException) {
+            return new ResponseEntity<>("Someone has already resolved patients complaint.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

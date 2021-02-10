@@ -32,9 +32,9 @@ public class RegisterController {
 
     private final RegisterPharmacistService registerPharmacistService;
 
-    private final String userExistsAlert = "User with that mail address already exists!";
-    private final String registrationFailedAlert = "Registration failed!";
-    private final String missingBasicUserInfoAlert = "Registration failed! Missing name, email or password";
+    private final static String userExistsAlert = "User with that mail address already exists!";
+    private final static String registrationFailedAlert = "Registration failed!";
+    private final static String missingBasicUserInfoAlert = "Registration failed! Missing name, email or password";
 
     @Autowired
     public RegisterController(RegisterUserService registerUserService, RegisterPatientService registerPatientService, RegisterPharmacistService registerPharmacistService) {
@@ -54,11 +54,9 @@ public class RegisterController {
         try {
             this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
-        }
-        catch (BadUserInformationException e){
+        } catch (BadUserInformationException e) {
             return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -93,19 +91,12 @@ public class RegisterController {
         try {
             this.registerUserService.register(credentials);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
-        }
-        catch (BadUserInformationException e){
+        } catch (BadUserInformationException | DataIntegrityViolationException e) {
             return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        }
-        catch (PharmacyMissingException e){
+        } catch (PharmacyMissingException e) {
             return new ResponseEntity<>("If you add new pharmacy admin, you must set his (hers) pharmacy.",
                     HttpStatus.BAD_REQUEST);
-        }
-        catch (DataIntegrityViolationException e){
-            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
