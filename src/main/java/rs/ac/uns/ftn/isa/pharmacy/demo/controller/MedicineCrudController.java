@@ -25,11 +25,13 @@ public class MedicineCrudController {
         this.medicineService = medicineService;
     }
 
-    //TODO:Vladimir, check if values are ok NOSONAR
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/save")
     public ResponseEntity<String> saveMedicine(@RequestBody MedicineDto dto) {
         try {
+            if(dto.getUuid().isEmpty()||dto.getUuid()==null){
+                return new ResponseEntity<>("Sorry, you have sent a bad request!", HttpStatus.BAD_REQUEST);
+            }
             medicineService.save(dto);
             return new ResponseEntity<>("Medicine saved!", HttpStatus.OK);
         } catch (Exception e) {

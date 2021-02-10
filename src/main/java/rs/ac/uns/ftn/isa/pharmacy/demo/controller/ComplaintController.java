@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
@@ -67,7 +68,11 @@ public class ComplaintController {
         try {
             complaintService.resolveComplaint(dto);
             return new ResponseEntity<>("Complaint resolved!", HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (ObjectOptimisticLockingFailureException objectOptimisticLockingFailureException){
+            return new ResponseEntity<>("Someone has already resolved patients complaint.",HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

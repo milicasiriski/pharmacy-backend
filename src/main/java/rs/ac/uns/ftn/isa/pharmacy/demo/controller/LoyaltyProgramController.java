@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,9 @@ public class LoyaltyProgramController {
         try {
             loyaltyService.update(dto);
             return new ResponseEntity<>("Loyalty program updated.", HttpStatus.OK);
+        }
+        catch (ObjectOptimisticLockingFailureException e){
+            return new ResponseEntity<>("Someone has just changed program, if you still want to change program, please try again.", HttpStatus.BAD_REQUEST);
         }
         catch (BadRequestException badRequestException){
             return new ResponseEntity<>("You sent bad information, please try again.", HttpStatus.BAD_REQUEST);

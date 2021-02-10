@@ -2,6 +2,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
@@ -22,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@Transactional(readOnly = true)
 public class QRServiceImpl implements QRService {
 
     private final PharmacyRepository pharmacyRepository;
@@ -79,6 +82,7 @@ public class QRServiceImpl implements QRService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void buy(QRResultDto dto) throws Exception {
         if (prescriptionRepository.findById(dto.getPrescription().getId()).isPresent()) {
             throw new PrescriptionUsedException();

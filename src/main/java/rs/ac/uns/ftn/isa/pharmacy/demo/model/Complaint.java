@@ -12,6 +12,9 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "complaint_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "patient_id")
     private Patient patient;
@@ -56,6 +59,14 @@ public class Complaint {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Patient getPatient() {

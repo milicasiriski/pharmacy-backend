@@ -34,9 +34,7 @@ public class TokenUtils {
     private static final String AUDIENCE_TABLET = "tablet";
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-    //@TODO use key private SecretKey key = Keys.secretKeyFor(SIGNATURE_ALGORITHM);
 
-    //@TODO: Login method
     public String generateToken(String username) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)

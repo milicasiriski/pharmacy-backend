@@ -8,7 +8,7 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Rating {
     @Id
-    @SequenceGenerator(name = "rating_sequence_generator", sequenceName = "rating_sequence", initialValue = 20)
+    @SequenceGenerator(name = "rating_sequence_generator", sequenceName = "rating_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rating_sequence_generator")
     private Long id;
 

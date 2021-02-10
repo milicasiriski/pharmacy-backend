@@ -2,12 +2,15 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacyMissingException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ActivateDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
@@ -21,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController {
 
-    //@TODO:Vladimir Check if values are ok NOSONAR
     @Qualifier("registerPatientServiceImpl")
     private RegisterPatientService registerPatientService;
 
@@ -30,7 +32,7 @@ public class RegisterController {
 
     private final RegisterPharmacistService registerPharmacistService;
 
-    private final String userExistsAlert = "User already exists!";
+    private final String userExistsAlert = "User with that mail address already exists!";
     private final String registrationFailedAlert = "Registration failed!";
     private final String missingBasicUserInfoAlert = "Registration failed! Missing name, email or password";
 
@@ -52,7 +54,11 @@ public class RegisterController {
         try {
             this.registerPatientService.register(patientDTO, getSiteURL(request));
             return new ResponseEntity<>("/emailSent", HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (BadUserInformationException e){
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -87,7 +93,19 @@ public class RegisterController {
         try {
             this.registerUserService.register(credentials);
             return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch (BadUserInformationException e){
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
+        }
+        catch (PharmacyMissingException e){
+            return new ResponseEntity<>("If you add new pharmacy admin, you must set his (hers) pharmacy.",
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(userExistsAlert, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(registrationFailedAlert, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
