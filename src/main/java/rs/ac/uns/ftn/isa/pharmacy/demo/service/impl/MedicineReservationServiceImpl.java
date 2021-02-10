@@ -36,7 +36,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     private final MailService<MedicineReservationEmailParams> mailService;
     private final LoyaltyService loyaltyService;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public MedicineReservationServiceImpl(
