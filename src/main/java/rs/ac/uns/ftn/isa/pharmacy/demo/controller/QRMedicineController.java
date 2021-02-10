@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,7 @@ public class QRMedicineController {
         } catch (NoMedicineFoundException noMedicineFoundException) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -53,12 +55,17 @@ public class QRMedicineController {
             qrService.buy(dto);
             return new ResponseEntity<>("Medicine successfully bought.", HttpStatus.OK);
         } catch (PrescriptionUsedException prescriptionUsedException) {
-            return new ResponseEntity<>("Sorry, you can't use one prescription multiple times.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Sorry, you can't use one prescription multiple times."
+                    , HttpStatus.BAD_REQUEST);
         } catch (NoMedicineFoundException noMedicineFoundException) {
             return new ResponseEntity<>("Sorry, while you were waiting, we run out of selected medicines.",
                     HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Please don't try buying medicine at the same time."
+                    , HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Sorry, you sent a bad request, or something else went wrong.",
+            return new ResponseEntity<>("Sorry, you sent a bad request, used prescription for second time," +
+                    " or something else went wrong.",
                     HttpStatus.BAD_REQUEST);
         }
     }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadActivationCodeException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NotAPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.AccountActivationLinkMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
@@ -47,6 +48,9 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         patient.setPassword(passwordEncoder.encode(dto.getPassword()));
         String activationCode = RandomString.make(64);
         patient.setActivationCode(activationCode);
+        if(userExists(patient.getEmail())){
+            throw new BadUserInformationException();
+        }
         patient = userRepository.save(patient);
         sendActivationLink(patient, siteURL);
         return patient;
@@ -82,7 +86,7 @@ public class RegisterPatientServiceImpl implements RegisterPatientService {
         try {
             return findByEmail(email) != null;
         } catch (NotAPatientException e) {
-            return false;
+            return true;
         }
     }
 

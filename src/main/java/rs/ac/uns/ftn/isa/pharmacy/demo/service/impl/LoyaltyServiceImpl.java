@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Exam;
@@ -21,6 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class LoyaltyServiceImpl implements LoyaltyService {
 
     private final LoyaltyProgramRepository loyaltyProgramRepository;
@@ -36,6 +39,7 @@ public class LoyaltyServiceImpl implements LoyaltyService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void update(LoyaltyProgramDto dto) {
         Optional<LoyaltyProgram> loyaltyOptional = loyaltyProgramRepository.findById(LoyaltyProgram.defaultId);
         LoyaltyProgram loyaltyProgram;
@@ -97,14 +101,17 @@ public class LoyaltyServiceImpl implements LoyaltyService {
             exams.forEach(exam -> {
                 if (exam.getStatus() == ExamStatus.EXAM_DONE_POINTS_NOT_GIVEN) {
                     Patient patient = exam.getPatient();
-                    int point  = loyaltyProgram.getExamPoints();
-                    patient.addLoyaltyPoints(point);
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    exam.setStatus(ExamStatus.EXAM_DONE_POINTS_GIVEN);
-                    examRepository.save(exam);
-                    userRepository.save(patient);
-                    logger.info("{} {} points given to {} id: {} for exam {}",
-                            timestamp, point,patient.getName(), patient.getId(), exam.getId());
+                    if(patient!=null){
+                        int points  = loyaltyProgram.getExamPoints();
+                        logger.info("Points:  {}",points);
+                        patient.addLoyaltyPoints(points);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        exam.setStatus(ExamStatus.EXAM_DONE_POINTS_GIVEN);
+                        examRepository.save(exam);
+                        userRepository.save(patient);
+                        logger.info("{} {} points given to {} id: {} for exam {}",
+                                timestamp, points,patient.getName(), patient.getId(), exam.getId());
+                    }
                 }
             });
         }

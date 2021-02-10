@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Order implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 10)
+    @SequenceGenerator(name = "order_sequence_generator", sequenceName = "order_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence_generator")
     private Long id;
 

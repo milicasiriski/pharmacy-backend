@@ -11,7 +11,7 @@ import java.util.Objects;
 public abstract class VacationTimeRequest {
 
     @Id
-    @SequenceGenerator(name = "vacation_time_request_sequence_generator", sequenceName = "vacation_time_request_sequence", initialValue = 1)
+    @SequenceGenerator(name = "vacation_time_request_sequence_generator", sequenceName = "vacation_time_request_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacation_time_request_sequence_generator")
     private Long id;
 

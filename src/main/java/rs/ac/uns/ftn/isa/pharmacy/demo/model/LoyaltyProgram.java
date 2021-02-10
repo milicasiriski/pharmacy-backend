@@ -106,6 +106,10 @@ public class LoyaltyProgram {
         this.examPoints = examPoints;
     }
 
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

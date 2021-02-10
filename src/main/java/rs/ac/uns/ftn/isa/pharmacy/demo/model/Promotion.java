@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Promotion {
 
     @Id
-    @SequenceGenerator(name = "promotion_sequence_generator", sequenceName = "promotion_sequence", initialValue = 1)
+    @SequenceGenerator(name = "promotion_sequence_generator", sequenceName = "promotion_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "promotion_sequence_generator")
     private Long id;
 

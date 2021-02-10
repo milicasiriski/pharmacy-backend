@@ -2,14 +2,14 @@ INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country,
 INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points, version) VALUES ('2', 'PATIENT', 'pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Perin bulevar 34', 'Perici', 'Srbija', 'Pera', '0601231234', 'Peric', true, '2017-10-01 21:58:58.508-07', 2, 2, 0);
 INSERT INTO pharmacy_user(id, user_type, email, password, street, city, country, name, patient_phone_num, surname, enabled, last_password_reset_date, patient_penalty_points, patient_loyalty_points, version) VALUES ('3', 'PATIENT', 'pharmacyisa6+duja@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 'Dujina ulica 7', 'Liman', 'Srbija', 'Duja', '0601231234', 'Dujic', true, '2017-10-01 21:58:58.508-07', 0, 0, 0);
 
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('1', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 30, 45, 4.6, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('2', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 20, 20, 5, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('3', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.8109553', '45.2516069', 'Hadziruvimova 54', 'Jankovic', 30, 40, 4.2, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('4', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Slobodana Jovanovica 35', 'Apoteka', 30, 30, 4.2, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('5', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Strazilovska 19', 'Biljana i Luka', 30, 50, 4.1, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('6', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 100', 'Memfis', 20, 45, 4.0, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('7', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Maksima Gorkog 20', 'Phizer', 45, 50, 3.9, 0);
-INSERT INTO pharmacy(id, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating, version) VALUES ('8', 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bul Evrope 32', 'Apoteka Jovanovic', 15, 20, 4.2, 0);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('1', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 123', 'Nova Apoteka', 30, 45, 4.6);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('2', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 666', 'Sputnik', 20, 20, 5);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('3', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.8109553', '45.2516069', 'Hadziruvimova 54', 'Jankovic', 30, 40, 4.2);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('4', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Slobodana Jovanovica 35', 'Apoteka', 30, 30, 4.2);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('5', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Strazilovska 19', 'Biljana i Luka', 30, 50, 4.1);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('6', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bulevar Oslobodjenja 100', 'Memfis', 20, 45, 4.0);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('7', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.565618', '45.276658', 'Maksima Gorkog 20', 'Phizer', 45, 50, 3.9);
+INSERT INTO pharmacy(id, version, about, city, country, longitude, latitude, street, name, pharmacist_exam_duration, pharmacist_exam_price, rating) VALUES ('8', 0, 'This is a pharmacy.', 'Novi Sad', 'Republika Srbija', '19.801726', '45.255790', 'Bul Evrope 32', 'Apoteka Jovanovic', 15, 20, 4.2);
 
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('1','Ibuprofen' ,'Anti-inflammatory medicine. Use on adults only.', '0', 'Advil®', 'Microcrystalline, cellulose, lactose, hypromellose', '0', true, 5, 'A1', '1 tablet', 'Death', 2);
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('2', 'Roxera', 'Heart medicine. Reduces cholesterol.', '0','KRKA-FARMA D.O.O Beograd', 'Rosuvastatin calcium', '0', false, 4,  'A2', '1 tablet', 'Death', 2);
@@ -62,13 +62,13 @@ INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id
 INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('3', '2021-02-13 23:59:59', '3333', '3', '3', '5');
 INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('4', '2021-02-13 23:59:59', '4444', '1', '3', '4');
 
-INSERT INTO prescription(id, prescription_date, patient_id) VALUES ('1', '2020-11-11', '3');
-INSERT INTO prescription(id, prescription_date, patient_id) VALUES ('2', '2020-10-11', '3');
+INSERT INTO prescription(id, version, prescription_date, patient_id) VALUES ('11', 0, '2020-11-11', '3');
+INSERT INTO prescription(id, version, prescription_date, patient_id) VALUES ('12', 0, '2020-10-11', '3');
 
-INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 1, '2');
-INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('1', 5, '3');
-INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 2, '2');
-INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('2', 4, '5');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('11', 1, '2');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('11', 5, '3');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('12', 2, '2');
+INSERT INTO prescription_medicine_mapping(prescription_id, prescription_medicine_amount, medicine_id) VALUES ('12', 4, '5');
 
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating, version) VALUES ('4', 'DERMATOLOGIST', 'pharmacyisa6+djuro@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Djuro', 'Djuric', '4.5', 0);
 INSERT INTO pharmacy_user(id, user_type, email, password, enabled, last_password_reset_date, name, surname, rating, version) VALUES ('5', 'DERMATOLOGIST', 'pharmacyisa6+pera@gmail.com', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', true, '2017-10-01 21:58:58.508-07', 'Pera', 'Peric', '4.8', 0);
@@ -199,7 +199,7 @@ INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (
 INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (2, 4, 4, '2021-07-16');
 INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (3, 3, 4, '2021-07-16');
 
-INSERT INTO complaint(id, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, null, 'Im not happy with a service!', false , 1, null, 1);
+INSERT INTO complaint(id, version, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, 0, null, 'Im not happy with a service!', false , 1, null, 1);
 
 INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 1);
 INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 2);

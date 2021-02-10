@@ -96,11 +96,13 @@ public class PharmacyController {
         }
     }
 
-    //TODO:Vladimir, check if values are ok NOSONAR
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     @PostMapping("/register")
     public ResponseEntity<String> registerPharmacy(@RequestBody PharmacyDto dto) {
         try {
+            if(dto.getName().isEmpty() || dto.getName()==null){
+                return new ResponseEntity<>("Sorry, you sent a bad request.", HttpStatus.BAD_REQUEST);
+            }
             pharmacyService.save(dto);
             return ResponseEntity.ok("Pharmacy registered.");
         } catch (Exception e) {

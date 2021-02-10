@@ -3,7 +3,10 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PharmacyMissingException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserRegistrationDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.UserType;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class RegisterUserServiceImpl implements RegisterUserService {
 
     private final UserRepository userRepository;
@@ -36,15 +40,15 @@ public class RegisterUserServiceImpl implements RegisterUserService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public User register(UserRegistrationDto dto) {
         User user;
         UserType type = dto.getType();
         user = createUserByType(type);
-        //TODO:Vladimir, this will be potential transaction NOSONAR
         if (user.getClass() == PharmacyAdmin.class) {
             Optional<Pharmacy> pharmacy = pharmacyRepository.findById(dto.getPharmacyId());
             if (pharmacy.isEmpty()) {
-                throw new BadUserInformationException();
+                throw new PharmacyMissingException();
             }
             ((PharmacyAdmin) user).setPharmacy(pharmacy.get());
         }
@@ -55,6 +59,9 @@ public class RegisterUserServiceImpl implements RegisterUserService {
         user.setSurname(dto.getSurname());
         List<Authority> auth = authService.findByname(user.getAdministrationRole());
         user.setAuthorities(auth);
+        if(userExists(user.getEmail())){
+            throw new BadUserInformationException();
+        }
         user = userRepository.save(user);
         return user;
     }

@@ -12,7 +12,10 @@ public class Prescription {
     @Id
     private String id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Version
+    private Long version;
+
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
@@ -43,6 +46,14 @@ public class Prescription {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public Patient getPatient() {

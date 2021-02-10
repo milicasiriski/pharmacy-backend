@@ -20,11 +20,12 @@ public abstract class User implements UserDetails {
     private transient String administrationRole = "";
 
     @Id
-    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 30)
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
     @Column(name = "id", unique = true)
     protected Long id;
 
+    @Column(name = "email", unique = true)
     @Version
     private Long version;
 

@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Offer implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "offer_sequence_generator", sequenceName = "offer_sequence", initialValue = 30)
+    @SequenceGenerator(name = "offer_sequence_generator", sequenceName = "offer_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_sequence_generator")
     private Long id;
 

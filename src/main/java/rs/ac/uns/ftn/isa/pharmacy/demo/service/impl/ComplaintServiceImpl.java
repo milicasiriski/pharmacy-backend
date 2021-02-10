@@ -1,8 +1,11 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadUserInformationException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ComplaintResolvedException;
@@ -17,6 +20,7 @@ import javax.mail.MessagingException;
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
 public class ComplaintServiceImpl implements ComplaintService {
 
     private final PharmacistRepository pharmacistRepository;
@@ -104,19 +108,27 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void resolveComplaint(ComplaintAnswerDto dto) throws Exception {
-        Optional<Complaint> optionalComplaint = complaintRepository.findById(dto.getId());
-        if (optionalComplaint.isEmpty()) {
-            throw new BadRequestException();
+        try{
+            Optional<Complaint> optionalComplaint = complaintRepository.findById(dto.getId());
+            if (optionalComplaint.isEmpty()) {
+                throw new BadRequestException();
+            }
+            Complaint complaint = optionalComplaint.get();
+            if (complaint.isResolved()) {
+                throw new ComplaintResolvedException();
+            }
+            complaint.setAnswerText(dto.getAnswerText());
+            complaint.setResolved(true);
+            complaintRepository.save(complaint);
+            sendMail(complaint, dto);
         }
-        Complaint complaint = optionalComplaint.get();
-        if (complaint.isResolved()) {
-            throw new ComplaintResolvedException();
+        catch (Exception e){
+            e.printStackTrace();
+            throw e;
         }
-        complaint.setAnswerText(dto.getAnswerText());
-        complaint.setResolved(true);
-        complaintRepository.save(complaint);
-        sendMail(complaint, dto);
+
     }
 
     private void sendMail(Complaint complaint, ComplaintAnswerDto dto) throws MessagingException {

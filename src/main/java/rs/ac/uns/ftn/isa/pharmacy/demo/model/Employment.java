@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Employment {
 
     @Id
-    @SequenceGenerator(name = "employment_sequence_generator", sequenceName = "employment_sequence", initialValue = 3)
+    @SequenceGenerator(name = "employment_sequence_generator", sequenceName = "employment_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employment_sequence_generator")
     private Long id;
 

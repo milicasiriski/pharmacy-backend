@@ -8,7 +8,7 @@ import java.util.Objects;
 public class MedicinePriceListItem {
 
     @Id
-    @SequenceGenerator(name = "medicine_price_list_item_sequence_generator", sequenceName = "medicine_price_list_item_sequence", initialValue = 11)
+    @SequenceGenerator(name = "medicine_price_list_item_sequence_generator", sequenceName = "medicine_price_list_item_sequence", initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_price_list_item_sequence_generator")
     private Long id;
 
