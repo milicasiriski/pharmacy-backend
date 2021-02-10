@@ -19,4 +19,10 @@ public interface MedicineRepository extends CrudRepository<Medicine, Long> {
             "\tWHERE m.id = pm.medicine_id AND pm.purchase_id = p.id\n" +
             "\tAND p.patient_id = :patientId AND m.id = :medicineId", nativeQuery = true)
     boolean canPatientRateMedicine(long patientId, long medicineId);
+
+    @Query(value = "SELECT id, composition, description, form, manufacturer, name, points, prescribed, ratings,\n" +
+            "\trecommended_dose, side_effects, type, uuid\n" +
+            "\tFROM medicine AS m, patient_allergies AS pa\n" +
+            "\tWHERE m.id = pa.medicine_id AND pa.patient_id = '3';", nativeQuery = true)
+    Iterable<Medicine> findAllergiesForPatient(long patientId);
 }

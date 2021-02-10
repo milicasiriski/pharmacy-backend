@@ -1,8 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +21,14 @@ public class Patient extends User {
 
     @Column(name = "patient_loyalty_points")
     private int loyaltyPoints;
+
+    @ManyToMany(cascade = {CascadeType.DETACH})
+    @JoinTable(
+            name = "patient_allergies",
+            joinColumns = {@JoinColumn(name = "patient_id")},
+            inverseJoinColumns = {@JoinColumn(name = "medicine_id")}
+    )
+    private List<Medicine> allergies;
 
     public Patient() {
         super();
@@ -79,6 +86,14 @@ public class Patient extends User {
 
     public void setLoyaltyPoints(int loyaltyPoints) {
         this.loyaltyPoints = loyaltyPoints;
+    }
+
+    public List<Medicine> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(List<Medicine> allergies) {
+        this.allergies = allergies;
     }
 
     public void addLoyaltyPoints(int points) {

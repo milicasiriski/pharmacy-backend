@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
+
 import java.io.Serializable;
 
 public class MedicinesBasicInfoDto implements Serializable {
@@ -18,6 +20,13 @@ public class MedicinesBasicInfoDto implements Serializable {
         this.form = form;
         this.id = id;
         this.rating = rating;
+    }
+
+    public MedicinesBasicInfoDto(Medicine medicine) {
+        this.name = medicine.getName();
+        this.form = medicine.getForm().label;
+        this.id = medicine.getId();
+        this.rating = medicine.getRatings();
     }
 
     public Double getCurrentPrice() {
