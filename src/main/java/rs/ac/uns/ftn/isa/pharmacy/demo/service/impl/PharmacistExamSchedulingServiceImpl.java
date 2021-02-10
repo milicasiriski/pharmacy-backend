@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
@@ -23,6 +24,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
 public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedulingService {
     private final PharmacistRepository pharmacistRepository;
     private final PharmacistVacationRepository pharmacistVacationRepository;
@@ -75,6 +77,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void scheduleAppointment(SchedulePharmacistExamParams params, Patient patient) throws EntityNotFoundException, ExamAlreadyScheduledException, MessagingException {
         Pharmacist pharmacist = getPharmacistById(params.getPharmacistId());
         Pharmacy pharmacy = pharmacist.getPharmacy();
@@ -92,6 +95,7 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void cancelAppointment(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
         Exam exam = getExamById(examId);
 

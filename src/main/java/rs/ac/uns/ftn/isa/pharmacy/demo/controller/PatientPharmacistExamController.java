@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,8 @@ public class PatientPharmacistExamController {
         try {
             pharmacistExamSchedulingService.scheduleAppointment(params, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("The reservation could not be cancelled, please try again.", HttpStatus.I_AM_A_TEAPOT);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("Selected pharmacist does not exist!", HttpStatus.BAD_REQUEST);
         } catch (ExamAlreadyScheduledException e) {
