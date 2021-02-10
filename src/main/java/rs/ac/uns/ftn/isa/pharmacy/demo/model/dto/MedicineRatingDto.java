@@ -32,7 +32,7 @@ public class MedicineRatingDto implements Serializable {
         this.manufacturer = medicine.getManufacturer();
         this.rating = medicine.getRatings();
         if (ratingMedicine != null) {
-            this.myRating = ratingMedicine.getRating();
+            this.myRating = ratingMedicine.getStars();
         }
     }
 

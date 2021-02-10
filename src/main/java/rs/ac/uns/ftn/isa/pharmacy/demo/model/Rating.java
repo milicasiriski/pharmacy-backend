@@ -17,20 +17,20 @@ public abstract class Rating {
     private Patient patient;
 
     @Column(name = "rating")
-    private int rating;
+    private int stars;
 
-    public Rating() {
+    protected Rating() {
     }
 
-    public Rating(Long id, Patient patient, int rating) {
+    protected Rating(Long id, Patient patient, int stars) {
         this.id = id;
         this.patient = patient;
-        this.rating = rating;
+        this.stars = stars;
     }
 
-    public Rating(Patient patient, int rating) {
+    protected Rating(Patient patient, int stars) {
         this.patient = patient;
-        this.rating = rating;
+        this.stars = stars;
     }
 
     public Long getId() {
@@ -49,12 +49,12 @@ public abstract class Rating {
         this.patient = patient;
     }
 
-    public int getRating() {
-        return rating;
+    public int getStars() {
+        return stars;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setStars(int rating) {
+        this.stars = rating;
     }
 
     @Override
@@ -62,13 +62,13 @@ public abstract class Rating {
         if (this == o) return true;
         if (!(o instanceof Rating)) return false;
         Rating rating1 = (Rating) o;
-        return rating == rating1.rating &&
+        return stars == rating1.stars &&
                 Objects.equals(id, rating1.id) &&
                 Objects.equals(patient, rating1.patient);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, patient, rating);
+        return Objects.hash(id, patient, stars);
     }
 }

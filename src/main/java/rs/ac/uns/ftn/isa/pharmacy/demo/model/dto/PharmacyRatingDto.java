@@ -29,7 +29,7 @@ public class PharmacyRatingDto implements Serializable {
         this.address = new AddressDto(pharmacy.getAddress());
         this.rating = pharmacy.getRating();
         if (ratingPharmacy != null) {
-            this.myRating = ratingPharmacy.getRating();
+            this.myRating = ratingPharmacy.getStars();
         }
     }
 

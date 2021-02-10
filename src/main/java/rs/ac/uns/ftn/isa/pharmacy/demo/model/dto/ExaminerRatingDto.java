@@ -30,7 +30,7 @@ public class ExaminerRatingDto implements Serializable {
         this.surname = dermatologist.getSurname();
         this.rating = dermatologist.getRating();
         if (rating != null) {
-            this.myRating = rating.getRating();
+            this.myRating = rating.getStars();
         }
     }
 
@@ -40,7 +40,7 @@ public class ExaminerRatingDto implements Serializable {
         this.surname = pharmacist.getSurname();
         this.rating = pharmacist.getRating();
         if (rating != null) {
-            this.myRating = rating.getRating();
+            this.myRating = rating.getStars();
         }
     }
 

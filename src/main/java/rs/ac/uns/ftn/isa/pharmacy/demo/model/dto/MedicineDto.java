@@ -51,26 +51,6 @@ public class MedicineDto implements Serializable {
         this.form = form;
     }
 
-    public MedicineDto(Medicine medicine) {
-        this.id = medicine.getId();
-        this.uuid = medicine.getUuid();
-        this.name = medicine.getName();
-        this.description = medicine.getDescription();
-        this.manufacturer = medicine.getManufacturer();
-        this.composition = medicine.getComposition();
-        this.form = medicine.getForm();
-        this.type = medicine.getType();
-        this.prescribed = medicine.isPrescribed();
-        this.recommendedDose = medicine.getRecommendedDose();
-        this.sideEffects = medicine.getSideEffects();
-        List<MedicineNameUuidDto> alternatives = new ArrayList<>();
-        medicine.getAlternatives().forEach(alternative ->
-                alternatives.add(new MedicineNameUuidDto(alternative.getUuid(), alternative.getName())));
-        this.alternatives = alternatives;
-        this.points = medicine.getPoints();
-        this.rating = medicine.getRatings();
-    }
-
     public long getId() {
         return id;
     }
