@@ -5,17 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PatientCannotRateThisEntity;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.RatingOutOfRangeException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

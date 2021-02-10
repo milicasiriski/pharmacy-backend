@@ -12,4 +12,8 @@ public interface RatingDermatologistRepository extends CrudRepository<RatingDerm
             "\tFROM rating_dermatologist AS rd, rating AS r WHERE rd.id = r.id\n" +
             "\tAND r.patient_id = :patientId AND rd.dermatologist_id = :dermatologistId", nativeQuery = true)
     Optional<RatingDermatologist> findByPatientIdAndDermatologistId(@Param("patientId") long patientId, @Param("dermatologistId") long dermatologistId);
+
+    @Query(value = "SELECT AVG(rating) FROM rating_dermatologist AS rd, rating AS r " +
+            "WHERE rd.id = r.id AND rd.dermatologist_id=:dermatologistId", nativeQuery = true)
+    Optional<Double> findAverageRatingForDermatologist(@Param("dermatologistId") long dermatologistId);
 }

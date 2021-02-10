@@ -194,6 +194,41 @@ INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (
 
 INSERT INTO complaint(id, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, null, 'Im not happy with a service!', false , 1, null, 1);
 
+INSERT INTO rating(id, rating, patient_id) VALUES ('1', '5', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('2', '4', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('3', '3', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('4', '5', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('5', '4', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('6', '4', '2');
+INSERT INTO rating(id, rating, patient_id) VALUES ('7', '4', '2');
+INSERT INTO rating(id, rating, patient_id) VALUES ('8', '3', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('9', '5', '2');
+INSERT INTO rating(id, rating, patient_id) VALUES ('10', '2', '2');
+INSERT INTO rating(id, rating, patient_id) VALUES ('11', '5', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('12', '3', '2');
+INSERT INTO rating(id, rating, patient_id) VALUES ('13', '4', '3');
+INSERT INTO rating(id, rating, patient_id) VALUES ('14', '5', '1');
+INSERT INTO rating(id, rating, patient_id) VALUES ('15', '4', '2');
+
+INSERT INTO rating_dermatologist(id, dermatologist_id) VALUES ('1', '4');
+INSERT INTO rating_dermatologist(id, dermatologist_id) VALUES ('2', '5');
+INSERT INTO rating_dermatologist(id, dermatologist_id) VALUES ('6', '6');
+INSERT INTO rating_dermatologist(id, dermatologist_id) VALUES ('7', '4');
+
+INSERT INTO rating_medicine(id, medicine_id) VALUES ('3', '1');
+INSERT INTO rating_medicine(id, medicine_id) VALUES ('4', '3');
+INSERT INTO rating_medicine(id, medicine_id) VALUES ('5', '5');
+
+INSERT INTO rating_pharmacist(id, pharmacist_id) VALUES ('8', '7');
+INSERT INTO rating_pharmacist(id, pharmacist_id) VALUES ('9', '7');
+INSERT INTO rating_pharmacist(id, pharmacist_id) VALUES ('10', '8');
+
+INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('11', '4');
+INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('12', '4');
+INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('13', '4');
+INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('14', '1');
+INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('15', '1');
+
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');

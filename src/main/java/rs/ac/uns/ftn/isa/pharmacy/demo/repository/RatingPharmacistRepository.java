@@ -12,4 +12,8 @@ public interface RatingPharmacistRepository extends CrudRepository<RatingPharmac
             "\tFROM rating_pharmacist AS rp, rating AS r WHERE rp.id = r.id\n" +
             "\tAND r.patient_id = :patientId AND rp.pharmacist_id = :pharmacistId", nativeQuery = true)
     Optional<RatingPharmacist> findByPatientIdAndPharmacistId(@Param("patientId") long patientId, @Param("pharmacistId") long pharmacistId);
+
+    @Query(value = "SELECT AVG(rating) FROM rating_pharmacist AS rp, rating AS r " +
+            "WHERE rp.id = r.id AND rp.pharmacist_id=:pharmacistId", nativeQuery = true)
+    Optional<Double> findAverageRatingForPharmacist(@Param("pharmacistId") long pharmacistId);
 }
