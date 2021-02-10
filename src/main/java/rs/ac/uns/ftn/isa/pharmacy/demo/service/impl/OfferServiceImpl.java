@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.OfferMailFormatter;
@@ -18,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
 public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
@@ -119,6 +122,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void acceptOffer(Long offerId) throws EntityNotFoundException, MessagingException, OtherPharmacyAdminCreatedOrderException, OfferDeadlineHasNotExpiredException {
         Offer offer = offerRepository.findById(offerId).orElse(null);
         List<Supplier> suppliers = new ArrayList<>();

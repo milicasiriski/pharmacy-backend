@@ -3,6 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.VacationTimeResponseMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
@@ -18,6 +20,7 @@ import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
 @Service
+@Transactional(readOnly = true)
 public class VacationServiceImpl implements VacationService {
 
     private final PharmacistVacationRepository pharmacistVacationRepository;
@@ -43,6 +46,7 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void sendVacationResponsePharmacist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestPharmacist vacationTimeRequestPharmacist = pharmacistVacationRepository.findById(vacationDto.getId()).orElse(null);
 
@@ -54,6 +58,7 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void sendVacationResponseDermatologist(VacationDto vacationDto) throws MessagingException, EntityNotFoundException {
         VacationTimeRequestDermatologist vacationTimeRequestDermatologist = dermatologistVacationRepository.findById(vacationDto.getId()).orElse(null);
 

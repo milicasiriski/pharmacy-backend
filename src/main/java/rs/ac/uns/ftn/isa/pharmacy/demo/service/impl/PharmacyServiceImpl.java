@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.RatingFilter;
 
@@ -26,17 +27,19 @@ public class PharmacyServiceImpl implements PharmacyService {
     private final DermatologistRepository dermatologistRepository;
     private final MedicineReservationRepository medicineReservationRepository;
     private final ExamRepository examRepository;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public PharmacyServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository,
                                PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository,
-                               MedicineReservationRepository medicineReservationRepository, ExamRepository examRepository) {
+                               MedicineReservationRepository medicineReservationRepository, ExamRepository examRepository, AuthenticationService authenticationService) {
         this.pharmacyRepository = pharmacyRepository;
         this.medicineRepository = medicineRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.medicineReservationRepository = medicineReservationRepository;
         this.examRepository = examRepository;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -216,8 +219,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     @Override
     public void addDermatologist(AddDermatologistDto addDermatologistDto) throws EntityNotFoundException, DermatologistHasShiftInAnotherPharmacy {
         Dermatologist dermatologist = dermatologistRepository.findById(addDermatologistDto.getDermatologistId()).orElse(null);
-        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(((PharmacyAdmin)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+        Pharmacy pharmacy = pharmacyRepository.findPharmacyByPharmacyAdmin(authenticationService.getLoggedUser().getId());
 
         if (dermatologist == null) {
             throw new EntityNotFoundException();
@@ -236,13 +238,13 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     private void checkIfIntervalsOverlapping(Map<DaysOfWeek, TimeInterval> convertedShifts, Map<DaysOfWeek, TimeInterval> shifts) {
-        if ((convertedShifts.containsKey(DaysOfWeek.MONDAY) && shifts.get(DaysOfWeek.MONDAY).isOverlapping(convertedShifts.get(DaysOfWeek.MONDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.TUESDAY) && shifts.get(DaysOfWeek.TUESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.TUESDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.WEDNESDAY) && shifts.get(DaysOfWeek.WEDNESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.WEDNESDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.THURSDAY) && shifts.get(DaysOfWeek.THURSDAY).isOverlapping(convertedShifts.get(DaysOfWeek.THURSDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.FRIDAY) && shifts.get(DaysOfWeek.FRIDAY).isOverlapping(convertedShifts.get(DaysOfWeek.FRIDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.SATURDAY) && shifts.get(DaysOfWeek.SATURDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SATURDAY)))
-                || (convertedShifts.containsKey(DaysOfWeek.SUNDAY) && shifts.get(DaysOfWeek.SUNDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SUNDAY)))) {
+        if ((convertedShifts.containsKey(DaysOfWeek.MONDAY) && shifts.containsKey(DaysOfWeek.MONDAY) && shifts.get(DaysOfWeek.MONDAY).isOverlapping(convertedShifts.get(DaysOfWeek.MONDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.TUESDAY) && shifts.containsKey(DaysOfWeek.TUESDAY) && shifts.get(DaysOfWeek.TUESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.TUESDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.WEDNESDAY) && shifts.containsKey(DaysOfWeek.WEDNESDAY) && shifts.get(DaysOfWeek.WEDNESDAY).isOverlapping(convertedShifts.get(DaysOfWeek.WEDNESDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.THURSDAY) && shifts.containsKey(DaysOfWeek.THURSDAY) && shifts.get(DaysOfWeek.THURSDAY).isOverlapping(convertedShifts.get(DaysOfWeek.THURSDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.FRIDAY) && shifts.containsKey(DaysOfWeek.FRIDAY) && shifts.get(DaysOfWeek.FRIDAY).isOverlapping(convertedShifts.get(DaysOfWeek.FRIDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.SATURDAY) && shifts.containsKey(DaysOfWeek.SATURDAY) && shifts.get(DaysOfWeek.SATURDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SATURDAY)))
+                || (convertedShifts.containsKey(DaysOfWeek.SUNDAY) && shifts.containsKey(DaysOfWeek.SUNDAY) && shifts.get(DaysOfWeek.SUNDAY).isOverlapping(convertedShifts.get(DaysOfWeek.SUNDAY)))) {
             throw new DermatologistHasShiftInAnotherPharmacy();
         }
     }

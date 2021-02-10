@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +67,7 @@ public class PatientDermatologistExamController {
         try {
             long id = Long.parseLong(examId);
             examService.scheduleDermatologistExam(id, getSignedInUser());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
         } catch (ExamAlreadyScheduledException e) {
@@ -75,6 +76,8 @@ public class PatientDermatologistExamController {
             return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
         } catch (MessagingException e) {
             return new ResponseEntity<>("The confirmation email cannot be sent, please try again!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like this exam has already been scheduled!", HttpStatus.I_AM_A_TEAPOT);
         }
     }
 

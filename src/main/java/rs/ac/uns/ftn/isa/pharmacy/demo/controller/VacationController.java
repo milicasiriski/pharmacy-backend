@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,8 @@ public class VacationController implements VacationConverter {
         try {
             vacationService.sendVacationResponsePharmacist(vacationDto);
             return new ResponseEntity<>("Vacation response successfully send.", HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like someone already answered on this vacation request!", HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong.", HttpStatus.BAD_REQUEST);
         }
@@ -58,6 +61,8 @@ public class VacationController implements VacationConverter {
         try {
             vacationService.sendVacationResponseDermatologist(vacationDto);
             return new ResponseEntity<>("Vacation response successfully send.", HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like someone already answered on this vacation request!", HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong.", HttpStatus.BAD_REQUEST);
         }

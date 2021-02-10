@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadRequestException;
@@ -95,6 +96,8 @@ public class OfferController {
             return new ResponseEntity<>("Deadline has not expired!", HttpStatus.BAD_REQUEST);
         } catch (MessagingException e) {
             return new ResponseEntity<>("Problem occurred while sending email!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like this offer has already been accepted!", HttpStatus.I_AM_A_TEAPOT);
         }
     }
 }

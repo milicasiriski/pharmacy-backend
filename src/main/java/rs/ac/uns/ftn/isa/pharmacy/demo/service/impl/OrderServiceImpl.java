@@ -90,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderResponseDto> getOrdersByPharmacy() {
         PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long pharmacyId = pharmacyAdmin.getPharmacy().getId();
+        System.out.println("PHARMACY ID " + pharmacyId);
         return convertOrdersToOrderResponse(orderRepository.getOrdersByPharmacy(pharmacyId));
     }
 

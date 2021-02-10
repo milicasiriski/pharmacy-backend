@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findAll();
 
-    @Query(value = "SELECT o.id, deadline, pharmacy_admin_id, offer_accepted FROM medicine_order AS o, pharmacy_user AS pu WHERE o.pharmacy_admin_id = pu.id and pu.pharmacy_id = :pharmacyId ", nativeQuery = true)
+    @Query(value = "SELECT o.version, o.id, deadline, pharmacy_admin_id, offer_accepted FROM medicine_order AS o, pharmacy_user AS pu WHERE o.pharmacy_admin_id = pu.id and pu.pharmacy_id = :pharmacyId ", nativeQuery = true)
     List<Order> getOrdersByPharmacy(@Param("pharmacyId") Long pharmacyId);
 
     @Query(value = "SELECT o.id FROM medicine_order AS o, pharmacy_user AS pu WHERE o.pharmacy_admin_id = pu.id and pu.pharmacy_id = :pharmacyId ", nativeQuery = true)
