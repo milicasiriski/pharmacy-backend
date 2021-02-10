@@ -16,7 +16,9 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.NoMedicineFoundException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.PrescriptionUsedException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.EPrescriptionDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.QRResultDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.QRService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import java.util.List;
 
@@ -26,10 +28,13 @@ public class QRMedicineController {
 
     @Qualifier("QRServiceImpl")
     private final QRService qrService;
+    @Qualifier("PatientServiceImpl")
+    private final PatientService patientService;
 
     @Autowired
-    public QRMedicineController(QRService qrService) {
+    public QRMedicineController(QRService qrService, PatientService patientService) {
         this.qrService = qrService;
+        this.patientService = patientService;
     }
 
     @PostMapping("/pharmacies")
@@ -51,6 +56,9 @@ public class QRMedicineController {
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> buyMedicines(@RequestBody QRResultDto dto) {
         try {
+            if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+                return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            }
             qrService.buy(dto);
             return new ResponseEntity<>("Medicine successfully bought.", HttpStatus.OK);
         } catch (PrescriptionUsedException prescriptionUsedException) {
