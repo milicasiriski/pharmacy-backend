@@ -44,7 +44,7 @@ public class PatientServiceImpl implements PatientService {
                 allergies.add(allergy);
             }
         });
-        // TODO: check if cascade type is ok
+
         Patient patient = getSignedInUser();
         patient.setAllergies(allergies);
         patientRepository.save(patient);
