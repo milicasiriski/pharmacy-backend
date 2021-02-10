@@ -233,6 +233,9 @@ INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('13', '4');
 INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('14', '1');
 INSERT INTO rating_pharmacy(id, pharmacy_id) VALUES ('15', '1');
 
+INSERT INTO patient_allergies(patient_id, medicine_id) VALUES ('3', '2');
+INSERT INTO patient_allergies(patient_id, medicine_id) VALUES ('3', '4');
+
 INSERT INTO AUTHORITY (id ,name) VALUES (1, 'ROLE_PATIENT');
 INSERT INTO AUTHORITY (id ,name) VALUES (2, 'ROLE_PHARMACIST');
 INSERT INTO AUTHORITY (id ,name) VALUES (3, 'ROLE_DERMATOLOGIST');
