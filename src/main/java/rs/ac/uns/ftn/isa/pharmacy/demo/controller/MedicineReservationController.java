@@ -54,16 +54,20 @@ public class MedicineReservationController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
-    public ResponseEntity<Void> confirmReservation(@RequestBody CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
-        if (medicineReservationService.isReservationValid(createMedicineReservationParamsDto)) {
-            try {
-                medicineReservationService.confirmReservation(createMedicineReservationParamsDto, getSignedInUser());
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (MessagingException e) {
+    public ResponseEntity<String> confirmReservation(@RequestBody CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
+        try {
+            if (!medicineReservationService.isReservationValid(createMedicineReservationParamsDto)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            medicineReservationService.confirmReservation(createMedicineReservationParamsDto, getSignedInUser());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("The reservation could not be made, please try again.", HttpStatus.I_AM_A_TEAPOT);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("Email could not be sent!", HttpStatus.I_AM_A_TEAPOT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security

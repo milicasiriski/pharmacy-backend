@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class Exam {
 
     @Id
-    @SequenceGenerator(name = "exam_sequence_generator", sequenceName = "exam_sequence", initialValue = 7)
+    @SequenceGenerator(name = "exam_sequence_generator", sequenceName = "exam_sequence", initialValue = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_sequence_generator")
     private Long id;
 

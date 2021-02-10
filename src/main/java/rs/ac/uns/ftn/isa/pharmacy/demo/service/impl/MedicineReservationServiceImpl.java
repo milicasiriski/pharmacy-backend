@@ -3,8 +3,8 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MedicineReservationConfirmMailFormatter;
@@ -23,12 +23,12 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Transactional(readOnly = true)
 public class MedicineReservationServiceImpl implements MedicineReservationService {
 
     private final MedicineRepository medicineRepository;
@@ -81,7 +81,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    @Transactional(value = Transactional.TxType.REQUIRED, rollbackOn = ObjectOptimisticLockingFailureException.class)
+    @Transactional(readOnly = false)
     public void confirmReservation(CreateMedicineReservationParamsDto createMedicineReservationParamsDto, Patient patient) throws MessagingException {
         Medicine medicine = getMedicineById(createMedicineReservationParamsDto.getMedicineId());
         Pharmacy pharmacy = getPharmacyById(createMedicineReservationParamsDto.getPharmacyId());
@@ -137,7 +137,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
-    @Transactional(value = Transactional.TxType.REQUIRED, rollbackOn = ObjectOptimisticLockingFailureException.class)
+    @Transactional(readOnly = false)
     public void cancelMedicineReservation(Long medicineReservationId) throws EntityNotFoundException, MedicineReservationCannotBeCancelledException {
         MedicineReservation medicineReservation = getMedicineReservationById(medicineReservationId);
         if (!isMedicineReservationCancellable(medicineReservation.getExpirationDate())) {
