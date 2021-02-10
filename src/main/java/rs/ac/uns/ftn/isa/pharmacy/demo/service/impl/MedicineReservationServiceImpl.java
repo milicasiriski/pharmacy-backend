@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.MedicineReservationCannotBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
@@ -22,6 +23,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -79,6 +81,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
+    @Transactional(value = Transactional.TxType.REQUIRED, rollbackOn = ObjectOptimisticLockingFailureException.class)
     public void confirmReservation(CreateMedicineReservationParamsDto createMedicineReservationParamsDto, Patient patient) throws MessagingException {
         Medicine medicine = getMedicineById(createMedicineReservationParamsDto.getMedicineId());
         Pharmacy pharmacy = getPharmacyById(createMedicineReservationParamsDto.getPharmacyId());
@@ -94,18 +97,17 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         medicineReservationRepository.save(medicineReservation);
 
         MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
-        int currentStock = medicineStatus.getStock();
-        medicineStatus.setStock(currentStock - 1);
+        medicineStatus.subtractFromStock(1);
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
 
         patient.addLoyaltyPoints(medicine.getPoints());
         userRepository.save(patient);
-        // TODO: Give real address to constructor
+
         MedicineReservationEmailParams params = new MedicineReservationEmailParams(medicine.getName(),
                 createMedicineReservationParamsDto.getExpirationDate(),
                 pharmacy.getName(),
-                "",
+                pharmacy.getAddress().getCountry() + ", " + pharmacy.getAddress().getCity() + ", " + pharmacy.getAddress().getStreet(),
                 uniqueReservationNumber);
         mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
     }
@@ -135,6 +137,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
+    @Transactional(value = Transactional.TxType.REQUIRED, rollbackOn = ObjectOptimisticLockingFailureException.class)
     public void cancelMedicineReservation(Long medicineReservationId) throws EntityNotFoundException, MedicineReservationCannotBeCancelledException {
         MedicineReservation medicineReservation = getMedicineReservationById(medicineReservationId);
         if (!isMedicineReservationCancellable(medicineReservation.getExpirationDate())) {
@@ -146,8 +149,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         Medicine medicine = medicineReservation.getMedicine();
         MedicineStatus medicineStatus = pharmacy.getMedicine().get(medicine);
 
-        int currentStock = medicineStatus.getStock();
-        medicineStatus.setStock(currentStock + 1);
+        medicineStatus.addToStock(1);
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
     }

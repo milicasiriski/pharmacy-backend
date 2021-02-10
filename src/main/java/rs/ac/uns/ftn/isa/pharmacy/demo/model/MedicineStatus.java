@@ -13,6 +13,9 @@ public class MedicineStatus {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medicine_status_sequence_generator")
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "stock")
     private int stock;
 
@@ -41,6 +44,14 @@ public class MedicineStatus {
         this.id = id;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public int getStock() {
         return stock;
     }
@@ -55,6 +66,16 @@ public class MedicineStatus {
 
     public void setPrices(List<MedicinePriceListItem> prices) {
         this.prices = prices;
+    }
+
+    public void addToStock(int value) {
+        this.stock += value;
+    }
+
+    public void subtractFromStock(int value) {
+        if (this.stock >= value) {
+            this.stock -= value;
+        }
     }
 
     @Override
