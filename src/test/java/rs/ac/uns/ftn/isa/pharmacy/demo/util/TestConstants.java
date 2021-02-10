@@ -79,7 +79,7 @@ public class TestConstants {
             new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true));
 
-    public static final Employment EMPLOYMENT = new Employment(SHIFTS, 20.0, 20, new ArrayList<>());
+    public static final Employment EMPLOYMENT = new Employment(SHIFTS, new ArrayList<>());
 
     public static Map<Pharmacy, Employment> PHARMACIES = new HashMap<>() {{
         put(PHARMACY_TEST_OBJECT_2, EMPLOYMENT);
