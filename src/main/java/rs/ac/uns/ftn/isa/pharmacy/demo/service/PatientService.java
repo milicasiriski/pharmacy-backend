@@ -11,4 +11,6 @@ public interface PatientService {
     void updateAllergies(List<MedicinesBasicInfoDto> medicine);
 
     Iterable<MedicinesBasicInfoDto> getAllMedicine();
+
+    boolean hasCurrentUserExceededPenaltyPoints();
 }

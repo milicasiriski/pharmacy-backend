@@ -15,6 +15,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParams
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetMedicineReservationResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmaciesMedicinePriceDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.MedicineReservationService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -26,10 +28,12 @@ import java.util.List;
 public class MedicineReservationController {
 
     private final MedicineReservationService medicineReservationService;
+    private final PatientService patientService;
 
     @Autowired
-    public MedicineReservationController(MedicineReservationService medicineReservationService) {
+    public MedicineReservationController(MedicineReservationService medicineReservationService, PatientService patientService) {
         this.medicineReservationService = medicineReservationService;
+        this.patientService = patientService;
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
@@ -56,6 +60,9 @@ public class MedicineReservationController {
     @PostMapping("/")
     public ResponseEntity<String> confirmReservation(@RequestBody CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
         try {
+            if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+                return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            }
             if (!medicineReservationService.isReservationValid(createMedicineReservationParamsDto)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

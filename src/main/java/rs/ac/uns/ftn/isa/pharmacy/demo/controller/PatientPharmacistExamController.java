@@ -15,7 +15,9 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExam
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
@@ -29,9 +31,11 @@ import java.util.List;
 @RequestMapping(value = "/pharmacistExam", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientPharmacistExamController {
     private final PharmacistExamSchedulingService pharmacistExamSchedulingService;
+    private final PatientService patientService;
 
-    public PatientPharmacistExamController(PharmacistExamSchedulingService pharmacistExamSchedulingService) {
+    public PatientPharmacistExamController(PharmacistExamSchedulingService pharmacistExamSchedulingService, PatientService patientService) {
         this.pharmacistExamSchedulingService = pharmacistExamSchedulingService;
+        this.patientService = patientService;
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
@@ -45,6 +49,9 @@ public class PatientPharmacistExamController {
     @PostMapping("/")
     public ResponseEntity<String> scheduleAppointment(@RequestBody SchedulePharmacistExamParams params) {
         try {
+            if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+                return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            }
             pharmacistExamSchedulingService.scheduleAppointment(params, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ObjectOptimisticLockingFailureException e) {
