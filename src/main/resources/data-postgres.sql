@@ -17,16 +17,16 @@ INSERT INTO medicine(id, name, description, form, manufacturer, composition, typ
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('4', 'Paracetamol', 'Painkiller.', '0', 'KRKA-FARMA D.O.O Beograd', 'Paracetamol', '0', false, 3,  'A4', '2 tablets', 'Death', 2);
 INSERT INTO medicine(id, name, description, form, manufacturer, composition, type, prescribed, ratings, uuid, recommended_dose, side_effects, points) VALUES ('5', 'Bromazepam', 'Painkiller.', '0', 'KRKA-FARMA D.O.O Beograd', 'Paracetamol', '0', false, 3,  'A5', '3 tablets', 'Headache', 2);
 
-INSERT INTO medicine_status(id, stock) VALUES ('1', '20');
-INSERT INTO medicine_status(id, stock) VALUES ('2', '40');
-INSERT INTO medicine_status(id, stock) VALUES ('3', '60');
-INSERT INTO medicine_status(id, stock) VALUES ('4', '80');
-INSERT INTO medicine_status(id, stock) VALUES ('5', '0');
-INSERT INTO medicine_status(id, stock) VALUES ('6', '20');
-INSERT INTO medicine_status(id, stock) VALUES ('7', '10');
-INSERT INTO medicine_status(id, stock) VALUES ('8', '50');
-INSERT INTO medicine_status(id, stock) VALUES ('9', '0');
-INSERT INTO medicine_status(id, stock) VALUES ('10', '20');
+INSERT INTO medicine_status(id, stock, version) VALUES ('1', '1', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('2', '40', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('3', '60', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('4', '80', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('5', '0', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('6', '20', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('7', '10', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('8', '50', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('9', '0', 0);
+INSERT INTO medicine_status(id, stock, version) VALUES ('10', '20', 0);
 
 INSERT INTO medicine_price_list_item(id, price, time_end, time_start, medicine_status_id) VALUES ('1', '20', '2021-07-16', '2021-06-16', '1');
 INSERT INTO medicine_price_list_item(id, price, time_end, time_start, medicine_status_id) VALUES ('2', '40', '2021-03-16', '2020-12-16', '1');
