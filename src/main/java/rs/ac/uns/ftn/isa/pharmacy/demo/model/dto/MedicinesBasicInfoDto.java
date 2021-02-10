@@ -8,6 +8,7 @@ public class MedicinesBasicInfoDto implements Serializable {
     String form;
     Double rating;
     Long id;
+    Double currentPrice;
 
     public MedicinesBasicInfoDto() {
     }
@@ -17,6 +18,14 @@ public class MedicinesBasicInfoDto implements Serializable {
         this.form = form;
         this.id = id;
         this.rating = rating;
+    }
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public Double getRating() {
