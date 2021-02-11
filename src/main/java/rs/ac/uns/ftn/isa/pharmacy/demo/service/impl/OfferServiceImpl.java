@@ -45,6 +45,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Offer addNewOffer(OfferDto dto) throws NoMedicineFoundException, OrderException {
         Supplier supplier;
         try {
@@ -96,6 +97,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Offer updateOffer(OfferDto offerDto) {
         Optional<Offer> o = offerRepository.findById(offerDto.getOfferId());
         if (o.isEmpty()) {
@@ -105,6 +107,7 @@ public class OfferServiceImpl implements OfferService {
             if (canUpdate(offer)) {
                 offer.setPrice(offerDto.getPrice());
                 offer.setShippingDays(offerDto.getShippingDays());
+                System.out.println(offer.getShippingDays());
                 return offerRepository.save(offer);
             } else {
                 throw new BadRequestException();
@@ -181,17 +184,20 @@ public class OfferServiceImpl implements OfferService {
         }
     }
 
-    private void updateOrderStatus(Order order) {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void updateOrderStatus(Order order) {
         order.setOfferAccepted(true);
         orderRepository.save(order);
     }
 
-    private void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
         pharmacy.addMedicinesOnStock(medicineAmount);
         pharmacyRepository.save(pharmacy);
     }
 
-    private void updateOfferStatus(Offer offer) {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void updateOfferStatus(Offer offer) {
         offer.setStatus(OfferStatus.ACCEPTED);
         List<Offer> offers = offerRepository.findOffersByOrder(offer.getOrder().getId());
         offers.forEach(o -> {

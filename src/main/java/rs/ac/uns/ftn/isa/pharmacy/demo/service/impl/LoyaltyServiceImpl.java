@@ -43,7 +43,7 @@ public class LoyaltyServiceImpl implements LoyaltyService {
     public void update(LoyaltyProgramDto dto) {
         Optional<LoyaltyProgram> loyaltyOptional = loyaltyProgramRepository.findById(LoyaltyProgram.defaultId);
         LoyaltyProgram loyaltyProgram;
-        if(!validInformation(dto)){
+        if (!validInformation(dto)) {
             throw new BadRequestException();
         }
         if (loyaltyOptional.isEmpty()) {
@@ -65,8 +65,8 @@ public class LoyaltyServiceImpl implements LoyaltyService {
         int examPoints = dto.getExamPoints();
         int silverMinimumPoints = dto.getSilverMinimumPoints();
         int goldMinimumPoints = dto.getGoldMinimumPoints();
-        return goldDiscount>0 && goldDiscount<=1 && silverDiscount>0 && silverDiscount<=1 && silverDiscount>=goldDiscount &&
-                examPoints>=0 && silverMinimumPoints>0 && goldMinimumPoints>1 && silverMinimumPoints<=goldMinimumPoints;
+        return goldDiscount > 0 && goldDiscount <= 1 && silverDiscount > 0 && silverDiscount <= 1 && silverDiscount >= goldDiscount &&
+                examPoints >= 0 && silverMinimumPoints > 0 && goldMinimumPoints > 1 && silverMinimumPoints <= goldMinimumPoints;
     }
 
     @Override
@@ -93,6 +93,7 @@ public class LoyaltyServiceImpl implements LoyaltyService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void givePointsForExam() {
         Iterable<Exam> exams = examRepository.findAll();
         Optional<LoyaltyProgram> loyaltyProgramOptional = loyaltyProgramRepository.findById(LoyaltyProgram.defaultId);
@@ -101,16 +102,16 @@ public class LoyaltyServiceImpl implements LoyaltyService {
             exams.forEach(exam -> {
                 if (exam.getStatus() == ExamStatus.EXAM_DONE_POINTS_NOT_GIVEN) {
                     Patient patient = exam.getPatient();
-                    if(patient!=null){
-                        int points  = loyaltyProgram.getExamPoints();
-                        logger.info("Points:  {}",points);
+                    if (patient != null) {
+                        int points = loyaltyProgram.getExamPoints();
+                        logger.info("Points:  {}", points);
                         patient.addLoyaltyPoints(points);
                         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                         exam.setStatus(ExamStatus.EXAM_DONE_POINTS_GIVEN);
                         examRepository.save(exam);
                         userRepository.save(patient);
                         logger.info("{} {} points given to {} id: {} for exam {}",
-                                timestamp, points,patient.getName(), patient.getId(), exam.getId());
+                                timestamp, points, patient.getName(), patient.getId(), exam.getId());
                     }
                 }
             });

@@ -1,9 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.util;
 
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.AddDermatologistDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.CreateMedicineReservationParamsDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.TimeIntervalDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineForm;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.MedicineType;
@@ -17,6 +15,7 @@ public class TestConstants {
 
     private static final long MEDICINE_ID = 1L;
     private static final String MEDICINE_UUID = "uuid";
+    private static final String MEDICINE_UUID_2 = "uuid2";
     private static final String MEDICINE_NAME = "Medicine";
     private static final String MEDICINE_DESCRIPTION = "Description";
     private static final String MEDICINE_MANUFACTURER = "Walter White";
@@ -32,6 +31,10 @@ public class TestConstants {
             MEDICINE_DESCRIPTION, MEDICINE_MANUFACTURER, MEDICINE_COMPOSITION, MEDICINE_RATING, MEDICINE_FORM,
             MEDICINE_TYPE, true, MEDICINE_RECOMMENDED_DOSE, MEDICINE_SIDE_EFFECTS, 0, MEDICINE_ALTERNATIVES);
 
+    public static Medicine MEDICINE_TEST_OBJECT_2 = new Medicine(MEDICINE_NAME) {{
+        setUuid(MEDICINE_UUID_2);
+    }};
+
     public static MedicineStatus MEDICINE_STATUS_TEST_OBJECT = new MedicineStatus(1, new ArrayList<>());
     public static MedicineStatus MEDICINE_STATUS_STOCK_EMPTY_TEST_OBJECT = new MedicineStatus(0, new ArrayList<>());
 
@@ -46,11 +49,41 @@ public class TestConstants {
     private static final Map<Exam, Double> PHARMACY_EXAM_PRICE_LIST = new HashMap<>();
     private static final double PHARMACY_RATING = 3.6;
 
+    private static final String PRESCRIPTION_ID = "Id";
+    private static final Date PRESCRIPTION_DATE = Calendar.getInstance().getTime();
+
+    private static final long PATIENT_ID = 1L;
+    private static final String PATIENT_NAME = "Jesse";
+    private static final String PATIENT_EMAIL = "jesse@gmail.com";
+
+    public static Patient PATIENT_TEST_OBJECT = new Patient() {{
+        setId(PATIENT_ID);
+        setName(PATIENT_NAME);
+        setEmail(PATIENT_EMAIL);
+    }};
+
     public static Pharmacy PHARMACY_TEST_OBJECT = new Pharmacy(PHARMACY_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
             PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
 
     public static Pharmacy PHARMACY_TEST_OBJECT_2 = new Pharmacy(PHARMACY_2_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
             PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
+
+    public static Iterable<Pharmacy> PHARMACY_TEST_LIST = new ArrayList<>() {{
+        add(PHARMACY_TEST_OBJECT);
+        add(PHARMACY_TEST_OBJECT_2);
+    }};
+
+    public static List<PrescribedMedicineDto> PRESCRIBED_MEDICINE_DTO_TEST_LIST = new ArrayList<>() {{
+        add(new PrescribedMedicineDto(MEDICINE_UUID, MEDICINE_NAME, 1L));
+    }};
+
+    public static EPrescriptionDto PRESCRIPTION_DTO = new EPrescriptionDto(PRESCRIPTION_ID, PATIENT_NAME, PRESCRIBED_MEDICINE_DTO_TEST_LIST, PRESCRIPTION_DATE);
+
+    public static Prescription PRESCRIPTION_TEST_OBJECT = new Prescription();
+
+    public static Prescription PRESCRIPTION_TEST_OBJECT_MEDICINE_2 = new Prescription() {{
+        setMedicines(new HashMap<>());
+    }};
 
     private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE_STOCK_EMPTY = new HashMap<>() {{
         put(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_STOCK_EMPTY_TEST_OBJECT);
@@ -63,6 +96,8 @@ public class TestConstants {
 
     public static CreateMedicineReservationParamsDto MEDICINE_RESERVATION_DTO_TEST_OBJECT =
             new CreateMedicineReservationParamsDto(MEDICINE_ID, PHARMACY_ID, new Date());
+
+    public static EPrescriptionDto MEDICINE_E_PRESCRIPTION_DTO_TEST_OBJECT = new EPrescriptionDto(PRESCRIPTION_ID, PATIENT_NAME, PRESCRIBED_MEDICINE_DTO_TEST_LIST, PRESCRIPTION_DATE);
 
     public static Map<DaysOfWeek, TimeInterval> SHIFTS = new HashMap<>() {{
         put(DaysOfWeek.MONDAY, new TimeInterval(getDateTime(2021, 3, 5, 10, 0), getDateTime(2021, 3, 5, 12, 0)));

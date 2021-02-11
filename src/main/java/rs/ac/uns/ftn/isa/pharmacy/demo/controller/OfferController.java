@@ -38,6 +38,8 @@ public class OfferController {
             return new ResponseEntity<>("Sorry, you dont have enough medicine!", HttpStatus.BAD_REQUEST);
         } catch (OrderException orderException) {
             return new ResponseEntity<>("Sorry, order you sent is empty!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Sorry you can't save offer twice in same time!", HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             return new ResponseEntity<>("Sorry, there has been a mistake on server.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -51,6 +53,8 @@ public class OfferController {
             return new ResponseEntity<>("Offer updated successfully!", HttpStatus.OK);
         } catch (BadRequestException badRequestException) {
             return new ResponseEntity<>("You cant change this offer!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Sorry, you can't update offer while it's updating!", HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             return new ResponseEntity<>("Sorry, there has been a mistake on server.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

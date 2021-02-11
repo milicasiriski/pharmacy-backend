@@ -16,6 +16,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientShoppingEmailParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PrescribedMedicineDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.QRResultDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.QRService;
 
@@ -34,8 +35,9 @@ public class QRServiceImpl implements QRService {
     private final MailService<PatientShoppingEmailParams> mailService;
     private final MedicinePurchaseRepository medicinePurchaseRepository;
     private final LoyaltyService loyaltyService;
+    private final AuthenticationService authenticationService;
 
-    public QRServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, UserRepository userRepository, PrescriptionRepository prescriptionRepository, MailService<PatientShoppingEmailParams> mailService, MedicinePurchaseRepository medicinePurchaseRepository, LoyaltyService loyaltyService) {
+    public QRServiceImpl(PharmacyRepository pharmacyRepository, MedicineRepository medicineRepository, UserRepository userRepository, PrescriptionRepository prescriptionRepository, MailService<PatientShoppingEmailParams> mailService, MedicinePurchaseRepository medicinePurchaseRepository, LoyaltyService loyaltyService, AuthenticationService authenticationService) {
         this.pharmacyRepository = pharmacyRepository;
         this.medicineRepository = medicineRepository;
         this.userRepository = userRepository;
@@ -43,11 +45,12 @@ public class QRServiceImpl implements QRService {
         this.mailService = mailService;
         this.medicinePurchaseRepository = medicinePurchaseRepository;
         this.loyaltyService = loyaltyService;
+        this.authenticationService = authenticationService;
     }
 
     @Override
     public List<QRResultDto> findPharmacies(EPrescriptionDto dto) {
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         if (!patient.getName().equals(dto.getName())) {
             throw new BadUserInformationException();
         }
@@ -87,7 +90,7 @@ public class QRServiceImpl implements QRService {
         if (prescriptionRepository.findById(dto.getPrescription().getId()).isPresent()) {
             throw new PrescriptionUsedException();
         }
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         Optional<Pharmacy> pharmacyOptional = pharmacyRepository.findById(dto.getPharmacyId());
         Map<Medicine, Integer> prescriptionMedicineAmount = new HashMap<>();
         AtomicInteger price = new AtomicInteger();

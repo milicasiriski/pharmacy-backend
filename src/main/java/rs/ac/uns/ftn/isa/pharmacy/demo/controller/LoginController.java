@@ -26,7 +26,7 @@ public class LoginController {
         return ResponseEntity.ok(state);
     }
 
-    @PostMapping("/intialPasswordChange")
+    @PostMapping("/initialPasswordChange")
     public ResponseEntity<UserTokenState> firstTimeLogin(@RequestBody LogInDto authenticationRequest) {
         try {
             return new ResponseEntity<>(logInService.firstLogInPasswordChange(authenticationRequest), HttpStatus.OK);
