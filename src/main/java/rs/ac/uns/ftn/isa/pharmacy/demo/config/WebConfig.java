@@ -11,6 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:8081");
+        registry.addMapping("/**").allowedOrigins("http://localhost:8081",
+                "http://localhost:8082",
+                "http://team6-isa-front.herokuapp.com",
+                "https://team6-isa-front.herokuapp.com");
     }
 }
