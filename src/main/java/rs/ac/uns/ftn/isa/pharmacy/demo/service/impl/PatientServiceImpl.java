@@ -64,6 +64,14 @@ public class PatientServiceImpl implements PatientService {
         return patient.getPenaltyPoints() >= PenaltyPointsConstants.PENALTY_POINT_LIMIT;
     }
 
+    @Override
+    public void resetPenaltyPoints() {
+        patientRepository.findAll().forEach(patient -> {
+            patient.resetPenaltyPoints();
+            patientRepository.save(patient);
+        });
+    }
+
     private Medicine getMedicineById(Long id) throws EntityNotFoundException {
         Optional<Medicine> medicineOptional = medicineRepository.findById(id);
         if (medicineOptional.isPresent()) {
