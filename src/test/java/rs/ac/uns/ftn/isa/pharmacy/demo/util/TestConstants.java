@@ -35,7 +35,7 @@ public class TestConstants {
     public static MedicineStatus MEDICINE_STATUS_TEST_OBJECT = new MedicineStatus(1, new ArrayList<>());
     public static MedicineStatus MEDICINE_STATUS_STOCK_EMPTY_TEST_OBJECT = new MedicineStatus(0, new ArrayList<>());
 
-    private static final long PHARMACY_ID = 1L;
+    private static final long PHARMACY_ID = 4L;
     private static final long PHARMACY_2_ID = 2L;
     private static final String PHARMACY_NAME = "Pharmacy";
     private static final Address PHARMACY_ADDRESS = new Address();
@@ -108,4 +108,6 @@ public class TestConstants {
         date.set(Calendar.MILLISECOND, 0);
         return date;
     }
+
+    public static final Patient PATIENT = new Patient("patinet@patient", "123", "Pera", "Peric", "123123", 5, new Address(), 123);
 }
