@@ -69,10 +69,10 @@ public class PharmacyController {
     }
 
     @GetMapping("/getPharmacyById/{pharmacyId}")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_PATIENT', 'ROLE_SYSTEM_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_PATIENT', 'ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
     public ResponseEntity<PharmacyProfileDto> getPharmacyById(@PathVariable Long pharmacyId) {
         try {
-            if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")){
+            if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")) {
                 PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 if (!pharmacyAdmin.getPharmacy().getId().equals(pharmacyId)) {
                     throw new WrongAdminException();
@@ -100,7 +100,7 @@ public class PharmacyController {
     @PostMapping("/register")
     public ResponseEntity<String> registerPharmacy(@RequestBody PharmacyDto dto) {
         try {
-            if(dto.getName().isEmpty() || dto.getName()==null){
+            if (dto.getName().isEmpty() || dto.getName() == null) {
                 return new ResponseEntity<>("Sorry, you sent a bad request.", HttpStatus.BAD_REQUEST);
             }
             pharmacyService.save(dto);

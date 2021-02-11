@@ -29,7 +29,7 @@ public class MedicineCrudController {
     @PostMapping("/save")
     public ResponseEntity<String> saveMedicine(@RequestBody MedicineDto dto) {
         try {
-            if(dto.getUuid().isEmpty()||dto.getUuid()==null){
+            if (dto.getUuid().isEmpty() || dto.getUuid() == null) {
                 return new ResponseEntity<>("Sorry, you have sent a bad request!", HttpStatus.BAD_REQUEST);
             }
             medicineService.save(dto);
