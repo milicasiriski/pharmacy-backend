@@ -9,10 +9,25 @@ plugins {
 group = 'rs.ac.uns.ftn.isa.pharmacy'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
     mavenCentral()
 }
+
+task stage() {
+    dependsOn clean, war
+}
+war.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/server"
+    from(configurations.compile) {
+        include "webapp-runner*"
+    }
+}
+
+stage.dependsOn(copyToLib)
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -45,7 +60,10 @@ dependencies {
 
     // mail
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
+
+    implementation 'com.github.jsimone:webapp-runner:8.5.11.3'
 }
+
 
 test {
     useJUnitPlatform()
