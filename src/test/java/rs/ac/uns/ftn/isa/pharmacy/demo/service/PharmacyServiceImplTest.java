@@ -60,5 +60,4 @@ public class PharmacyServiceImplTest {
         verify(pharmacyRepository, times(1)).save(any());
     }
 
-
 }

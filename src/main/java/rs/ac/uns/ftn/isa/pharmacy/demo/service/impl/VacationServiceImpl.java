@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.VacationStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.VacationRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.VacationService;
 
 import javax.mail.MessagingException;
@@ -27,14 +27,16 @@ public class VacationServiceImpl implements VacationService {
     private final DermatologistVacationRepository dermatologistVacationRepository;
     private final VacationRepository vacationRepository;
     private final MailService<VacationTimeResponseEmailParams> mailService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public VacationServiceImpl(PharmacistVacationRepository pharmacistVacationRepository, DermatologistVacationRepository dermatologistVacationRepository, VacationRepository vacationRepository,
-                               MailService<VacationTimeResponseEmailParams> mailService) {
+                               MailService<VacationTimeResponseEmailParams> mailService, AuthenticationService authenticationService) {
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.vacationRepository = vacationRepository;
         this.mailService = mailService;
+        this.authenticationService = authenticationService;
     }
 
     public Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation() {
@@ -42,7 +44,11 @@ public class VacationServiceImpl implements VacationService {
     }
 
     public Iterable<VacationTimeRequestDermatologist> getAllDermatologistsVacation() {
-        return dermatologistVacationRepository.findVacationsByPharmacyId(((PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPharmacy().getId());
+        return dermatologistVacationRepository.findVacationsByPharmacyId((
+                (PharmacyAdmin) authenticationService.
+                        getLoggedUser())
+                .getPharmacy()
+                .getId());
     }
 
     @Override
