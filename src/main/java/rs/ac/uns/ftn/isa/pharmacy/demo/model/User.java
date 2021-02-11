@@ -25,11 +25,10 @@ public abstract class User implements UserDetails {
     @Column(name = "id", unique = true)
     protected Long id;
 
-    @Column(name = "email", unique = true)
     @Version
     private Long version;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     protected String email;
 
     @JsonIgnore
@@ -66,14 +65,6 @@ public abstract class User implements UserDetails {
         this.name = name;
         this.surname = surname;
         this.address = address;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
     }
 
     public void setAuthorities(List<Authority> authorities) {
