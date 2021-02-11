@@ -104,6 +104,10 @@ public class Patient extends User {
         this.loyaltyPoints -= points;
     }
 
+    public void resetPenaltyPoints() {
+        this.penaltyPoints = 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

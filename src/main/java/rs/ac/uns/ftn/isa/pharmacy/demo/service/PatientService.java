@@ -13,4 +13,6 @@ public interface PatientService {
     Iterable<MedicinesBasicInfoDto> getAllMedicine();
 
     boolean hasCurrentUserExceededPenaltyPoints();
+
+    void resetPenaltyPoints();
 }
