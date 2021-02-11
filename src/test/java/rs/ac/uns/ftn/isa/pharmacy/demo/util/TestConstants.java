@@ -79,6 +79,14 @@ public class TestConstants {
             new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true));
 
+    public static List<TimeIntervalDto> SHIFTS_3 = List.of(new TimeIntervalDto(START, END, false),
+            new TimeIntervalDto(START, END, true),
+            new TimeIntervalDto(START, END, true),
+            new TimeIntervalDto(START, END, true),
+            new TimeIntervalDto(START, END, true),
+            new TimeIntervalDto(START, END, true),
+            new TimeIntervalDto(START, END, true));
+
     public static final Employment EMPLOYMENT = new Employment(SHIFTS, new ArrayList<>());
 
     public static Map<Pharmacy, Employment> PHARMACIES = new HashMap<>() {{

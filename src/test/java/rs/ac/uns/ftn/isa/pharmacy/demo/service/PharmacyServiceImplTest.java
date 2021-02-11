@@ -47,7 +47,7 @@ public class PharmacyServiceImplTest {
     }
 
     @Test
-    void testIsReservationValid_PharmacyHasMedicineOnStock_ReturnsTrue() {
+    void testAddingDermatologistToPharmacy_ShiftsAreNotOverlapping_SavesPharmacy() {
         // GIVEN
         when(authenticationService.getLoggedUser()).thenReturn(TestConstants.PHARMACY_ADMIN);
         when(dermatologistRepository.findById(any())).thenReturn(Optional.of(TestConstants.DERMATOLOGIST));
@@ -59,4 +59,6 @@ public class PharmacyServiceImplTest {
         // THEN
         verify(pharmacyRepository, times(1)).save(any());
     }
+
+
 }
