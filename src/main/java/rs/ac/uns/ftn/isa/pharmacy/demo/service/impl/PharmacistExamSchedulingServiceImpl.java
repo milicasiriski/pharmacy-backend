@@ -110,8 +110,13 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     }
 
     @Override
-    public Iterable<ExamDetails> getPharmacistExamsForPatient(Patient patient) {
-        return examRepository.getPharmacistExamDetails(patient.getId());
+    public Iterable<ExamDetails> getScheduledPharmacistExamsForPatient(Patient patient) {
+        return examRepository.getPharmacistScheduledExamDetails(patient.getId());
+    }
+
+    @Override
+    public Iterable<ExamDetails> getPharmacistExamHistoryForPatient(Patient patient) {
+        return examRepository.getPharmacistHistoryExamDetails(patient.getId());
     }
 
     private void sortPharmacies(List<Pharmacy> pharmacies, PharmacySortType sortType) {

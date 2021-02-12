@@ -17,7 +17,11 @@ public interface ExamService {
 
     Iterable<ExamAndDermatologistDto> getAvailableDermatologistExamsForPharmacy(long pharmacyId, ExamSortType sortType);
 
-    Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient);
+    Iterable<ExamAndDermatologistDto> getAvailableDermatologistExams(ExamSortType sortType);
+
+    Iterable<ExamDetails> getScheduledDermatologistExamsForPatient(Patient patient);
+
+    Iterable<ExamDetails> getDermatologistExamHistoryForPatient(Patient patient);
 
     void cancelDermatologistExam(long examId, Patient signedInUser);
 

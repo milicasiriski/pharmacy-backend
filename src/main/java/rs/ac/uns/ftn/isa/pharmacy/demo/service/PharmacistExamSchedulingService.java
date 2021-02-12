@@ -20,5 +20,7 @@ public interface PharmacistExamSchedulingService {
 
     void cancelAppointment(long examId, Patient signedInUser);
 
-    Iterable<ExamDetails> getPharmacistExamsForPatient(Patient patient);
+    Iterable<ExamDetails> getScheduledPharmacistExamsForPatient(Patient patient);
+
+    Iterable<ExamDetails> getPharmacistExamHistoryForPatient(Patient patient);
 }
