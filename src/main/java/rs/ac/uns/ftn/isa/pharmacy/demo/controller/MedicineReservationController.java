@@ -64,7 +64,7 @@ public class MedicineReservationController {
                 return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
             }
             if (!medicineReservationService.isReservationValid(createMedicineReservationParamsDto)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("The reservation id not valid, please try again.", HttpStatus.BAD_REQUEST);
             }
             medicineReservationService.confirmReservation(createMedicineReservationParamsDto, getSignedInUser());
             return new ResponseEntity<>(HttpStatus.OK);

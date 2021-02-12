@@ -20,7 +20,7 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
             "WHERE u.id = :pharmacyAdminId AND user_type = 'PHARMACY_ADMIN'", nativeQuery = true)
     Pharmacy findPharmacyByPharmacyAdmin(@Param("pharmacyAdminId") Long pharmacyAdminId);
 
-    @Query(value = "SELECT id, p.version, about, city, country, latitude, longitude, street, name, rating, pharmacist_exam_duration, pharmacist_exam_price " +
+    @Query(value = "SELECT id, version, about, city, country, latitude, longitude, street, name, rating, pharmacist_exam_duration, pharmacist_exam_price " +
             "FROM pharmacy WHERE rating >= :rating", nativeQuery = true)
     Iterable<Pharmacy> findWithRatingGreaterThan(@Param("rating") int rating);
 

@@ -43,6 +43,7 @@ public class PromotionController {
             Boolean subscribed = promotionService.updateSubscription(pharmacyId);
             return new ResponseEntity<>(subscribed, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
