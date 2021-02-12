@@ -138,7 +138,7 @@ public class TestConstants {
             new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true));
 
-    public static List<TimeIntervalDto> SHIFTS_3 = List.of(new TimeIntervalDto(START, END, false),
+    public static List<TimeIntervalDto> SHIFTS_3 = List.of(new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true),
             new TimeIntervalDto(START, END, true),
@@ -155,6 +155,7 @@ public class TestConstants {
     public static final Dermatologist DERMATOLOGIST = new Dermatologist("email@email", "123", "Pera", "Peric", PHARMACIES, 3);
     public static final PharmacyAdmin PHARMACY_ADMIN = new PharmacyAdmin("admin@admin", "123", PHARMACY_TEST_OBJECT, "Djuro", "Djuric");
     public static final AddDermatologistDto ADD_DERMATOLOGIST_DTO = new AddDermatologistDto(1L, SHIFTS_2);
+    public static final AddDermatologistDto ADD_DERMATOLOGIST_DTO_2 = new AddDermatologistDto(1L, SHIFTS_3);
 
     public static Calendar getDateTime(int year, int month, int day, int hour, int minute) {
         Calendar date = Calendar.getInstance();
