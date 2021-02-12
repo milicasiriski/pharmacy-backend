@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class QRServiceImplTest {
+class QRServiceImplTest {
     @Mock
     private PharmacyRepository pharmacyRepository;
 
@@ -72,7 +72,7 @@ public class QRServiceImplTest {
         List<QRResultDto> result = subject.findPharmacies(TestConstants.PRESCRIPTION_DTO);
 
         // THEN
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
     }
 
     @Test

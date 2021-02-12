@@ -107,7 +107,6 @@ public class OfferServiceImpl implements OfferService {
             if (canUpdate(offer)) {
                 offer.setPrice(offerDto.getPrice());
                 offer.setShippingDays(offerDto.getShippingDays());
-                System.out.println(offer.getShippingDays());
                 return offerRepository.save(offer);
             } else {
                 throw new BadRequestException();
@@ -184,19 +183,19 @@ public class OfferServiceImpl implements OfferService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
     public void updateOrderStatus(Order order) {
         order.setOfferAccepted(true);
         orderRepository.save(order);
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
     public void updateMedicineStatus(Pharmacy pharmacy, Map<Medicine, Integer> medicineAmount) throws EntityNotFoundException {
         pharmacy.addMedicinesOnStock(medicineAmount);
         pharmacyRepository.save(pharmacy);
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
     public void updateOfferStatus(Offer offer) {
         offer.setStatus(OfferStatus.ACCEPTED);
         List<Offer> offers = offerRepository.findOffersByOrder(offer.getOrder().getId());
