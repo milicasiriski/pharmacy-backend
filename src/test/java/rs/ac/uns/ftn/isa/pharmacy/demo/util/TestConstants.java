@@ -59,6 +59,7 @@ public class TestConstants {
     private static final Date PRESCRIPTION_DATE = Calendar.getInstance().getTime();
 
     private static final long PATIENT_ID = 1L;
+    private static final long SUPPLIER_ID = 2L;
     private static final String PATIENT_NAME = "Jesse";
     private static final String PATIENT_EMAIL = "jesse@gmail.com";
 
@@ -66,6 +67,14 @@ public class TestConstants {
         setId(PATIENT_ID);
         setName(PATIENT_NAME);
         setEmail(PATIENT_EMAIL);
+    }};
+
+    public static Supplier SUPPLIER_TEST_OBJECT = new Supplier() {{
+        setId(SUPPLIER_ID);
+        setName(PATIENT_NAME);
+        setEmail(PATIENT_EMAIL);
+        setOffers(new HashSet<>());
+        setMedicineAmount(new HashMap<>());
     }};
 
     public static Pharmacy PHARMACY_TEST_OBJECT = new Pharmacy(PHARMACY_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,

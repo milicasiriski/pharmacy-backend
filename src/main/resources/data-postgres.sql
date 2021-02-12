@@ -200,6 +200,7 @@ INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (
 INSERT INTO medicine_search (id, medicine_id, pharmacy_id, search_date) VALUES (3, 3, 4, '2021-07-16');
 
 INSERT INTO complaint(id, version, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (1, 0, null, 'Im not happy with a service!', false , 1, null, 1);
+INSERT INTO complaint(id, version, answer_text, complaint_text, resolved, patient_id, pharmacy_id, staff_id) VALUES (2, 0, null, 'Im not happy with a service2!', false , 1, null, 1);
 
 INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 1);
 INSERT INTO pharmacy_subscribers(pharmacy_id, patient_id) VALUES (4, 2);
