@@ -140,6 +140,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void cancelDermatologistExam(long examId, Patient signedInUser) throws EntityNotFoundException, WrongPatientException, ExamCanNoLongerBeCancelledException {
         Exam exam = getExamById(examId);
 
@@ -155,6 +156,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void deleteExam(long examId) throws EntityNotFoundException {
 
         Exam exam = examRepository.findById(examId).orElse(null);

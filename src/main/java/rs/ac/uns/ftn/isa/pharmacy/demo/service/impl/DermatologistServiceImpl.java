@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;

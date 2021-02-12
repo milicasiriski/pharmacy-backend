@@ -40,15 +40,11 @@ public class VacationServiceImpl implements VacationService {
     }
 
     public Iterable<VacationTimeRequestPharmacist> getAllPharmacistsVacation() {
-        return pharmacistVacationRepository.findAll();
+        return pharmacistVacationRepository.findVacationRequestsForPharmacistByPharmacy(((PharmacyAdmin) authenticationService.getLoggedUser()).getPharmacy().getId());
     }
 
     public Iterable<VacationTimeRequestDermatologist> getAllDermatologistsVacation() {
-        return dermatologistVacationRepository.findVacationsByPharmacyId((
-                (PharmacyAdmin) authenticationService.
-                        getLoggedUser())
-                .getPharmacy()
-                .getId());
+        return dermatologistVacationRepository.findVacationsByPharmacyId(((PharmacyAdmin) authenticationService.getLoggedUser()).getPharmacy().getId());
     }
 
     @Override

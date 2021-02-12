@@ -7,6 +7,11 @@ public class OfferMailFormatter implements MailFormatter<Boolean> {
     @Override
     public String getText(Boolean isAccepted) {
         String message = "";
+        if (isAccepted) {
+            message = ACCEPTED_TEXT;
+        } else {
+            message = DECLINED_TEXT;
+        }
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
