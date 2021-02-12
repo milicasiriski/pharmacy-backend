@@ -24,3 +24,27 @@ their schedules and pharmacy admins to manage pharmacies.
 | Luka Dorić           | 
 | Marko Vidović        | 
 | Vladimir Buđen       | 
+
+# Pokretanje aplikacije
+Uputstvo za pokretanje.
+
+# Front: 
+
+Preporucujemo lokalno pokretanje kroz WebStorm IDE
+
+Proveriti da li je instaliran NODE.js na racunaru.
+
+Nakon git pull, pokrenuti komandu npm install kako bi se instalirali svi dependencie-i.
+
+Lokalno pokrenuti aplikaciju komandom npm run serve -- --port 8081
+
+Aplikacija je takodje dostupna i na heroku platformi - https://team6-isa-front.herokuapp.com/
+
+# Backend:
+
+Preporucujemo lokalno pokretanje kroz InteliJ IDEA.
+
+Server se krece na 8080 portu.
+
+Backend deo je takodje dostupan i na heroku platformi - https://team6-isa-back.herokuapp.com/
+
