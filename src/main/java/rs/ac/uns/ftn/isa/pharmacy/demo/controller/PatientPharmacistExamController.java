@@ -40,8 +40,15 @@ public class PatientPharmacistExamController {
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/")
-    public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamsForPatient() {
-        Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getPharmacistExamsForPatient(getSignedInUser());
+    public ResponseEntity<Iterable<ExamDetails>> getPharmacistExamsForPatient() {
+        Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getScheduledPharmacistExamsForPatient(getSignedInUser());
+        return new ResponseEntity<>(exams, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/examHistory")
+    public ResponseEntity<Iterable<ExamDetails>> getPharmacistExamHistoryForPatient() {
+        Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getPharmacistExamHistoryForPatient(getSignedInUser());
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 

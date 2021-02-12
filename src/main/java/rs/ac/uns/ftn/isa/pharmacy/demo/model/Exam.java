@@ -26,14 +26,22 @@ import java.util.concurrent.TimeUnit;
                 )
         }
 )
-@NamedNativeQuery(name = "Exam.getDermatologistExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+@NamedNativeQuery(name = "Exam.getDermatologistScheduledExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
         "\tFROM public.exam AS e, dermatologist_employment_mapping AS dem, pharmacy as ph, pharmacy_user as pu\n" +
         "\tWHERE employment_id = dermatologist_employment_id AND dem.pharmacy_id = ph.id AND dem.dermatologist_id = pu.id\n" +
-        "\tAND e.patient_id = :patientId", resultSetMapping = "ExamDetailsMapping")
-@NamedNativeQuery(name = "Exam.getPharmacistExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+        "\tAND e.patient_id = :patientId AND e.status = 2", resultSetMapping = "ExamDetailsMapping")
+@NamedNativeQuery(name = "Exam.getDermatologistHistoryExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+        "\tFROM public.exam AS e, dermatologist_employment_mapping AS dem, pharmacy as ph, pharmacy_user as pu\n" +
+        "\tWHERE employment_id = dermatologist_employment_id AND dem.pharmacy_id = ph.id AND dem.dermatologist_id = pu.id\n" +
+        "\tAND e.patient_id = :patientId AND (e.status = 0 OR e.status = 1)", resultSetMapping = "ExamDetailsMapping")
+@NamedNativeQuery(name = "Exam.getPharmacistScheduledExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
         "\tFROM exam AS e, pharmacy as ph, pharmacy_user as pu\n" +
         "\tWHERE e.pharmacist_id = pu.id AND user_type = 'PHARMACIST' AND pu.pharmacy_id = ph.id\n" +
-        "\tAND e.patient_id = :patientId", resultSetMapping = "ExamDetailsMapping")
+        "\tAND e.patient_id = :patientId AND e.status = 2", resultSetMapping = "ExamDetailsMapping")
+@NamedNativeQuery(name = "Exam.getPharmacistHistoryExamDetails", query = "SELECT e.id AS id, price, end_time, start_time, pu.name AS examiner_name, pu.surname AS examiner_surname, ph.name AS pharmacy_name\n" +
+        "\tFROM exam AS e, pharmacy as ph, pharmacy_user as pu\n" +
+        "\tWHERE e.pharmacist_id = pu.id AND user_type = 'PHARMACIST' AND pu.pharmacy_id = ph.id\n" +
+        "\tAND e.patient_id = :patientId AND (e.status = 0 OR e.status = 1)", resultSetMapping = "ExamDetailsMapping")
 @Entity
 @Table(name = "exam")
 @Inheritance(strategy = InheritanceType.JOINED)

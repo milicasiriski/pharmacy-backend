@@ -38,8 +38,36 @@ public class PatientDermatologistExamController {
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/")
     public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamsForPatient() {
-        Iterable<ExamDetails> exams = examService.getDermatologistExamsForPatient(getSignedInUser());
-        return new ResponseEntity<>(exams, HttpStatus.OK);
+        try {
+            Iterable<ExamDetails> exams = examService.getScheduledDermatologistExamsForPatient(getSignedInUser());
+            return new ResponseEntity<>(exams, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/examHistory/")
+    public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamHistoryForPatient() {
+        try {
+            Iterable<ExamDetails> exams = examService.getDermatologistExamHistoryForPatient(getSignedInUser());
+            return new ResponseEntity<>(exams, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    @GetMapping("/all/")
+    public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExams() {
+        try {
+            ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
+            examService.getAvailableDermatologistExams(ExamSortType.NONE).forEach(it ->
+                    response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR
@@ -63,6 +91,19 @@ public class PatientDermatologistExamController {
         examService.getAvailableDermatologistExamsForPharmacy(pharmacyId, sort).forEach(it ->
                 response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    @GetMapping("/all/{sort}")
+    public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExams(@PathVariable("sort") ExamSortType sort) {
+        try {
+            ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
+            examService.getAvailableDermatologistExams(sort).forEach(it ->
+                    response.add(new GetAvailableDermatologistExamsResponse(it.getExam(), it.getDermatologist())));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security

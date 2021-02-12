@@ -162,10 +162,6 @@ INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id)
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (13, 91, 5);
 INSERT INTO supplier_medicine_mapping(supplier_id, medicine_amount, medicine_id) VALUES (14, 91, 4);
 
--- INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (1, 100, 10, 0, 1, 13);
--- INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (3, 100, 10, 0, 1, 13);
--- INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id) VALUES (4, 100, 10, 0, 1, 13);
-
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (2, 100, 20, 0, 2, 13, 0);
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (5, 100, 20, 0, 3, 13, 0);
 INSERT INTO order_offer(id, price, shipping_days, status,order_id, supplier_id, version) VALUES (6, 100, 20, 0, 4, 13, 0);

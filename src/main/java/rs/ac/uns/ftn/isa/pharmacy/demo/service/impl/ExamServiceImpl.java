@@ -120,23 +120,30 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Iterable<ExamAndDermatologistDto> getAvailableDermatologistExamsForPharmacy(long pharmacyId, ExamSortType sortType) {
         Pharmacy pharmacy = getPharmacyById(pharmacyId);
-        List<ExamAndDermatologistDto> result = new ArrayList<>();
-
-        Map<Dermatologist, Employment> map = pharmacy.getDermatologists();
-        Set<Dermatologist> dermatologists = map.keySet();
-
-        dermatologists.forEach(key -> map.get(key).getExams().stream()
-                .filter(it -> !it.isScheduled()).forEach(exam -> {
-                    exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
-                    result.add(new ExamAndDermatologistDto(exam, key));
-                }));
+        List<ExamAndDermatologistDto> result = getAvailableDermatologistAppointmentsForPharmacy(pharmacy);
         sortExams(result, sortType);
         return result;
     }
 
     @Override
-    public Iterable<ExamDetails> getDermatologistExamsForPatient(Patient patient) {
-        return examRepository.getDermatologistExamDetails(patient.getId());
+    public Iterable<ExamAndDermatologistDto> getAvailableDermatologistExams(ExamSortType sortType) {
+        List<ExamAndDermatologistDto> result = new ArrayList<>();
+        pharmacyRepository.findAll().forEach(pharmacy -> {
+            List<ExamAndDermatologistDto> exams = getAvailableDermatologistAppointmentsForPharmacy(pharmacy);
+            result.addAll(exams);
+        });
+        sortExams(result, sortType);
+        return result;
+    }
+
+    @Override
+    public Iterable<ExamDetails> getScheduledDermatologistExamsForPatient(Patient patient) {
+        return examRepository.getDermatologistScheduledExamDetails(patient.getId());
+    }
+
+    @Override
+    public Iterable<ExamDetails> getDermatologistExamHistoryForPatient(Patient patient) {
+        return examRepository.getDermatologistHistoryExamDetails(patient.getId());
     }
 
     @Override
@@ -166,6 +173,20 @@ public class ExamServiceImpl implements ExamService {
         } else {
             examRepository.delete(exam);
         }
+    }
+
+    private List<ExamAndDermatologistDto> getAvailableDermatologistAppointmentsForPharmacy(Pharmacy pharmacy) {
+        List<ExamAndDermatologistDto> result = new ArrayList<>();
+        Map<Dermatologist, Employment> map = pharmacy.getDermatologists();
+        Set<Dermatologist> dermatologists = map.keySet();
+
+        dermatologists.forEach(key -> map.get(key).getExams().stream()
+                .filter(it -> !it.isScheduled()).forEach(exam -> {
+                    // TODO: include promotions
+                    exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
+                    result.add(new ExamAndDermatologistDto(exam, key));
+                }));
+        return result;
     }
 
     private TimeInterval getIntervalForShiftCompare(TimeInterval timeInterval, TimeInterval shiftForDayOfWeek) {
