@@ -158,6 +158,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void removeAllExpiredMedicineReservations() {
         Iterable<MedicineReservation> reservationsToDelete = getExpiredMedicineReservations();
         reservationsToDelete.forEach(it -> {
