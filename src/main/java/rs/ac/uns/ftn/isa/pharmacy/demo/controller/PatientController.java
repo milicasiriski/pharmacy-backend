@@ -7,15 +7,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.EPrescriptionDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
+import rs.ac.uns.ftn.isa.pharmacy.demo.util.LoyaltyProgramStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,13 @@ import java.util.List;
 public class PatientController {
     @Qualifier("PatientServiceImpl")
     private final PatientService patientService;
+    @Qualifier("LoyaltyServiceImpl")
+    private final LoyaltyService loyaltyService;
 
     @Autowired
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, LoyaltyService loyaltyService) {
         this.patientService = patientService;
+        this.loyaltyService = loyaltyService;
     }
 
     @GetMapping("/allergies")
@@ -71,6 +76,43 @@ public class PatientController {
                 result.add(new EPrescriptionDto(prescription));
             });
             return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/penaltyPoints")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<Integer> getPenaltyPoints() {
+        try {
+            Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return new ResponseEntity<>(patient.getPenaltyPoints(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/loyaltyProgram")
+    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    public ResponseEntity<PatientLoyaltyPointsDto> getLoyaltyProgram() {
+        try {
+            Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            LoyaltyProgramDto loyaltyProgram = loyaltyService.getLoyaltyProgramDto();
+
+            LoyaltyProgramStatus status = LoyaltyProgramStatus.REGULAR;
+            double discount = 0;
+            if (patient.getLoyaltyPoints() >= loyaltyProgram.getGoldMinimumPoints()) {
+                status = LoyaltyProgramStatus.GOLD;
+                discount = loyaltyProgram.getGoldDiscount();
+            } else if (patient.getLoyaltyPoints() >= loyaltyProgram.getSilverMinimumPoints()) {
+                status = LoyaltyProgramStatus.SILVER;
+                discount = loyaltyProgram.getSilverDiscount();
+            }
+
+            PatientLoyaltyPointsDto result = new PatientLoyaltyPointsDto(status, patient.getLoyaltyPoints(), discount);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
