@@ -101,4 +101,13 @@ class MedicineReservationServiceImplTest {
         // THEN
         assertFalse(result);
     }
+
+    @Test
+    void testIsReservationValid_DateIsNotValid_ReturnsFalse() {
+        // WHEN
+        boolean result = subject.isReservationValid(TestConstants.MEDICINE_RESERVATION_DTO_INVALID_DATE_TEST_OBJECT);
+
+        // THEN
+        assertFalse(result);
+    }
 }

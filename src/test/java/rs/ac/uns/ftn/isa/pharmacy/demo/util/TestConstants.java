@@ -119,7 +119,9 @@ public class TestConstants {
             PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, new HashMap<>(), PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
 
     public static CreateMedicineReservationParamsDto MEDICINE_RESERVATION_DTO_TEST_OBJECT =
-            new CreateMedicineReservationParamsDto(MEDICINE_ID, PHARMACY_ID, new Date());
+            new CreateMedicineReservationParamsDto(MEDICINE_ID, PHARMACY_ID, getDateTime(3000, 7, 7, 23, 59).getTime());
+    public static CreateMedicineReservationParamsDto MEDICINE_RESERVATION_DTO_INVALID_DATE_TEST_OBJECT =
+            new CreateMedicineReservationParamsDto(MEDICINE_ID, PHARMACY_ID, getDateTime(1970, 7, 7, 23, 59).getTime());
 
     public static EPrescriptionDto MEDICINE_E_PRESCRIPTION_DTO_TEST_OBJECT = new EPrescriptionDto(PRESCRIPTION_ID, PATIENT_NAME, PRESCRIBED_MEDICINE_DTO_TEST_LIST, PRESCRIPTION_DATE);
 
