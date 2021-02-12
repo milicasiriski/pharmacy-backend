@@ -166,6 +166,8 @@ INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, sta
 INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('6', '20', '2020-03-30 18:00', '2021-03-30 17:30', '3', '8', 1, 0);
 INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('7', '20', '2021-05-30 18:00', '2021-03-30 17:30', '3', '9', 2, 0);
 
+INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES (4, 8);
+
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 08:00:00', '0');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 16:00:00', '1970-01-01 10:00:00', '1');
 INSERT INTO shift_day_mapping(employment_id, end_time, start_time, day_of_week) VALUES (1, '1970-01-01 12:00:00', '1970-01-01 08:00:00', '2');
