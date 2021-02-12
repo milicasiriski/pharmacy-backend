@@ -1,6 +1,9 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.model.dto;
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Prescription;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +21,15 @@ public class EPrescriptionDto implements Serializable {
     }
 
     public EPrescriptionDto() {
+    }
+
+    public EPrescriptionDto(Prescription prescription) {
+        this.id = prescription.getId();
+        this.name = prescription.getName();
+        List<PrescribedMedicineDto> medicine = new ArrayList<>();
+        prescription.getMedicines().forEach((m, a) -> medicine.add(new PrescribedMedicineDto(m.getUuid(), m.getName(), Long.valueOf(a))));
+        this.medicines = medicine;
+        this.prescriptionDate = prescription.getPrescriptionDate().getTime();
     }
 
     public String getId() {

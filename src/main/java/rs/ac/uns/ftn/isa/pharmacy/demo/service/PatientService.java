@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service;
 
 
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Prescription;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface PatientService {
     boolean hasCurrentUserExceededPenaltyPoints();
 
     void resetPenaltyPoints();
+
+    Iterable<Prescription> getAllPrescriptions();
 }
