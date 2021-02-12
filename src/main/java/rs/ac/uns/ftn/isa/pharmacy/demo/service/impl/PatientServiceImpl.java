@@ -5,9 +5,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Prescription;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PrescriptionRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
@@ -20,11 +22,13 @@ import java.util.Optional;
 public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final MedicineRepository medicineRepository;
+    private final PrescriptionRepository prescriptionRepository;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, MedicineRepository medicineRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, MedicineRepository medicineRepository, PrescriptionRepository prescriptionRepository) {
         this.patientRepository = patientRepository;
         this.medicineRepository = medicineRepository;
+        this.prescriptionRepository = prescriptionRepository;
     }
 
     @Override
@@ -70,6 +74,12 @@ public class PatientServiceImpl implements PatientService {
             patient.resetPenaltyPoints();
             patientRepository.save(patient);
         });
+    }
+
+    @Override
+    public Iterable<Prescription> getAllPrescriptions() {
+        Patient patient = getSignedInUser();
+        return prescriptionRepository.findByPatient(patient);
     }
 
     private Medicine getMedicineById(Long id) throws EntityNotFoundException {
