@@ -81,6 +81,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void makeAComplaint(ComplaintDto dto) {
         Patient patient = (Patient) authenticationService.getLoggedUser();
         if (dto.getStaffId() != null) {
