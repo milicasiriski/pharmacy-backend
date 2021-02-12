@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
