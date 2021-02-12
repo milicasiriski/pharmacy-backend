@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.DermatologistHasShiftInAnotherPharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.impl.PharmacyServiceImpl;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.TestConstants;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -58,6 +60,17 @@ public class PharmacyServiceImplTest {
 
         // THEN
         verify(pharmacyRepository, times(1)).save(any());
+    }
+
+    @Test
+    void testAddingDermatologistToPharmacy_ShiftsAreOverlapping_ThrowsException() {
+        // GIVEN
+        when(authenticationService.getLoggedUser()).thenReturn(TestConstants.PHARMACY_ADMIN);
+        when(dermatologistRepository.findById(any())).thenReturn(Optional.of(TestConstants.DERMATOLOGIST));
+        when(pharmacyRepository.findPharmacyByPharmacyAdmin(any())).thenReturn(TestConstants.PHARMACY_TEST_OBJECT_2);
+
+        // THEN
+        assertThrows(DermatologistHasShiftInAnotherPharmacy.class, () -> subject.addDermatologist(TestConstants.ADD_DERMATOLOGIST_DTO_2));
     }
 
 }
