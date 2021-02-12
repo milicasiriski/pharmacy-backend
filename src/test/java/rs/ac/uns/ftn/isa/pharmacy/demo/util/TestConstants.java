@@ -61,7 +61,7 @@ public class TestConstants {
     private static final long PATIENT_ID = 1L;
     private static final long SUPPLIER_ID = 2L;
     private static final String PATIENT_NAME = "Jesse";
-    private static final String PATIENT_EMAIL = "jesse@gmail.com";
+    public static final String PATIENT_EMAIL = "jesse@gmail.com";
 
     public static Patient PATIENT_TEST_OBJECT = new Patient() {{
         setId(PATIENT_ID);

@@ -11,6 +11,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SubmitRatingDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.RatingService;
 
 import javax.persistence.EntityNotFoundException;
@@ -29,9 +30,10 @@ public class RatingServiceImpl implements RatingService {
     private final RatingDermatologistRepository ratingDermatologistRepository;
     private final RatingPharmacistRepository ratingPharmacistRepository;
     private final RatingPharmacyRepository ratingPharmacyRepository;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingMedicineRepository ratingMedicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository, RatingPharmacyRepository ratingPharmacyRepository) {
+    public RatingServiceImpl(PharmacyRepository pharmacyRepository, DermatologistRepository dermatologistRepository, PharmacistRepository pharmacistRepository, MedicineRepository medicineRepository, RatingMedicineRepository ratingMedicineRepository, RatingDermatologistRepository ratingDermatologistRepository, RatingPharmacistRepository ratingPharmacistRepository, RatingPharmacyRepository ratingPharmacyRepository, AuthenticationService authenticationService) { // NOSONAR
         this.pharmacyRepository = pharmacyRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.pharmacistRepository = pharmacistRepository;
@@ -40,6 +42,7 @@ public class RatingServiceImpl implements RatingService {
         this.ratingDermatologistRepository = ratingDermatologistRepository;
         this.ratingPharmacistRepository = ratingPharmacistRepository;
         this.ratingPharmacyRepository = ratingPharmacyRepository;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -220,7 +223,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     private Patient getSignedInUser() {
-        return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (Patient) authenticationService.getLoggedUser();
     }
 
     private void validateRating(int rating) throws RatingOutOfRangeException {
