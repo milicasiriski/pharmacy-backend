@@ -48,6 +48,7 @@ public class OrderController implements OrderConverter {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<List<OrderForOfferDto>> getOrders() {
         List<OrderForOfferDto> orders = orderService.getOrders();
         return ResponseEntity.ok(orders);

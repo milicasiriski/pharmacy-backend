@@ -114,9 +114,7 @@ public class RegisterController {
     }
 
     private String getSiteURL(HttpServletRequest request) {
-        //String siteURL = request.getRequestURL().toString();
-        //return siteURL.replace(request.getServletPath(), "");
-        return "http://localhost:8081";
+        return request.getHeader("origin");
     }
 
 }

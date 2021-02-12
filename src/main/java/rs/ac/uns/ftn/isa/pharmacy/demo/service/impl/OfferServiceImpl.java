@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicineAmountDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.OfferDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.OfferStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.OfferService;
 
 import javax.mail.MessagingException;
@@ -30,11 +30,12 @@ public class OfferServiceImpl implements OfferService {
     private final PharmacyRepository pharmacyRepository;
     private final SupplierRepository supplierRepository;
     private final MailService<Boolean> mailService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public OfferServiceImpl(OfferRepository offerRepository, OrderRepository orderRepository, UserRepository userRepository,
                             MedicineRepository medicineRepository, PharmacyRepository pharmacyRepository, SupplierRepository supplierRepository,
-                            MailService<Boolean> mailService) {
+                            MailService<Boolean> mailService, AuthenticationService authenticationService) {
         this.offerRepository = offerRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
@@ -42,6 +43,7 @@ public class OfferServiceImpl implements OfferService {
         this.pharmacyRepository = pharmacyRepository;
         this.supplierRepository = supplierRepository;
         this.mailService = mailService;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class OfferServiceImpl implements OfferService {
             if (dto.getShippingDays() < 1 || dto.getPrice() < 1) {
                 throw new BadRequestException();
             }
-            supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            supplier = (Supplier) authenticationService.getLoggedUser();
             Offer offer = dtoToOffer(dto);
             offer.setStatus(OfferStatus.WAITING);
             Order order = offer.getOrder();
@@ -68,6 +70,7 @@ public class OfferServiceImpl implements OfferService {
         } catch (NoMedicineFoundException | OrderException noMedicineFoundException) {
             throw noMedicineFoundException;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BadUserInformationException();
         }
     }
@@ -77,7 +80,7 @@ public class OfferServiceImpl implements OfferService {
         Supplier supplier;
         try {
             List<MedicineAmountDto> medicinesAmountDto = new ArrayList<>();
-            supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            supplier = (Supplier) authenticationService.getLoggedUser();
             Map<Medicine, Integer> map = getMedicineAmount(supplier.getId());
             map.keySet().forEach(medicine ->
                     medicinesAmountDto.add(new MedicineAmountDto(medicine.getName(), medicine.getUuid(), map.get(medicine))));
@@ -89,7 +92,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferDto> getAllOffers() {
-        Supplier supplier = (Supplier) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Supplier supplier = (Supplier) authenticationService.getLoggedUser();
         Iterable<Offer> offers = offerRepository.findBySupplierId(supplier.getId());
         List<OfferDto> offerDtos = new ArrayList<>();
         offers.forEach(offer -> offerDtos.add(new OfferDto(offer.getShippingDays(), offer.getPrice(), offer.getOrder().getId(), offer.getStatus(), offer.getId(), offer.getOrder().getDeadline().getTime())));
@@ -116,7 +119,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<List<OfferDto>> getAllOffersByOrders() {
-        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) authenticationService.getLoggedUser();
         Pharmacy pharmacy = pharmacyAdmin.getPharmacy();
         List<Long> orderIds = orderRepository.getOrderIdsByPharmacy(pharmacy.getId());
 
@@ -132,7 +135,7 @@ public class OfferServiceImpl implements OfferService {
         if (offer == null) {
             throw new EntityNotFoundException();
         }
-        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PharmacyAdmin pharmacyAdmin = (PharmacyAdmin) authenticationService.getLoggedUser();
         Order order = orderRepository.findById(offer.getOrder().getId()).orElse(null);
         Pharmacy pharmacy = pharmacyRepository.findById(pharmacyAdmin.getPharmacy().getId()).orElse(null);
 

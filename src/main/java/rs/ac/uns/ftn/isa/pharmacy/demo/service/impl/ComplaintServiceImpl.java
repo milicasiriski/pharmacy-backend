@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ComplaintService;
 
 import javax.mail.MessagingException;
@@ -28,21 +28,23 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final UserRepository userRepository;
     private final MailService<String> mailService;
     private final PharmacyRepository pharmacyRepository;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public ComplaintServiceImpl(PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository, ComplaintRepository complaintRepository, UserRepository userRepository, MailService<String> mailService, PharmacyRepository pharmacyRepository) {
+    public ComplaintServiceImpl(PharmacistRepository pharmacistRepository, DermatologistRepository dermatologistRepository, ComplaintRepository complaintRepository, UserRepository userRepository, MailService<String> mailService, PharmacyRepository pharmacyRepository, AuthenticationService authenticationService) {
         this.pharmacistRepository = pharmacistRepository;
         this.dermatologistRepository = dermatologistRepository;
         this.complaintRepository = complaintRepository;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.pharmacyRepository = pharmacyRepository;
+        this.authenticationService = authenticationService;
     }
 
     @Override
     public List<PharmacistDto> getPharmacists() {
 
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         List<Pharmacist> pharmacists = pharmacistRepository.getByPatientsId(patient.getId());
         List<PharmacistDto> dtos = new ArrayList<>();
         pharmacists.forEach(pharmacist -> dtos.add(new PharmacistDto(pharmacist.getName(), pharmacist.getSurname(),
@@ -53,7 +55,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public List<PharmacyDto> getPharmacies() {
 
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         List<Pharmacy> pharmacies = pharmacyRepository.findPharmacyByPatientIdPurchase(patient.getId());
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdDermatologistsExam(patient.getId()));
         pharmacies.addAll(pharmacyRepository.findPharmacyByPatientIdPharmacistsExam(patient.getId()));
@@ -70,7 +72,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public List<DermatologistDto> getDermatologists() {
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         List<Dermatologist> dermatologists = dermatologistRepository.getByPatientsId(patient.getId());
         List<DermatologistDto> dtos = new ArrayList<>();
         dermatologists.forEach(dermatologist -> dtos.add(new DermatologistDto(dermatologist.getName(), dermatologist.getSurname(),
@@ -80,7 +82,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public void makeAComplaint(ComplaintDto dto) {
-        Patient patient = (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Patient patient = (Patient) authenticationService.getLoggedUser();
         if (dto.getStaffId() != null) {
             Optional<User> userOptional = userRepository.findById(dto.getStaffId());
             if (userOptional.isEmpty()) {
@@ -109,7 +111,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void resolveComplaint(ComplaintAnswerDto dto) throws Exception {
-        try{
+        try {
             Optional<Complaint> optionalComplaint = complaintRepository.findById(dto.getId());
             if (optionalComplaint.isEmpty()) {
                 throw new BadRequestException();
@@ -122,8 +124,7 @@ public class ComplaintServiceImpl implements ComplaintService {
             complaint.setResolved(true);
             complaintRepository.save(complaint);
             sendMail(complaint, dto);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
 

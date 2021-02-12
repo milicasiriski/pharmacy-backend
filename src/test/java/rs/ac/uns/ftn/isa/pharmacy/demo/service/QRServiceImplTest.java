@@ -110,6 +110,8 @@ class QRServiceImplTest {
     void testBuy_PrescriptionUsedException_thrown() {
         // GIVEN
         when(prescriptionRepository.findById(any())).thenReturn(Optional.ofNullable(TestConstants.PRESCRIPTION_TEST_OBJECT));
+
+        // THEN
         assertThrows(PrescriptionUsedException.class, () -> subject.buy(new QRResultDto() {{
             setPrescription(TestConstants.PRESCRIPTION_DTO);
         }}));
@@ -122,6 +124,8 @@ class QRServiceImplTest {
         when(medicineRepository.findByUuid(any())).thenReturn(TestConstants.MEDICINE_TEST_OBJECT);
         when(authenticationService.getLoggedUser()).thenReturn(TestConstants.PATIENT_TEST_OBJECT);
         when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_TEST_OBJECT));
+
+        // THEN
         assertThrows(NoMedicineFoundException.class, () -> subject.buy(new QRResultDto() {{
             setPrescription(TestConstants.PRESCRIPTION_DTO_2);
         }}));
