@@ -115,14 +115,14 @@ public class QRServiceImpl implements QRService {
                 }
             });
 
-            sendEmail(patient.getEmail(), patient.getName(), pharmacy.getName(), String.valueOf(dto.getBill()));
+
             pharmacyRepository.save(pharmacy);
             medicinePurchaseRepository.save(new MedicinePurchase(prescriptionMedicineAmount, pharmacy, patient, price.longValue()));
             EPrescriptionDto prescriptionDto = dto.getPrescription();
             Calendar prescriptionDate = Calendar.getInstance();
             prescriptionDate.setTime(prescriptionDto.getPrescriptionDate());
             prescriptionRepository.save(new Prescription(prescriptionDto.getId(), patient, prescriptionMedicineAmount, prescriptionDate));
-
+            sendEmail(patient.getEmail(), patient.getName(), pharmacy.getName(), String.valueOf(dto.getBill()));
         } else {
             throw new BadRequestException();
         }
