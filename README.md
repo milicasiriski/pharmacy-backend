@@ -12,9 +12,11 @@ their schedules and pharmacy admins to manage pharmacies.
 
  Java Spring
  
- Java Spring Security
+ Spring Security
  
  Gradle
+ 
+ PostgreSQL
 
 # Front part of our app you can find at: https://github.com/lukaDoric/pharmacy-front
 
@@ -47,4 +49,10 @@ Preporucujemo lokalno pokretanje kroz InteliJ IDEA.
 Server se krece na 8080 portu.
 
 Backend deo je takodje dostupan i na heroku platformi - https://team6-isa-back.herokuapp.com/
+
+Potrebno je imati PostgreSQL bazu
+
+# Drive link za transakcije i QR kodove
+
+https://drive.google.com/drive/folders/1opH3A9NFR3FdffZ0D9r1KzTBDVJKAQ8e?fbclid=IwAR1qvkBoKDkFqewzoWjFh838cP8z1UVfgd95nNg-3hgNILY-Zgr9gW3cC6Q
 
