@@ -86,26 +86,24 @@ public class QRServiceImplTest {
     }
 
     @Test
-    void testBuy_successful() {
+    void testBuy_successful() throws Exception {
         // GIVEN
         when(prescriptionRepository.findById(any())).thenReturn(Optional.empty());
         when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_TEST_OBJECT));
         when(loyaltyService.getDiscount()).thenReturn(0.8);
         when(medicineRepository.findByUuid(any())).thenReturn(TestConstants.MEDICINE_TEST_OBJECT);
         when(authenticationService.getLoggedUser()).thenReturn(TestConstants.PATIENT_TEST_OBJECT);
-        try {
-            // WHEN
-            subject.buy(new QRResultDto() {{
-                setPrescription(TestConstants.PRESCRIPTION_DTO);
-            }});
 
-            //THEN
-            verify(pharmacyRepository, times(1)).save(any());
-            verify(medicinePurchaseRepository, times(1)).save(any());
-            verify(prescriptionRepository, times(1)).save(any());
-        } catch (Exception e) {
-            fail();
-        }
+        // WHEN
+        subject.buy(new QRResultDto() {{
+            setPrescription(TestConstants.PRESCRIPTION_DTO);
+        }});
+
+        //THEN
+        verify(pharmacyRepository, times(1)).save(any());
+        verify(medicinePurchaseRepository, times(1)).save(any());
+        verify(prescriptionRepository, times(1)).save(any());
+
     }
 
     @Test
@@ -121,8 +119,11 @@ public class QRServiceImplTest {
     void testBuy_NoMedicineFound_thrown() {
         // GIVEN
         when(prescriptionRepository.findById(any())).thenReturn(Optional.empty());
-        assertThrows(PrescriptionUsedException.class, () -> subject.buy(new QRResultDto() {{
-            setPrescription(TestConstants.PRESCRIPTION_DTO);
+        when(medicineRepository.findByUuid(any())).thenReturn(TestConstants.MEDICINE_TEST_OBJECT);
+        when(authenticationService.getLoggedUser()).thenReturn(TestConstants.PATIENT_TEST_OBJECT);
+        when(pharmacyRepository.findById(any())).thenReturn(Optional.of(TestConstants.PHARMACY_TEST_OBJECT));
+        assertThrows(NoMedicineFoundException.class, () -> subject.buy(new QRResultDto() {{
+            setPrescription(TestConstants.PRESCRIPTION_DTO_2);
         }}));
     }
 
