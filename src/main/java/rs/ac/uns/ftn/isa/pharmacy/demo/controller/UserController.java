@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.BadPasswordException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PasswordDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.UserDto;
@@ -48,13 +49,13 @@ public class UserController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
     public ResponseEntity<UserDto> getUserInfo() {
         return ResponseEntity.ok(userService.getUserInfo());
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')")// NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
     public ResponseEntity<String> updateUserInfo(@RequestBody UserDto userDto) {
         try {
             userService.updateUserInfo(userDto);
@@ -65,11 +66,13 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
     public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
         try {
             userService.updatePassword(passwordDto);
             return new ResponseEntity<>("Password successfully updated!", HttpStatus.OK);
+        } catch (BadPasswordException e) {
+            return new ResponseEntity<>("Wrong password, please try again!", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
         }
