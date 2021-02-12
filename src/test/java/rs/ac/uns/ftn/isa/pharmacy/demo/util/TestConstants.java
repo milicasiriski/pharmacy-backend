@@ -36,16 +36,22 @@ public class TestConstants {
     }};
 
     public static MedicineStatus MEDICINE_STATUS_TEST_OBJECT = new MedicineStatus(1, new ArrayList<>());
+    public static MedicineStatus MEDICINE_STATUS_TEST_OBJECT_2 = new MedicineStatus(4, new ArrayList<>());
+    public static MedicineStatus MEDICINE_STATUS_TEST_OBJECT_3 = new MedicineStatus(4, new ArrayList<>());
     public static MedicineStatus MEDICINE_STATUS_STOCK_EMPTY_TEST_OBJECT = new MedicineStatus(0, new ArrayList<>());
 
     private static final long PHARMACY_ID = 4L;
     private static final long PHARMACY_2_ID = 2L;
+    private static final long PHARMACY_3_ID = 3L;
     private static final String PHARMACY_NAME = "Pharmacy";
     private static final Address PHARMACY_ADDRESS = new Address();
     private static final String PHARMACY_ABOUT = "We sell drugs, but legal.";
     private static final Map<Dermatologist, Employment> PHARMACY_DERMATOLOGISTS = new HashMap<>();
     private static final List<Pharmacist> PHARMACY_PHARMACISTS = new ArrayList<>();
-    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE = Map.of(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT);
+    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE = Map.of(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT_2);
+    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE_2 = Map.of(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT_2);
+    private static final Map<Medicine, MedicineStatus> PHARMACY_MEDICINE_3 = Map.of(MEDICINE_TEST_OBJECT, MEDICINE_STATUS_TEST_OBJECT_3);
+
     private static final Map<Exam, Double> PHARMACY_EXAM_PRICE_LIST = new HashMap<>();
     private static final double PHARMACY_RATING = 3.6;
 
@@ -63,13 +69,16 @@ public class TestConstants {
     }};
 
     public static Pharmacy PHARMACY_TEST_OBJECT = new Pharmacy(PHARMACY_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
-            PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
+            PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE_2, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
 
     public static Pharmacy PHARMACY_TEST_OBJECT_2 = new Pharmacy(PHARMACY_2_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
-            PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
+            PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE_2, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
+
+    public static Pharmacy PHARMACY_TEST_OBJECT_3 = new Pharmacy(PHARMACY_3_ID, PHARMACY_NAME, PHARMACY_ADDRESS, PHARMACY_ABOUT,
+            PHARMACY_DERMATOLOGISTS, PHARMACY_PHARMACISTS, PHARMACY_MEDICINE_3, PHARMACY_EXAM_PRICE_LIST, PHARMACY_RATING);
 
     public static Iterable<Pharmacy> PHARMACY_TEST_LIST = new ArrayList<>() {{
-        add(PHARMACY_TEST_OBJECT);
+        add(PHARMACY_TEST_OBJECT_3);
         add(PHARMACY_TEST_OBJECT_2);
     }};
 
@@ -77,7 +86,13 @@ public class TestConstants {
         add(new PrescribedMedicineDto(MEDICINE_UUID, MEDICINE_NAME, 1L));
     }};
 
+    public static List<PrescribedMedicineDto> PRESCRIBED_MEDICINE_DTO_TEST_LIST_2 = new ArrayList<>() {{
+        add(new PrescribedMedicineDto(MEDICINE_UUID_2, MEDICINE_NAME, 30L));
+    }};
+
     public static EPrescriptionDto PRESCRIPTION_DTO = new EPrescriptionDto(PRESCRIPTION_ID, PATIENT_NAME, PRESCRIBED_MEDICINE_DTO_TEST_LIST, PRESCRIPTION_DATE);
+
+    public static EPrescriptionDto PRESCRIPTION_DTO_2 = new EPrescriptionDto(PRESCRIPTION_ID, PATIENT_NAME, PRESCRIBED_MEDICINE_DTO_TEST_LIST_2, PRESCRIPTION_DATE);
 
     public static Prescription PRESCRIPTION_TEST_OBJECT = new Prescription();
 
