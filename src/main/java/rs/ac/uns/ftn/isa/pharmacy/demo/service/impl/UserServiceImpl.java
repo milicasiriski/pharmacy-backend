@@ -65,6 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isValidType(User user) {
-        return user.getClass() == SystemAdmin.class || user.getClass() == Supplier.class || user.getClass() == PharmacyAdmin.class;
+        return user.getClass() == SystemAdmin.class
+                || user.getClass() == Supplier.class
+                || user.getClass() == PharmacyAdmin.class
+                || user.getClass() == Patient.class;
     }
 }
