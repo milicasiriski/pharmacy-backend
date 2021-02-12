@@ -27,7 +27,8 @@ public interface MedicineConverter {
                             medicine.getRecommendedDose(),
                             medicine.getSideEffects(),
                             null,
-                            medicine.getPoints());
+                            medicine.getPoints(),
+                            medicine.getRatings());
                     List<MedicineNameUuidDto> alternatives = new ArrayList<>();
                     medicine.getAlternatives().forEach(m ->
                             alternatives.add(new MedicineNameUuidDto(m.getUuid(), m.getName()))

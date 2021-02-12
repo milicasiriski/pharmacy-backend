@@ -46,8 +46,12 @@ public class PharmacyController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<PharmacyDto>> getAllPharmacies() {
-        List<PharmacyDto> pharmacies = pharmacyService.findAll();
-        return ResponseEntity.ok(pharmacies);
+        try {
+            List<PharmacyDto> pharmacies = pharmacyService.findAll();
+            return ResponseEntity.ok(pharmacies);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{ratingFilter}/{distance}/{userLon}/{userLat}")
@@ -69,7 +73,7 @@ public class PharmacyController {
     }
 
     @GetMapping("/getPharmacyById/{pharmacyId}")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_PATIENT', 'ROLE_SYSTEM_ADMINISTRATOR')")// NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_PATIENT', 'ROLE_SYSTEM_ADMINISTRATOR')") // NOSONAR
     public ResponseEntity<PharmacyProfileDto> getPharmacyById(@PathVariable Long pharmacyId) {
         try {
             if (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAdministrationRole().equals("ROLE_PHARMACY_ADMINISTRATOR")) {

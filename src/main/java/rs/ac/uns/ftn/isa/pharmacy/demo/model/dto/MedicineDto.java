@@ -24,7 +24,7 @@ public class MedicineDto implements Serializable {
     private int points = 0;
     private double rating;
 
-    public MedicineDto(long id, String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points) {
+    public MedicineDto(long id, String uuid, String name, String description, String manufacturer, String composition, MedicineForm form, MedicineType type, boolean prescribed, String recommendedDose, String sideEffects, List<MedicineNameUuidDto> alternatives, int points, double rating) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -38,6 +38,7 @@ public class MedicineDto implements Serializable {
         this.sideEffects = sideEffects;
         this.alternatives = alternatives;
         this.points = points;
+        this.rating = rating;
     }
 
     public MedicineDto() {

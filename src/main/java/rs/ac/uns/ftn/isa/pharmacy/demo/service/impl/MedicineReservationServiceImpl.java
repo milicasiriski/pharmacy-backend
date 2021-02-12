@@ -68,6 +68,9 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     @Override
     public boolean isReservationValid(CreateMedicineReservationParamsDto createMedicineReservationParamsDto) {
         try {
+            if (!isReservationDateValid(createMedicineReservationParamsDto.getExpirationDate())) {
+                return false;
+            }
             Medicine medicine = getMedicineById(createMedicineReservationParamsDto.getMedicineId());
             Pharmacy pharmacy = getPharmacyById(createMedicineReservationParamsDto.getPharmacyId());
             if (pharmacy.getMedicine().containsKey(medicine)) {
@@ -207,6 +210,11 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    private boolean isReservationDateValid(Date expirationDate) {
+        Calendar today = Calendar.getInstance();
+        return expirationDate.after(today.getTime());
     }
 
     public ArrayList<PharmaciesMedicinePriceDto> getPharmaciesMedicinePriceDtos(Long medicineId) {
