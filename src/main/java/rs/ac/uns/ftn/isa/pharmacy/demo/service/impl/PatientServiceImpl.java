@@ -10,6 +10,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PrescriptionRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PenaltyPointsConstants;
 
@@ -23,12 +24,14 @@ public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final MedicineRepository medicineRepository;
     private final PrescriptionRepository prescriptionRepository;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, MedicineRepository medicineRepository, PrescriptionRepository prescriptionRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, MedicineRepository medicineRepository, PrescriptionRepository prescriptionRepository, AuthenticationService authenticationService) {
         this.patientRepository = patientRepository;
         this.medicineRepository = medicineRepository;
         this.prescriptionRepository = prescriptionRepository;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -92,6 +95,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     private Patient getSignedInUser() {
-        return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (Patient) authenticationService.getLoggedUser();
     }
 }
