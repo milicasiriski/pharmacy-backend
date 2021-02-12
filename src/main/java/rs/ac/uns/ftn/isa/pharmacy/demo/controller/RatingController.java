@@ -94,12 +94,16 @@ public class RatingController {
             ratingService.saveDermatologistRatings(ratings);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(ENTITY_NOT_FOUND_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (RatingOutOfRangeException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(RATING_NOT_VALID_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (PatientCannotRateThisEntity e) {
+            e.printStackTrace();
             return new ResponseEntity<>(RATING_NOT_ALLOWED_MESSAGE, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(GENERIC_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
