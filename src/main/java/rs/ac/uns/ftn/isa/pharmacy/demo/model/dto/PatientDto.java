@@ -29,6 +29,17 @@ public class PatientDto {
         this.password = password;
     }
 
+    public PatientDto(Patient patient) {
+        this.name = patient.getName();
+        this.surname = patient.getSurname();
+        this.address = patient.getAddress().getStreet();
+        this.city = patient.getAddress().getCity();
+        this.country = patient.getAddress().getCountry();
+        this.phoneNumber = patient.getPhoneNumber();
+        this.email = patient.getEmail();
+        this.password = patient.getPassword();
+    }
+
     @Override
     public String toString() {
         return "PatientDTO{" +

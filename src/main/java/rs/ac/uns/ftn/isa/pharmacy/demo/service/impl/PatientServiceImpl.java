@@ -7,6 +7,8 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.Medicine;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Prescription;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.MedicinesBasicInfoDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PatientDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.MedicineRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PrescriptionRepository;
@@ -32,6 +34,15 @@ public class PatientServiceImpl implements PatientService {
         this.medicineRepository = medicineRepository;
         this.prescriptionRepository = prescriptionRepository;
         this.authenticationService = authenticationService;
+    }
+
+    @Override
+    public List<PatientDto> findAll() {
+        List<PatientDto> dtoPatients = new ArrayList<>();
+
+        patientRepository.findAll().forEach(patient -> dtoPatients.add(new PatientDto(patient)));
+
+        return dtoPatients;
     }
 
     @Override
