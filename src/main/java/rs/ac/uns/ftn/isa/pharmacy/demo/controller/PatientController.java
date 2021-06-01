@@ -46,6 +46,16 @@ public class PatientController {
         }
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PatientDto>> getAllPharmacies() {
+        try {
+            List<PatientDto> patients = patientService.findAll();
+            return ResponseEntity.ok(patients);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/medicine")
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
     public ResponseEntity<Iterable<MedicinesBasicInfoDto>> getAllMedicine() {

@@ -49,13 +49,17 @@ public class UserController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT', 'ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST')") // NOSONAR
     public ResponseEntity<UserDto> getUserInfo() {
-        return ResponseEntity.ok(userService.getUserInfo());
+        try{return ResponseEntity.ok(userService.getUserInfo());}
+        catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT', 'ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST')") // NOSONAR
     public ResponseEntity<String> updateUserInfo(@RequestBody UserDto userDto) {
         try {
             userService.updateUserInfo(userDto);
@@ -66,7 +70,7 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR','ROLE_SUPPLIER', 'ROLE_PATIENT', 'ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST')") // NOSONAR
     public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
         try {
             userService.updatePassword(passwordDto);
