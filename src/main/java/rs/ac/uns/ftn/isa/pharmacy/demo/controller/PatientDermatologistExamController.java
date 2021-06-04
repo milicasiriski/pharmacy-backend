@@ -35,7 +35,7 @@ public class PatientDermatologistExamController {
         this.patientService = patientService;
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/")
     public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamsForPatient() {
         try {
@@ -46,7 +46,7 @@ public class PatientDermatologistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/examHistory/")
     public ResponseEntity<Iterable<ExamDetails>> getDermatologistExamHistoryForPatient() {
         try {
@@ -57,7 +57,7 @@ public class PatientDermatologistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR
     @GetMapping("/all/")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExams() {
         try {
@@ -70,7 +70,7 @@ public class PatientDermatologistExamController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_DERMATOLOGIST')") // NOSONAR
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") String pharmacyId) {
         try {
@@ -84,7 +84,7 @@ public class PatientDermatologistExamController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_DERMATOLOGIST')") // NOSONAR
     @GetMapping("/{pharmacyId}/{sort}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExamsForPharmacy(@PathVariable("pharmacyId") long pharmacyId, @PathVariable("sort") ExamSortType sort) {
         ArrayList<GetAvailableDermatologistExamsResponse> response = new ArrayList<>();
@@ -93,7 +93,7 @@ public class PatientDermatologistExamController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR
     @GetMapping("/all/{sort}")
     public ResponseEntity<Iterable<GetAvailableDermatologistExamsResponse>> getSortedAvailableDermatologistExams(@PathVariable("sort") ExamSortType sort) {
         try {
@@ -106,7 +106,7 @@ public class PatientDermatologistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
     @PutMapping("/")
     public ResponseEntity<String> scheduleDermatologistExam(@RequestBody String examId) {
         try {
