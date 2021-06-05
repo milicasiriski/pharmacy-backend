@@ -38,21 +38,21 @@ public class PatientPharmacistExamController {
         this.patientService = patientService;
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/")
     public ResponseEntity<Iterable<ExamDetails>> getPharmacistExamsForPatient() {
         Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getScheduledPharmacistExamsForPatient(getSignedInUser());
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/examHistory")
     public ResponseEntity<Iterable<ExamDetails>> getPharmacistExamHistoryForPatient() {
         Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getPharmacistExamHistoryForPatient(getSignedInUser());
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @PostMapping("/")
     public ResponseEntity<String> scheduleAppointment(@RequestBody SchedulePharmacistExamParams params) {
         try {
@@ -74,7 +74,7 @@ public class PatientPharmacistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacies/{dateTime}")
     public ResponseEntity<Iterable<PharmacyDto>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime) {
         try {
@@ -85,7 +85,7 @@ public class PatientPharmacistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacies/{dateTime}/{sort}")
     public ResponseEntity<Iterable<PharmacyDto>> getPharmaciesWithAvailablePharmacists(@PathVariable("dateTime") Date dateTime, @PathVariable("sort") PharmacySortType sort) {
         try {
@@ -96,7 +96,7 @@ public class PatientPharmacistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacists/{pharmacyId}/{dateTime}")
     public ResponseEntity<Iterable<GetPharmacistsForPharmacistExamResponse>> getAvailablePharmacists(@PathVariable Date dateTime, @PathVariable long pharmacyId) {
         try {
@@ -107,7 +107,7 @@ public class PatientPharmacistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @GetMapping("/pharmacists/{pharmacyId}/{dateTime}/{sort}")
     public ResponseEntity<Iterable<GetPharmacistsForPharmacistExamResponse>> getAvailablePharmacists(@PathVariable Date dateTime, @PathVariable long pharmacyId, @PathVariable PharmacistSortType sort) {
         try {
@@ -118,7 +118,7 @@ public class PatientPharmacistExamController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
     @DeleteMapping("/cancel/{examId}")
     public ResponseEntity<String> cancelDermatologistExam(@PathVariable long examId) {
         try {
