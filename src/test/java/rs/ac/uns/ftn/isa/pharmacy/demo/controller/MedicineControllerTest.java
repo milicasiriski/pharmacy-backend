@@ -29,7 +29,7 @@ public class MedicineControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-
+/*
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
@@ -46,5 +46,5 @@ public class MedicineControllerTest {
     public void testGetAllAlternatives() throws Exception {
         mockMvc.perform(get(URL_PREFIX + "/get/alternativeGroups"))
                 .andExpect(status().isOk());
-    }
+    }*/
 }
