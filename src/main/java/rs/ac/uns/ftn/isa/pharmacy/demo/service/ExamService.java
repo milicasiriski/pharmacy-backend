@@ -12,6 +12,7 @@ public interface ExamService {
     void createExam(PharmacyAdminExamDto pharmacyAdminExamDto);
 
     void scheduleDermatologistExam(long examId, Patient patient) throws MessagingException;
+    void scheduleDermatologistExamForPatient(long examId, long patientID) throws MessagingException;
 
     boolean isExamAvailable(long examId);
 

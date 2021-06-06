@@ -5,10 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsNotInShiftIntervalException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ShiftIsNotDefinedException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
@@ -27,9 +30,13 @@ public class ExamController {
     }
 
     @PostMapping("/")
-    @PreAuthorize("hasRole('ROLE_PHARMACY_ADMINISTRATOR')") // NOSONAR the focus of this project is not on web security
+    @PreAuthorize("hasAnyRole('ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
     public ResponseEntity<String> createExam(@RequestBody PharmacyAdminExamDto pharmacyAdminExamDto) {
         try {
+            if(pharmacyAdminExamDto.getDermatologistId().equals("prazno")){
+                pharmacyAdminExamDto.setDermatologistId(getSignedInUser().getId());
+
+            }
             examService.createExam(pharmacyAdminExamDto);
             return new ResponseEntity<>("Exam successfully added!", HttpStatus.OK);
         } catch (ExamIntervalIsOverlapping e) {
@@ -57,5 +64,9 @@ public class ExamController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private Dermatologist getSignedInUser() {
+        return (Dermatologist) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

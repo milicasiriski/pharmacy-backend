@@ -16,6 +16,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
@@ -37,16 +38,18 @@ public class ExamServiceImpl implements ExamService {
     private final MailService<TimeInterval> mailService;
     private final DermatologistVacationRepository dermatologistVacationRepository;
     private final LoyaltyService loyaltyService;
+    private final PatientRepository patientRepository;
 
     @Autowired
     public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository,
-                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService) {
+                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService, PatientRepository patientRepository) {
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
         this.mailService = mailService;
         this.loyaltyService = loyaltyService;
+        this.patientRepository = patientRepository;
     }
 
     @Override
@@ -109,6 +112,24 @@ public class ExamServiceImpl implements ExamService {
         } else {
             throw new ExamAlreadyScheduledException();
         }
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void scheduleDermatologistExamForPatient(long examId, long patientID) throws MessagingException {
+        if (isExamAvailable(examId)) {
+            Exam exam = getExamById(examId);
+            exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
+            Patient patient = patientRepository.findById(patientID).get();
+            exam.setPatient(patient);
+            examRepository.save(exam);
+
+            mailService.sendMail(patient.getEmail(), exam.getTimeInterval(), new ExamConfirmationMailFormatter());
+        }
+        else {
+            throw new ExamAlreadyScheduledException();
+        }
+
     }
 
     @Override
