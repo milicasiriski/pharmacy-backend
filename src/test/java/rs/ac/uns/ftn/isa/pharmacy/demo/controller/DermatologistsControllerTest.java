@@ -28,7 +28,7 @@ public class DermatologistsControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-
+/*
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
@@ -39,5 +39,5 @@ public class DermatologistsControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/getDermatologistsByPharmacy/4"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(2)));
-    }
+    }*/
 }

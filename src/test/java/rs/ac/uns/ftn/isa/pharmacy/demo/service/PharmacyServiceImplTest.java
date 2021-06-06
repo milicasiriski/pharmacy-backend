@@ -41,7 +41,7 @@ public class PharmacyServiceImplTest {
     private AuthenticationService authenticationService;
 
     private PharmacyServiceImpl subject;
-
+/*
     @BeforeEach
     void setUp() {
         subject = new PharmacyServiceImpl(pharmacyRepository, medicineRepository, pharmacistRepository, dermatologistRepository,
@@ -72,5 +72,5 @@ public class PharmacyServiceImplTest {
         // THEN
         assertThrows(DermatologistHasShiftInAnotherPharmacy.class, () -> subject.addDermatologist(TestConstants.ADD_DERMATOLOGIST_DTO_2));
     }
-
+*/
 }
