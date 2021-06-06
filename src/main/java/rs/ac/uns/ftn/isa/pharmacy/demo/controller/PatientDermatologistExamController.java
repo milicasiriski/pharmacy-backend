@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndPatiendIDDTO;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetAvailableDermatologistExamsResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
@@ -115,6 +116,30 @@ public class PatientDermatologistExamController {
             }
             long id = Long.parseLong(examId);
             examService.scheduleDermatologistExam(id, getSignedInUser());
+            return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (ExamAlreadyScheduledException e) {
+            return new ResponseEntity<>("Sorry, the exam is no longer available.", HttpStatus.BAD_REQUEST);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("The confirmation email cannot be sent, please try again!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like this exam has already been scheduled!", HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
+    @PutMapping("/scheduleForPatient")
+    public ResponseEntity<String> scheduleDermatologistExamForPatient(@RequestBody ExamAndPatiendIDDTO examAndPatiendIDDTO) {
+        try {
+            //if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+            //    return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            //}
+            long id = Long.parseLong(examAndPatiendIDDTO.getExamID());
+            long idPatient = Long.parseLong(examAndPatiendIDDTO.getPatientID());
+            examService.scheduleDermatologistExamForPatient(id, idPatient);
             return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
