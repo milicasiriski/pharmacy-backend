@@ -42,14 +42,14 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository,
-                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService, PatientRepository patientRepository) {
+                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService, PatientRepository patientRepository, PatientRepository patientRepository1) {
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
         this.mailService = mailService;
         this.loyaltyService = loyaltyService;
-        this.patientRepository = patientRepository;
+        this.patientRepository = patientRepository1;
     }
 
     @Override
