@@ -1,6 +1,5 @@
 # PHARMACY-SYSTEM
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=milicasiriski_pharmacy-backend)](https://sonarcloud.io/dashboard?id=milicasiriski_pharmacy-backend)
 [![Build Status](https://travis-ci.com/milicasiriski/pharmacy-backend.svg?branch=develop)](https://travis-ci.com/milicasiriski/pharmacy-backend)
 
 This is backend part of our web app (Student Project at FTN: Faculty of Technical Sciences).
