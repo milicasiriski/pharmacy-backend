@@ -15,4 +15,6 @@ public interface MedicineReservationRepository extends CrudRepository<MedicineRe
 
     @Query(value = "SELECT id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id FROM medicine_reservation where medicine_id = :medicineId and pharmacy_id = :pharmacyId", nativeQuery = true)
     List<MedicineReservation> getReservationByPharmacyAndMedicine(@Param("medicineId") Long medicineId, @Param("pharmacyId") Long pharmacyId);
+
+    MedicineReservation findByUniqueNumber(String uniqueNumber);
 }

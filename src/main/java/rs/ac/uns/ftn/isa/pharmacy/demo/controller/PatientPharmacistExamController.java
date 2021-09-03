@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,13 +8,10 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
-import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
+import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistsForPharmacistExamResponse;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PatientService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
@@ -23,6 +21,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +32,7 @@ public class PatientPharmacistExamController {
     private final PharmacistExamSchedulingService pharmacistExamSchedulingService;
     private final PatientService patientService;
 
+    @Autowired
     public PatientPharmacistExamController(PharmacistExamSchedulingService pharmacistExamSchedulingService, PatientService patientService) {
         this.pharmacistExamSchedulingService = pharmacistExamSchedulingService;
         this.patientService = patientService;
@@ -42,6 +42,13 @@ public class PatientPharmacistExamController {
     @GetMapping("/")
     public ResponseEntity<Iterable<ExamDetails>> getPharmacistExamsForPatient() {
         Iterable<ExamDetails> exams = pharmacistExamSchedulingService.getScheduledPharmacistExamsForPatient(getSignedInUser());
+        return new ResponseEntity<>(exams, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<GetPharmacistExamResponse>> getAllPharmacistExams() {
+        Iterable<GetPharmacistExamResponse> exams = pharmacistExamSchedulingService.getAllScheduledPharmacistExamsForPatient(getSignedInPharmacist());
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
@@ -71,6 +78,51 @@ public class PatientPharmacistExamController {
             return new ResponseEntity<>("Email could not be sent.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("Oops! Something went wrong.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_PATIENT', 'ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
+    @PutMapping("/scheduleForPatientPharmacist")
+    public ResponseEntity<String> schedulePharmacistExamForPatient(@RequestBody ExamAndPatiendIDDTO examAndPatiendIDDTO) {
+        try {
+            //if (patientService.hasCurrentUserExceededPenaltyPoints()) {
+            //    return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
+            //}
+            long id = Long.parseLong(examAndPatiendIDDTO.getExamID());
+            pharmacistExamSchedulingService.scheduleAppointmentForPharmacist(id, examAndPatiendIDDTO.getPatientID(), getSignedInPharmacist());
+            return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
+        } catch (ExamAlreadyScheduledException e) {
+            return new ResponseEntity<>("Sorry, the exam is no longer available.", HttpStatus.BAD_REQUEST);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Wrong id format.", HttpStatus.BAD_REQUEST);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("The confirmation email cannot be sent, please try again!", HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>("Looks like this exam has already been scheduled!", HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @PostMapping("/createAndScheduleForPatientPharmacist")
+    @PreAuthorize("hasRole('ROLE_PHARMACIST')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> createAndScheduleExamPharmacist(@RequestBody DermatologistExamDTO dermatologistExamDTO) {
+        try {
+            dermatologistExamDTO.setDermatologistId(getSignedInPharmacist().getId());
+
+            //examService.createAndScheduleExamForDermatologist(dermatologistExamDTO);
+            return new ResponseEntity<>("Exam successfully added!", HttpStatus.OK);
+        } catch (ExamIntervalIsOverlapping e) {
+            return new ResponseEntity<>("Dermatologists is already scheduled for chosen date!", HttpStatus.BAD_REQUEST);
+        } catch (ExamIntervalIsNotInShiftIntervalException e) {
+            return new ResponseEntity<>("Dermatologists is not available at that time!", HttpStatus.BAD_REQUEST);
+        } catch (ShiftIsNotDefinedException e) {
+            return new ResponseEntity<>("Shift is not defined for that day!", HttpStatus.BAD_REQUEST);
+        } catch (OptimisticLockException e) {
+            return new ResponseEntity<>("Looks like this time interval is already scheduled!", HttpStatus.I_AM_A_TEAPOT);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -153,5 +205,9 @@ public class PatientPharmacistExamController {
 
     private Patient getSignedInUser() {
         return (Patient) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private Pharmacist getSignedInPharmacist() {
+        return (Pharmacist) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

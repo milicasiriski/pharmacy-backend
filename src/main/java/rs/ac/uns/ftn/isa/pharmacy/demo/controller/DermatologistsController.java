@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.helpers.dtoconverters.DermatologistConverter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistShiftDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistService;
 
@@ -36,6 +39,13 @@ public class DermatologistsController implements DermatologistConverter {
         return ResponseEntity.ok(dermatologistsDto);
     }
 
+    @GetMapping(value = "/getDermatologistsPharmacies")
+    public ResponseEntity<List<PharmacyDto>> getDermatologistsPharmacies() {
+        long dermatologistID = getSignedInUser().getId();
+        List<PharmacyDto> pharmacies = dermatologistService.getDermatologistsPharmacies(dermatologistID);
+        return ResponseEntity.ok(pharmacies);
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_PATIENT','ROLE_PHARMACIST', 'ROLE_DERMATOLOGIST', 'ROLE_PHARMACY_ADMINISTRATOR', 'ROLE_SUPPLIER')") // NOSONAR the focus of this project is not on web security
     @GetMapping(value = "/getAllDermatologists")
     public ResponseEntity<List<DermatologistDto>> getAllDermatologists() {
@@ -57,5 +67,9 @@ public class DermatologistsController implements DermatologistConverter {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private Dermatologist getSignedInUser() {
+        return (Dermatologist) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

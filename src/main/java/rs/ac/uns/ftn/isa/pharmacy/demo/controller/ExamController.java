@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamIntervalIsOverlapping;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ShiftIsNotDefinedException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.Patient;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistExamDTO;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 
@@ -63,6 +64,28 @@ public class ExamController {
             return new ResponseEntity<>("Exam does not exist!", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/createAndScheduleForPatientDermatologist")
+    @PreAuthorize("hasRole('ROLE_DERMATOLOGIST')") // NOSONAR the focus of this project is not on web security
+    public ResponseEntity<String> createAndScheduleExamDermatologist(@RequestBody DermatologistExamDTO dermatologistExamDTO) {
+        try {
+            dermatologistExamDTO.setDermatologistId(getSignedInUser().getId());
+
+            examService.createAndScheduleExamForDermatologist(dermatologistExamDTO);
+            return new ResponseEntity<>("Exam successfully added!", HttpStatus.OK);
+        } catch (ExamIntervalIsOverlapping e) {
+            return new ResponseEntity<>("Dermatologists is already scheduled for chosen date!", HttpStatus.BAD_REQUEST);
+        } catch (ExamIntervalIsNotInShiftIntervalException e) {
+            return new ResponseEntity<>("Dermatologists is not available at that time!", HttpStatus.BAD_REQUEST);
+        } catch (ShiftIsNotDefinedException e) {
+            return new ResponseEntity<>("Shift is not defined for that day!", HttpStatus.BAD_REQUEST);
+        } catch (OptimisticLockException e) {
+            return new ResponseEntity<>("Looks like this time interval is already scheduled!", HttpStatus.I_AM_A_TEAPOT);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Please input all fields!", HttpStatus.BAD_REQUEST);
         }
     }
 
