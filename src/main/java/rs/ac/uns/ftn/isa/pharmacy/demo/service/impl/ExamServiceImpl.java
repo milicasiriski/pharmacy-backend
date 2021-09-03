@@ -9,15 +9,13 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistExamDTO;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.ExamAndDermatologistDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.ExamStatus;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyAdminExamDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistVacationRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PatientRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistEmploymentService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.ExamService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.LoyaltyService;
@@ -39,10 +37,11 @@ public class ExamServiceImpl implements ExamService {
     private final DermatologistVacationRepository dermatologistVacationRepository;
     private final LoyaltyService loyaltyService;
     private final PatientRepository patientRepository;
+    private final DermatologistRepository dermatologistRepository;
 
     @Autowired
     public ExamServiceImpl(DermatologistEmploymentService dermatologistEmploymentService, PharmacyRepository pharmacyRepository,
-                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService, PatientRepository patientRepository) {
+                           ExamRepository examRepository, MailService<TimeInterval> mailService, DermatologistVacationRepository dermatologistVacationRepository, LoyaltyService loyaltyService, PatientRepository patientRepository, DermatologistRepository dermatologistRepository) {
         this.dermatologistVacationRepository = dermatologistVacationRepository;
         this.dermatologistEmploymentService = dermatologistEmploymentService;
         this.pharmacyRepository = pharmacyRepository;
@@ -50,6 +49,7 @@ public class ExamServiceImpl implements ExamService {
         this.mailService = mailService;
         this.loyaltyService = loyaltyService;
         this.patientRepository = patientRepository;
+        this.dermatologistRepository = dermatologistRepository;
     }
 
     @Override
@@ -101,6 +101,69 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void createAndScheduleExamForDermatologist(DermatologistExamDTO dermatologistExamDTO) {
+        Dermatologist dermatologist = dermatologistRepository.getDermatologistById(dermatologistExamDTO.getDermatologistId());
+        System.out.println(dermatologistExamDTO.getPharmacyID());
+
+        var pharmacyOptional = pharmacyRepository.findById(dermatologistExamDTO.getPharmacyID());
+        if(pharmacyOptional.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        var pharmacy = pharmacyOptional.get();
+
+        Map<Dermatologist, Employment> dermatologists = pharmacy.getDermatologists();
+
+        Employment employment = dermatologists.get(dermatologist);
+
+        Map<DaysOfWeek, TimeInterval> shifts = employment.getShifts();
+        PharmacyAdminExamDto pharmacyAdminExamDto = new PharmacyAdminExamDto(dermatologistExamDTO.getDermatologistId(),
+                dermatologistExamDTO.getExamStart(), dermatologistExamDTO.getDuration(), dermatologistExamDTO.getPrice());
+
+        TimeInterval examTimeInterval = generateExamTimeInterval(pharmacyAdminExamDto);
+
+        String dayOfWeek = DaysOfWeek.fromCalendarDayOfWeek(examTimeInterval.getStart().get(Calendar.DAY_OF_WEEK)).label;
+
+        if (!shifts.containsKey(DaysOfWeek.fromCalendarDayOfWeek(examTimeInterval.getStart().get(Calendar.DAY_OF_WEEK)))) {
+            throw new ShiftIsNotDefinedException();
+        }
+
+        TimeInterval shiftForDayOfWeek = shifts.get(DaysOfWeek.valueOf(dayOfWeek.toUpperCase()));
+        TimeInterval examShiftTimeInterval = getIntervalForShiftCompare(examTimeInterval, shiftForDayOfWeek);
+
+        if (!examShiftTimeInterval.isInside(shiftForDayOfWeek)) {
+            throw new ExamIntervalIsNotInShiftIntervalException();
+        }
+
+        employment.getExams().forEach(exam -> {
+            if (examTimeInterval.isOverlapping(exam.getTimeInterval())) {
+                throw new ExamIntervalIsOverlapping();
+            }
+        });
+
+        Iterable<VacationTimeRequestDermatologist> vacationTimes =
+                dermatologistVacationRepository.findApprovedVacationsByDermatologistId(dermatologistExamDTO.getDermatologistId());
+
+        vacationTimes.forEach(vacationTime -> {
+            if (examTimeInterval.isOverlapping(vacationTime.getRequestedTimeForVacation())) {
+                throw new ExamIntervalIsOverlapping();
+            }
+        });
+        Exam exam = new Exam(pharmacyAdminExamDto.getPrice(), examTimeInterval, ExamStatus.WAITING);
+        //employment.getExams().add(exam);
+
+        pharmacyRepository.save(pharmacy);
+
+        exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
+        Patient patient = new Patient();
+        patient = patientRepository.findByEmail(dermatologistExamDTO.getPatientID());
+
+        exam.setPatient(patient);
+        examRepository.save(exam);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void scheduleDermatologistExam(long examId, Patient patient) throws ExamAlreadyScheduledException, EntityNotFoundException, MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);
@@ -116,15 +179,17 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void scheduleDermatologistExamForPatient(long examId, long patientID) throws MessagingException {
+    public void scheduleDermatologistExamForPatient(long examId, String patientID) throws MessagingException {
         if (isExamAvailable(examId)) {
             Exam exam = getExamById(examId);
             exam.setPrice(exam.getPrice() * loyaltyService.getDiscount());
-            Patient patient = patientRepository.findById(patientID).get();
+            Patient patient = new Patient();
+            patient = patientRepository.findByEmail(patientID);
+
             exam.setPatient(patient);
             examRepository.save(exam);
 
-            mailService.sendMail(patient.getEmail(), exam.getTimeInterval(), new ExamConfirmationMailFormatter());
+            //mailService.sendMail(patient.getEmail(), exam.getTimeInterval(), new ExamConfirmationMailFormatter());
         }
         else {
             throw new ExamAlreadyScheduledException();

@@ -43,6 +43,15 @@ public class Patient extends User {
         this.loyaltyPoints = loyaltyPoints;
     }
 
+    public Patient(Patient p) {
+        super(p.getEmail(), p.getPassword(), p.getName(), p.getSurname(), p.getAddress());
+        this.name = p.getName();
+        this.surname = p.getSurname();
+        this.phoneNumber = p.getPhoneNumber();
+        this.penaltyPoints = p.penaltyPoints;
+        this.loyaltyPoints = p.loyaltyPoints;
+    }
+
     @Override
     public String getAdministrationRole() {
         return administrationRole;

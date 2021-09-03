@@ -14,6 +14,8 @@ import java.util.Calendar;
 public interface MedicineReservationService {
     Iterable<Medicine> getAllMedicine();
 
+    Iterable<MedicineReservation> getAllMedicineReservations();
+
     Iterable<Pharmacy> getPharmaciesWithMedicineOnStock(Long medicineId);
 
     boolean isReservationValid(CreateMedicineReservationParamsDto createMedicineReservationParamsDto);
@@ -22,11 +24,17 @@ public interface MedicineReservationService {
 
     Medicine getMedicineById(Long medicineId);
 
+    MedicineReservation getMedicineReservationById(Long id);
+
+    MedicineReservation getMedicineReservationByUniqueNumber(String uniqueNumber);
+
     Iterable<MedicineReservation> getAllMedicineReservationsForPatient(Patient patient);
 
     boolean isMedicineReservationCancellable(Calendar deadline);
 
     void cancelMedicineReservation(Long medicineReservationId);
+
+    void issueMedicineReservation(Long medicineReservationId);
 
     void removeAllExpiredMedicineReservations();
 

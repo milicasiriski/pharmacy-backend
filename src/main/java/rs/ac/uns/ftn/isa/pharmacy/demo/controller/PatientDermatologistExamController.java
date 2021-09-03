@@ -138,8 +138,7 @@ public class PatientDermatologistExamController {
             //    return new ResponseEntity<>(PenaltyPointsConstants.PENALTY_POINTS_EXCEEDED_MESSAGE, HttpStatus.I_AM_A_TEAPOT);
             //}
             long id = Long.parseLong(examAndPatiendIDDTO.getExamID());
-            long idPatient = Long.parseLong(examAndPatiendIDDTO.getPatientID());
-            examService.scheduleDermatologistExamForPatient(id, idPatient);
+            examService.scheduleDermatologistExamForPatient(id, examAndPatiendIDDTO.getPatientID());
             return new ResponseEntity<>("Exam successfully scheduled!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>("The exam you've tried to schedule does not exist.", HttpStatus.BAD_REQUEST);
@@ -153,6 +152,8 @@ public class PatientDermatologistExamController {
             return new ResponseEntity<>("Looks like this exam has already been scheduled!", HttpStatus.I_AM_A_TEAPOT);
         }
     }
+
+
 
     @PreAuthorize("hasRole('ROLE_PATIENT')") // NOSONAR the focus of this project is not on web security
     @PutMapping("/cancel/")

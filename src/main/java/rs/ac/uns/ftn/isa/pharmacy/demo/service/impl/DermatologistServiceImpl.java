@@ -3,11 +3,9 @@ package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Dermatologist;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.Pharmacy;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.PharmacyAdmin;
-import rs.ac.uns.ftn.isa.pharmacy.demo.model.User;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistDto;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.PharmacyDto;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.DermatologistRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.AuthenticationService;
@@ -16,6 +14,7 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.service.DermatologistService;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -69,5 +68,16 @@ public class DermatologistServiceImpl implements DermatologistService {
         });
 
         return otherDermatologist;
+    }
+
+    @Override
+    public List<PharmacyDto> getDermatologistsPharmacies(long dermatologistID) {
+        Dermatologist dermatologist = dermatologistRepository.getDermatologistById(dermatologistID);
+        Map<Pharmacy, Employment> pharmacies = dermatologist.getPharmacies();
+        List<PharmacyDto> pharmacyDtos = new ArrayList<>();
+        for (Pharmacy p: pharmacies.keySet()) {
+            pharmacyDtos.add(new PharmacyDto(p));
+        }
+        return pharmacyDtos;
     }
 }

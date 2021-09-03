@@ -28,4 +28,6 @@ public interface DermatologistRepository extends CrudRepository<Dermatologist, L
             "\tAND d.id=demap.dermatologist_id AND (e.status = 0 OR e.status = 1) AND e.patient_id=:patientId" +
             "\tAND d.id = :dermatologistId", nativeQuery = true)
     boolean canPatientRateDermatologist(long patientId, long dermatologistId);
+    Dermatologist getDermatologistById(long dermatologistId);
+    Dermatologist findDermatologistById(long dermatologistId);
 }

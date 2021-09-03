@@ -18,4 +18,7 @@ public interface PatientRepository extends CrudRepository<Patient, Long> {
 
     @Query(value = "SELECT patient_id FROM pharmacy_subscribers WHERE pharmacy_id=:id", nativeQuery = true)
     List<Long> findSubscribersIdsByPharmacyId(@Param("id") Long id);
+    //Patient findPatientByEmail(String email);
+    Patient findByEmail(String email);
+    Patient getById(long patientID);
 }

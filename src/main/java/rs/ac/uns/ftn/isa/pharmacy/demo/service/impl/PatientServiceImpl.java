@@ -46,6 +46,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Patient getPatientByEmail(String email) {
+        return patientRepository.findByEmail(email);
+    }
+
+    @Override
     public Iterable<MedicinesBasicInfoDto> getAllAllergies() {
         List<MedicinesBasicInfoDto> result = new ArrayList<>();
         Patient patient = getSignedInUser();
@@ -79,6 +84,12 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public boolean hasCurrentUserExceededPenaltyPoints() {
         Patient patient = getSignedInUser();
+        return patient.getPenaltyPoints() >= PenaltyPointsConstants.PENALTY_POINT_LIMIT;
+    }
+
+    @Override
+    public boolean hasPatientExceededPenaltyPoints(String patientID) {
+        Patient patient = patientRepository.findByEmail(patientID);
         return patient.getPenaltyPoints() >= PenaltyPointsConstants.PENALTY_POINT_LIMIT;
     }
 

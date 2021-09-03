@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa.pharmacy.demo.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamAlreadyScheduledException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.ExamCanNoLongerBeCancelledException;
@@ -8,13 +9,12 @@ import rs.ac.uns.ftn.isa.pharmacy.demo.exceptions.WrongPatientException;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.ExamConfirmationMailFormatter;
 import rs.ac.uns.ftn.isa.pharmacy.demo.mail.MailService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.*;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.DermatologistExamDTO;
+import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.GetPharmacistExamResponse;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.dto.SchedulePharmacistExamParams;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.enums.DaysOfWeek;
 import rs.ac.uns.ftn.isa.pharmacy.demo.model.mapping.ExamDetails;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.ExamRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacistVacationRepository;
-import rs.ac.uns.ftn.isa.pharmacy.demo.repository.PharmacyRepository;
+import rs.ac.uns.ftn.isa.pharmacy.demo.repository.*;
 import rs.ac.uns.ftn.isa.pharmacy.demo.service.PharmacistExamSchedulingService;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacistSortType;
 import rs.ac.uns.ftn.isa.pharmacy.demo.util.PharmacySortType;
@@ -31,13 +31,15 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
     private final PharmacyRepository pharmacyRepository;
     private final ExamRepository examRepository;
     private final MailService<TimeInterval> mailService;
+    private final PatientRepository patientRepository;
 
-    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService<TimeInterval> mailService) {
+    public PharmacistExamSchedulingServiceImpl(PharmacistRepository pharmacistRepository, PharmacistVacationRepository pharmacistVacationRepository, PharmacyRepository pharmacyRepository, ExamRepository examRepository, MailService<TimeInterval> mailService, PatientRepository patientRepository) {
         this.pharmacistRepository = pharmacistRepository;
         this.pharmacistVacationRepository = pharmacistVacationRepository;
         this.pharmacyRepository = pharmacyRepository;
         this.examRepository = examRepository;
         this.mailService = mailService;
+        this.patientRepository = patientRepository;
     }
 
     @Override
@@ -57,6 +59,14 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         sortPharmacies(pharmacies, sortType);
 
         return pharmacies;
+    }
+    @Override
+    public Iterable<GetPharmacistExamResponse> getAllScheduledPharmacistExamsForPatient(Pharmacist e){
+        List<Exam> exams = examRepository.getExamByPharmacist(e.getId());
+        ArrayList<GetPharmacistExamResponse> response = new ArrayList<>();
+        examRepository.getExamByPharmacist(e.getId()).forEach(it ->
+                response.add(new GetPharmacistExamResponse(it, e)));
+        return response;
     }
 
     @Override
@@ -92,6 +102,28 @@ public class PharmacistExamSchedulingServiceImpl implements PharmacistExamSchedu
         pharmacistRepository.save(pharmacist);
 
         mailService.sendMail(patient.getEmail(), appointment, new ExamConfirmationMailFormatter());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void scheduleAppointmentForPharmacist(long examId, String patientID, Pharmacist pharmacist) throws MessagingException {
+        Pharmacy pharmacy = pharmacist.getPharmacy();
+        Patient patient = new Patient();
+        patient = patientRepository.findByEmail(patientID);
+        Exam exam = getExamById(examId);
+        exam.setPatient(patient);
+        examRepository.save(exam);
+
+
+        //mailService.sendMail(patient.getEmail(), appointment, new ExamConfirmationMailFormatter());*/
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void createAppointmentForPharmacist(DermatologistExamDTO dermatologistExamDTO, Pharmacist pharmacist) {
+        Pharmacy pharmacy = pharmacist.getPharmacy();
+        Map<DaysOfWeek, TimeInterval> shifts = pharmacist.getShifts();
+
     }
 
     @Override

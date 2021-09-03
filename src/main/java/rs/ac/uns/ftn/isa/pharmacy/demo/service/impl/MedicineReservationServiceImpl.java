@@ -61,6 +61,11 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
     }
 
     @Override
+    public Iterable<MedicineReservation> getAllMedicineReservations() {
+        return medicineReservationRepository.findAll();
+    }
+
+    @Override
     public Iterable<Pharmacy> getPharmaciesWithMedicineOnStock(Long medicineId) {
         return pharmacyRepository.findWithMedicineOnStock(medicineId);
     }
@@ -112,7 +117,7 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
                 pharmacy.getName(),
                 pharmacy.getAddress().getCountry() + ", " + pharmacy.getAddress().getCity() + ", " + pharmacy.getAddress().getStreet(),
                 uniqueReservationNumber);
-        mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
+        //mailService.sendMail(patient.getEmail(), params, new MedicineReservationConfirmMailFormatter());
     }
 
     @Override
@@ -155,6 +160,13 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         medicineStatus.addToStock(1);
         pharmacy.getMedicine().put(medicine, medicineStatus);
         pharmacyRepository.save(pharmacy);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void issueMedicineReservation(Long medicineReservationId) throws EntityNotFoundException{
+        MedicineReservation medicineReservation = getMedicineReservationById(medicineReservationId);
+        medicineReservationRepository.delete(medicineReservation);
     }
 
     @Override
@@ -204,10 +216,20 @@ public class MedicineReservationServiceImpl implements MedicineReservationServic
         }
     }
 
-    private MedicineReservation getMedicineReservationById(Long id) throws EntityNotFoundException {
+    public MedicineReservation getMedicineReservationById(Long id) throws EntityNotFoundException {
         Optional<MedicineReservation> optionalMedicineReservation = medicineReservationRepository.findById(id);
         if (optionalMedicineReservation.isPresent()) {
             return optionalMedicineReservation.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    @Override
+    public MedicineReservation getMedicineReservationByUniqueNumber(String uniqueNumber) throws EntityNotFoundException{
+        MedicineReservation optionalMedicineReservation = medicineReservationRepository.findByUniqueNumber(uniqueNumber);
+        if (optionalMedicineReservation != null) {
+            return optionalMedicineReservation;
         } else {
             throw new EntityNotFoundException();
         }

@@ -102,7 +102,7 @@ INSERT INTO medicine_alternatives(medicine_id, alternative_id) VALUES ('4', '5')
 INSERT INTO medicine_alternatives(medicine_id, alternative_id) VALUES ('5', '4');
 
 -- Istekao rok za preuzimanje, sluzi za testiranje metode koja brise istekle rezervacije i daje penale pacijentu.
-INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('1', '2021-01-30 23:59:59', '1111', '1', '3', '1');
+INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('1', '2021-08-31 23:59:59', '1111', '1', '3', '1');
 INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('2', '2021-03-02 23:59:59', '2222', '2', '3', '1');
 INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('3', '2021-02-13 23:59:59', '3333', '3', '3', '5');
 INSERT INTO medicine_reservation(id, expiration_date, unique_number, medicine_id, patient_id, pharmacy_id) VALUES ('4', '2021-02-13 23:59:59', '4444', '1', '3', '4');
@@ -199,15 +199,15 @@ INSERT INTO vacation_request_dermatologist(id, dermatologist_id, pharmacy_id) VA
 INSERT INTO employment(id, version) VALUES ('1', 0);
 INSERT INTO employment(id, version) VALUES ('2', 0);
 
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('1', '20', '2021-02-22 15:00:00', '2021-02-22 14:40:00', 1, 2, 0);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('2', '40', '2021-02-23 14:40:00', '2021-02-23 14:20:00', 1, 1, 0);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('3', '10', '2021-02-27 11:40:00', '2021-02-27 11:20:00', 1, 2, 0);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('4', '30', '2021-02-19 10:40:00', '2021-02-19 10:20:00', '2', 3, 2, 0);
-INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('8', '30', '2021-02-05 10:40:00', '2021-02-05 10:20:00', '2', 3, 0, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('1', '20', '2021-09-22 15:00:00', '2021-09-22 14:40:00', 1, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('2', '40', '2021-09-23 14:40:00', '2021-09-23 14:20:00', 1, 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, status, version) VALUES ('3', '10', '2021-09-27 11:40:00', '2021-09-27 11:20:00', 1, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('4', '30', '2021-06-19 10:40:00', '2021-06-19 10:20:00', '2', 3, 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, employment_id, patient_id, status, version) VALUES ('8', '30', '2021-06-05 10:40:00', '2021-06-05 10:20:00', '2', 3, 0, 0);
 
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('5', '20', '2021-01-30 18:00', '2021-01-30 17:30', '1', '8', 2, 0);
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('6', '20', '2020-03-30 18:00', '2021-03-30 17:30', '3', '8', 1, 0);
-INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('7', '20', '2021-05-30 18:00', '2021-03-30 17:30', '3', '9', 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('5', '20', '2021-07-30 18:00', '2021-07-30 17:30', '1', '8', 2, 0);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('6', '20', '2020-07-30 18:00', '2021-07-30 17:30', '3', '8', 1, 0);
+INSERT INTO exam(id, price, end_time, start_time, patient_id, pharmacist_id, status, version) VALUES ('7', '20', '2021-07-30 18:00', '2021-07-30 17:30', '3', '9', 2, 0);
 
 INSERT INTO pharmacy_pharmacists(pharmacy_id, pharmacist_id) VALUES (4, 8);
 

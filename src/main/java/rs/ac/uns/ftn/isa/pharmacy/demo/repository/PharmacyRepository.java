@@ -52,4 +52,6 @@ public interface PharmacyRepository extends CrudRepository<Pharmacy, Long> {
             "FROM pharmacy AS p, exam AS e, pharmacy_user AS u " +
             "where u.id=e.pharmacist_id AND p.id=u.pharmacy_id AND e.patient_id=:patientId AND p.id=:pharmacyId", nativeQuery = true)
     boolean canPatientRatePharmacy(long patientId, long pharmacyId);
+    Pharmacy getPharmacyById(long pharmacyID);
+    Pharmacy findPharmacyById(long pharmacyId);
 }
